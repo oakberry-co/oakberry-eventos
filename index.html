@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Oakberry en tu Evento — Bogotá</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
 
 <!-- META PIXEL -->
 <script>
@@ -23,304 +23,185 @@ fbq('track', 'PageView');
   src="https://www.facebook.com/tr?id=914682538016264&ev=PageView&noscript=1"/></noscript>
 
 <style>
-/* ── TOKENS ─────────────────────────────────────────────────── */
+/* ── TOKENS — sistema cupones ────────────────────────────────── */
 :root {
-  --purple:     #12091F;
-  --purple-mid: #1e1035;
-  --purple-card:#251442;
-  --accent:     #FF2068;
-  --accent-dark:#cc1a54;
-  --gold:       #F5C842;
-  --white:      #ffffff;
-  --off-white:  #faf8ff;
-  --muted:      rgba(255,255,255,0.45);
-  --border:     rgba(255,255,255,0.1);
-  --border-inp: rgba(255,255,255,0.18);
-  --red:        #ff4d6d;
-  --radius-card:28px;
-  --radius-inp: 14px;
+  --primary:      #5F4B8B;
+  --primary-dark: #4a3a6e;
+  --yellow:       #F5C842;
+  --white:        #ffffff;
+  --off-white:    rgba(255,255,255,0.96);
+  --border:       #e8e3f4;
+  --gray:         #999;
+  --gray-light:   #f7f4ff;
+  --red:          #c0392b;
 }
 
 *,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
 
 body {
   font-family: 'Montserrat', sans-serif;
-  background: var(--purple);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 0 16px 48px;
-  position: relative;
-  overflow-x: hidden;
-}
-
-/* ── FONDO ATMOSFÉRICO ──────────────────────────────────────── */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
+  padding: 24px 16px 48px;
   background:
-    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(255,32,104,0.18) 0%, transparent 70%),
-    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(95,75,139,0.25) 0%, transparent 60%),
-    url('bg.jpg') center/cover no-repeat;
-  background-color: var(--purple);
-  z-index: 0;
-}
-
-/* Overlay oscuro sobre el bg.jpg */
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(160deg, rgba(18,9,31,0.82) 0%, rgba(18,9,31,0.70) 100%);
-  z-index: 1;
-}
-
-/* ── LAYOUT ──────────────────────────────────────────────────── */
-.page-wrap {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  max-width: 480px;
-  padding-top: 40px;
-}
-
-/* ── HERO ────────────────────────────────────────────────────── */
-.hero {
-  text-align: center;
-  margin-bottom: 28px;
-  padding: 0 8px;
-}
-
-.hero-logo {
-  width: 52px;
-  height: 52px;
-  background: var(--accent);
-  border-radius: 16px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 16px;
-  box-shadow: 0 8px 32px rgba(255,32,104,0.4);
-}
-
-.hero-logo svg { width: 32px; height: 32px; fill: var(--white); }
-
-.hero-eyebrow {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.hero-eyebrow::before,
-.hero-eyebrow::after {
-  content: '';
-  width: 28px;
-  height: 1px;
-  background: var(--accent);
-  opacity: 0.6;
-}
-
-.hero-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(42px, 10vw, 62px);
-  color: var(--white);
-  line-height: 0.95;
-  letter-spacing: 1px;
-  margin-bottom: 14px;
-}
-
-.hero-title span {
-  color: var(--accent);
-  display: block;
-}
-
-.hero-sub {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--muted);
-  line-height: 1.7;
-  max-width: 340px;
-  margin: 0 auto 20px;
-}
-
-/* ── PILLS DE PROPUESTA ──────────────────────────────────────── */
-.pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
-  margin-bottom: 32px;
-}
-
-.pill {
-  background: rgba(255,255,255,0.06);
-  border: 1px solid var(--border);
-  border-radius: 50px;
-  padding: 6px 14px;
-  font-size: 11px;
-  font-weight: 700;
-  color: rgba(255,255,255,0.7);
-  letter-spacing: 0.3px;
-}
-
-.pill.hot {
-  background: rgba(255,32,104,0.12);
-  border-color: rgba(255,32,104,0.3);
-  color: var(--accent);
+    linear-gradient(rgba(95,75,139,0.52), rgba(95,75,139,0.52)),
+    url('Oakville.jpg') center/cover no-repeat fixed;
+  background-color: #5F4B8B;
 }
 
 /* ── CARD ────────────────────────────────────────────────────── */
 .card {
-  background: rgba(37,20,66,0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: var(--radius-card);
+  background: var(--off-white);
+  border-radius: 30px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
   overflow: hidden;
-  box-shadow: 0 24px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,32,104,0.08);
   animation: cardIn 0.5s cubic-bezier(0.22,1,0.36,1) both;
+  margin-top: 16px;
 }
 
 @keyframes cardIn {
-  from { opacity:0; transform:translateY(24px) scale(0.98); }
+  from { opacity:0; transform:translateY(28px) scale(0.97); }
   to   { opacity:1; transform:translateY(0)    scale(1); }
 }
 
 /* ── CARD HEADER ─────────────────────────────────────────────── */
 .card-header {
-  background: linear-gradient(135deg, var(--accent) 0%, #c1185a 100%);
-  padding: 24px 28px 20px;
-  position: relative;
-  overflow: hidden;
+  background: var(--primary);
+  padding: 28px 30px 24px;
+  text-align: center;
 }
 
-.card-header::before {
-  content: '';
-  position: absolute;
-  top: -30px; right: -30px;
-  width: 140px; height: 140px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.06);
-}
-
-.card-header::after {
-  content: '';
-  position: absolute;
-  bottom: -20px; left: -10px;
-  width: 90px; height: 90px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.04);
-}
-
-.card-header-inner { position: relative; z-index: 1; }
-
-.ch-step {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 2.5px;
+.brand {
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--white);
   text-transform: uppercase;
-  color: rgba(255,255,255,0.6);
+  letter-spacing: 2px;
   margin-bottom: 4px;
 }
 
-.ch-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 26px;
-  letter-spacing: 1px;
-  color: var(--white);
-  line-height: 1;
-  margin-bottom: 2px;
+.brand-sub {
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.6);
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  margin-bottom: 16px;
 }
 
-.ch-sub {
+.event-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--yellow);
+  border-radius: 50px;
+  padding: 10px 22px;
+}
+
+.event-badge .icon { font-size: 24px; line-height: 1; }
+
+.event-badge .desc {
   font-size: 11px;
-  font-weight: 600;
-  color: rgba(255,255,255,0.65);
+  font-weight: 900;
+  color: var(--primary);
+  text-transform: uppercase;
+  text-align: left;
+  line-height: 1.4;
+  letter-spacing: 0.3px;
 }
 
 /* ── CARD BODY ───────────────────────────────────────────────── */
-.card-body {
-  padding: 24px 24px 28px;
+.card-body { padding: 26px 28px 30px; }
+
+.section-title {
+  color: var(--primary);
+  text-transform: uppercase;
+  font-weight: 900;
+  font-size: 16px;
+  letter-spacing: 0.5px;
+  text-align: center;
+  margin-bottom: 4px;
 }
 
-/* ── FORM GROUPS ─────────────────────────────────────────────── */
+.section-sub {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gray);
+  text-align: center;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 1.6;
+}
+
+/* ── FORM ────────────────────────────────────────────────────── */
 .form-grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
-.form-group {
-  margin-bottom: 10px;
-  position: relative;
-}
+.form-group { margin-bottom: 12px; position: relative; }
 
-.form-label {
-  display: block;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 6px;
-  padding-left: 2px;
-}
-
-input[type=text],
-input[type=tel] {
+input[type=text], input[type=tel] {
   width: 100%;
-  padding: 13px 16px;
-  background: rgba(255,255,255,0.05);
-  border: 1.5px solid var(--border-inp);
-  border-radius: var(--radius-inp);
-  color: var(--white);
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 2px solid var(--border);
   font-family: 'Montserrat', sans-serif;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--primary);
   outline: none;
-  transition: border-color 0.18s, background 0.18s, box-shadow 0.18s;
+  background: #fff;
+  transition: border-color 0.18s, box-shadow 0.18s;
   -webkit-appearance: none;
 }
 
-input::placeholder { color: rgba(255,255,255,0.2); font-weight: 500; }
+input::placeholder { color: #bbb; font-weight: 600; }
 
 input:focus {
-  border-color: var(--accent);
-  background: rgba(255,32,104,0.06);
-  box-shadow: 0 0 0 3px rgba(255,32,104,0.12);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(95,75,139,0.12);
 }
 
 input.err {
   border-color: var(--red);
-  box-shadow: 0 0 0 3px rgba(255,77,109,0.12);
+  box-shadow: 0 0 0 3px rgba(192,57,43,0.1);
 }
 
-/* Prefijo celular */
-.phone-wrap { position: relative; }
 .phone-prefix {
   position: absolute;
-  left: 14px;
+  left: 16px;
   top: 50%;
   transform: translateY(-50%);
   font-size: 13px;
   font-weight: 700;
-  color: rgba(255,255,255,0.4);
+  color: var(--primary);
   pointer-events: none;
 }
-.phone-wrap input { padding-left: 48px; }
 
-/* ── SELECT CHIPS ────────────────────────────────────────────── */
+.phone-wrap { position: relative; }
+.phone-wrap input { padding-left: 52px; }
+
+/* ── CHIPS ───────────────────────────────────────────────────── */
+.field-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 7px;
+  padding-left: 2px;
+  display: block;
+}
+
 .chips-wrap {
   display: flex;
   flex-wrap: wrap;
@@ -330,101 +211,108 @@ input.err {
 .chip {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
   padding: 8px 13px;
-  background: rgba(255,255,255,0.05);
-  border: 1.5px solid var(--border-inp);
+  background: #fff;
+  border: 2px solid var(--border);
   border-radius: 50px;
   font-family: 'Montserrat', sans-serif;
   font-size: 11px;
   font-weight: 700;
-  color: rgba(255,255,255,0.5);
+  color: var(--gray);
   cursor: pointer;
   transition: all 0.15s;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
 
-.chip:hover {
-  border-color: rgba(255,32,104,0.4);
-  color: rgba(255,255,255,0.8);
-}
+.chip:hover { border-color: var(--primary); color: var(--primary); }
 
 .chip.selected {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: var(--primary);
+  border-color: var(--primary);
   color: var(--white);
-  box-shadow: 0 4px 14px rgba(255,32,104,0.3);
+  box-shadow: 0 4px 12px rgba(95,75,139,0.3);
 }
 
-.chip.selected .chip-dot { background: var(--white); }
-
-.chip-dot {
-  width: 5px; height: 5px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.3);
-  flex-shrink: 0;
-  transition: background 0.15s;
-}
-
-/* ── ERROR MSG ───────────────────────────────────────────────── */
+/* ── ERRORS ──────────────────────────────────────────────────── */
 .err-msg {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   color: var(--red);
   text-transform: uppercase;
   letter-spacing: 0.3px;
   margin-top: 5px;
   display: none;
-  padding-left: 2px;
+  padding-left: 4px;
 }
 .err-msg.show { display: block; }
-.chips-err { margin-top: 6px; }
 
 /* ── DIVIDER ─────────────────────────────────────────────────── */
-.divider {
-  height: 1px;
-  background: var(--border);
-  margin: 18px 0;
+.divider { height: 1px; background: var(--border); margin: 16px 0; }
+
+/* ── INFO BOX ────────────────────────────────────────────────── */
+.info-rules {
+  font-size: 11px;
+  font-weight: 600;
+  color: #555;
+  background: var(--gray-light);
+  border: 1.5px solid #e0d8f8;
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+  line-height: 1.6;
+}
+.info-rules strong { color: var(--primary); }
+
+/* ── VALIDITY PILL ───────────────────────────────────────────── */
+.validity-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  background: var(--gray-light);
+  border: 1.5px solid #d4c8f5;
+  border-radius: 50px;
+  padding: 8px 16px;
+  margin-bottom: 14px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-/* ── SUBMIT BTN ──────────────────────────────────────────────── */
+.validity-dot {
+  width: 6px; height: 6px;
+  background: #27ae60;
+  border-radius: 50%;
+  animation: blink 1.6s ease-in-out infinite;
+  flex-shrink: 0;
+}
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+/* ── BTN ─────────────────────────────────────────────────────── */
 .btn {
   width: 100%;
-  padding: 17px;
-  background: var(--accent);
+  padding: 18px;
+  background: var(--primary);
   color: var(--white);
   border: none;
-  border-radius: var(--radius-inp);
+  border-radius: 12px;
   font-family: 'Montserrat', sans-serif;
   font-size: 14px;
   font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 1.5px;
+  letter-spacing: 1px;
   cursor: pointer;
   position: relative;
   overflow: hidden;
   transition: background 0.18s, transform 0.12s, box-shadow 0.18s;
-  box-shadow: 0 8px 28px rgba(255,32,104,0.4);
-  margin-top: 4px;
+  box-shadow: 0 6px 20px rgba(95,75,139,0.4);
 }
 
-.btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 60%);
-  pointer-events: none;
-}
-
-.btn:hover:not(:disabled) {
-  background: var(--accent-dark);
-  transform: translateY(-1px);
-  box-shadow: 0 12px 36px rgba(255,32,104,0.5);
-}
-
-.btn:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
-
+.btn:hover:not(:disabled) { background: var(--primary-dark); transform: translateY(-1px); }
+.btn:disabled { opacity: 0.55; cursor: not-allowed; box-shadow: none; }
 .btn-text { transition: opacity 0.18s; }
 .btn-loader {
   position: absolute; inset: 0;
@@ -433,7 +321,6 @@ input.err {
 }
 .btn.loading .btn-text { opacity: 0; }
 .btn.loading .btn-loader { opacity: 1; }
-
 .spin {
   width: 20px; height: 20px;
   border: 2.5px solid rgba(255,255,255,0.3);
@@ -443,520 +330,350 @@ input.err {
 }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ── MICROCOPY ───────────────────────────────────────────────── */
-.microcopy {
-  text-align: center;
+.terms {
   font-size: 10px;
   font-weight: 600;
-  color: rgba(255,255,255,0.25);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  color: #bbb;
+  text-align: center;
   margin-top: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
   line-height: 1.6;
 }
 
-/* ── ESTADO: ÉXITO ───────────────────────────────────────────── */
+/* ── ESTADOS ─────────────────────────────────────────────────── */
 .state { display: none; }
-.state.show {
-  display: block;
-  animation: cardIn 0.4s cubic-bezier(0.22,1,0.36,1) both;
-}
+.state.show { display: block; animation: cardIn 0.4s cubic-bezier(0.22,1,0.36,1) both; }
 
-.success-card {
-  background: rgba(37,20,66,0.9);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: var(--radius-card);
-  overflow: hidden;
-  box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+/* ── RESULT ──────────────────────────────────────────────────── */
+.result-header {
+  background: var(--primary);
+  padding: 28px 30px 24px;
   text-align: center;
 }
-
-.success-header {
-  background: linear-gradient(135deg, #1a8c56 0%, #0f6b41 100%);
-  padding: 36px 28px 28px;
-  position: relative;
-  overflow: hidden;
-}
-
-.success-header::before {
-  content: '';
-  position: absolute;
-  top: -40px; right: -40px;
-  width: 160px; height: 160px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.05);
-}
-
-.success-icon {
-  font-size: 52px;
-  display: block;
-  margin-bottom: 12px;
+.result-icon {
+  font-size: 48px; display: block; margin-bottom: 10px;
   animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.15s both;
 }
+@keyframes popIn { from{opacity:0;transform:scale(0.3);} to{opacity:1;transform:scale(1);} }
+.result-title { font-size: 20px; font-weight: 900; color: var(--white); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+.result-name  { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 1px; }
 
-@keyframes popIn {
-  from { opacity:0; transform:scale(0.3); }
-  to   { opacity:1; transform:scale(1); }
-}
-
-.success-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 30px;
-  color: var(--white);
-  letter-spacing: 1px;
-  margin-bottom: 4px;
-}
-
-.success-name {
-  font-size: 12px;
-  font-weight: 700;
-  color: rgba(255,255,255,0.6);
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-
-.success-body {
-  padding: 28px 28px 32px;
-}
-
-.success-msg {
-  font-size: 13px;
-  font-weight: 600;
-  color: rgba(255,255,255,0.65);
-  line-height: 1.7;
-  margin-bottom: 24px;
-}
-
-.next-steps {
-  text-align: left;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 16px 18px;
-}
+.result-body { padding: 24px 28px 30px; }
 
 .next-step {
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
+  background: var(--gray-light);
+  border: 1.5px solid #e0d8f8;
+  border-radius: 12px;
+  padding: 12px 14px;
 }
-
-.next-step:last-child { margin-bottom: 0; }
-
 .ns-num {
   width: 22px; height: 22px;
-  background: var(--accent);
+  background: var(--primary);
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  font-size: 10px; font-weight: 900;
-  color: var(--white);
-  flex-shrink: 0;
-  margin-top: 1px;
+  font-size: 10px; font-weight: 900; color: var(--white);
+  flex-shrink: 0; margin-top: 1px;
 }
+.ns-text { font-size: 12px; font-weight: 600; color: #555; line-height: 1.5; }
 
-.ns-text {
-  font-size: 12px;
-  font-weight: 600;
-  color: rgba(255,255,255,0.65);
-  line-height: 1.5;
-}
-
-/* ── FOOTER ──────────────────────────────────────────────────── */
-.footer {
-  text-align: center;
-  margin-top: 24px;
-  font-size: 10px;
-  font-weight: 600;
-  color: rgba(255,255,255,0.2);
+.success-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--yellow);
+  border-radius: 50px;
+  padding: 8px 18px;
+  font-size: 11px;
+  font-weight: 900;
+  color: var(--primary);
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
+  margin-bottom: 18px;
 }
 </style>
 </head>
 <body>
 
-<div class="page-wrap">
-
-  <!-- HERO -->
-  <div class="hero">
-    <div class="hero-logo">
-      <!-- Logo placeholder — reemplaza con <img> cuando tengas el archivo -->
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2C9.2 2 7 4.2 7 7c0 1.8.9 3.3 2.2 4.3C6.3 12.5 4 15.5 4 19h2c0-3.3 2.7-6 6-6s6 2.7 6 6h2c0-3.5-2.3-6.5-5.2-7.7C16.1 10.3 17 8.8 17 7c0-2.8-2.2-5-5-5zm0 2c1.7 0 3 1.3 3 3s-1.3 3-3 3-3-1.3-3-3 1.3-3 3-3z"/>
-      </svg>
+<!-- FORMULARIO -->
+<div id="stateForm" class="state show">
+  <div class="card">
+    <div class="card-header">
+      <div class="brand">Oakberry</div>
+      <div class="brand-sub">Eventos · Bogotá Colombia</div>
+      <div class="event-badge">
+        <span class="icon">🎪</span>
+        <span class="desc">Lleva Oakberry<br>a tu empresa</span>
+      </div>
     </div>
 
-    <div class="hero-eyebrow">Oakberry Colombia · B2B</div>
+    <div class="card-body">
+      <h2 class="section-title">Cuéntanos tu idea</h2>
+      <p class="section-sub">Completa el formulario · te contactamos en &lt;24h</p>
 
-    <h1 class="hero-title">
-      Tu evento<br>
-      <span>con sabor</span><br>
-      Oakberry
-    </h1>
-
-    <p class="hero-sub">
-      Llevamos nuestro açaí fresco directamente a tu empresa, evento o activación. Déjanos los datos y te contactamos en menos de 24 horas.
-    </p>
-
-    <div class="pills">
-      <span class="pill hot">🔥 Bogotá</span>
-      <span class="pill">Eventos corporativos</span>
-      <span class="pill">Activaciones</span>
-      <span class="pill">Bienestar laboral</span>
-    </div>
-  </div>
-
-  <!-- FORMULARIO -->
-  <div id="stateForm" class="state show">
-    <div class="card">
-      <div class="card-header">
-        <div class="card-header-inner">
-          <div class="ch-step">Paso 1 de 1 · Solo toma 1 minuto</div>
-          <div class="ch-title">Cuéntanos tu idea</div>
-          <div class="ch-sub">Completa el formulario y te contactamos pronto</div>
+      <!-- Nombre y empresa -->
+      <div class="form-grid-2">
+        <div class="form-group" style="margin-bottom:0;">
+          <input type="text" id="inp-nombre" placeholder="NOMBRE Y APELLIDO" autocomplete="name">
+          <div class="err-msg" id="err-nombre">⚠ Requerido</div>
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <input type="text" id="inp-empresa" placeholder="EMPRESA">
+          <div class="err-msg" id="err-empresa">⚠ Requerido</div>
         </div>
       </div>
 
-      <div class="card-body">
-
-        <!-- Nombre y empresa -->
-        <div class="form-grid-2">
-          <div class="form-group">
-            <label class="form-label" for="inp-nombre">Nombre y apellido *</label>
-            <input type="text" id="inp-nombre" placeholder="Ej: Laura Gómez" autocomplete="name">
-            <div class="err-msg" id="err-nombre">Requerido</div>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="inp-empresa">Empresa *</label>
-            <input type="text" id="inp-empresa" placeholder="Ej: Bancolombia">
-            <div class="err-msg" id="err-empresa">Requerido</div>
-          </div>
+      <!-- Cargo -->
+      <div class="form-group">
+        <span class="field-label">Cargo *</span>
+        <div class="chips-wrap" id="chips-cargo">
+          <div class="chip" data-val="Marketing">Marketing</div>
+          <div class="chip" data-val="Talento Humano">Talento Humano</div>
+          <div class="chip" data-val="Bienestar">Bienestar</div>
+          <div class="chip" data-val="Gerencia">Gerencia</div>
+          <div class="chip" data-val="Eventos">Eventos</div>
+          <div class="chip" data-val="Otro">Otro</div>
         </div>
-
-        <!-- Cargo -->
-        <div class="form-group">
-          <label class="form-label">Cargo *</label>
-          <div class="chips-wrap" id="chips-cargo">
-            <div class="chip" data-val="Marketing"><span class="chip-dot"></span>Marketing</div>
-            <div class="chip" data-val="Talento Humano"><span class="chip-dot"></span>Talento Humano</div>
-            <div class="chip" data-val="Bienestar"><span class="chip-dot"></span>Bienestar</div>
-            <div class="chip" data-val="Gerencia"><span class="chip-dot"></span>Gerencia</div>
-            <div class="chip" data-val="Eventos"><span class="chip-dot"></span>Eventos</div>
-            <div class="chip" data-val="Otro"><span class="chip-dot"></span>Otro</div>
-          </div>
-          <div class="err-msg chips-err" id="err-cargo">Selecciona tu cargo</div>
-        </div>
-
-        <div class="divider"></div>
-
-        <!-- Tamaño empresa -->
-        <div class="form-group">
-          <label class="form-label">Tamaño de la empresa *</label>
-          <div class="chips-wrap" id="chips-tamano">
-            <div class="chip" data-val="Menos de 50"><span class="chip-dot"></span>&lt;50</div>
-            <div class="chip" data-val="50-100"><span class="chip-dot"></span>50–100</div>
-            <div class="chip" data-val="100-300"><span class="chip-dot"></span>100–300</div>
-            <div class="chip" data-val="300-500"><span class="chip-dot"></span>300–500</div>
-            <div class="chip" data-val="500+"><span class="chip-dot"></span>500+</div>
-          </div>
-          <div class="err-msg chips-err" id="err-tamano">Selecciona el tamaño</div>
-        </div>
-
-        <!-- Tipo experiencia -->
-        <div class="form-group">
-          <label class="form-label">¿Qué tipo de experiencia buscas? *</label>
-          <div class="chips-wrap" id="chips-tipo">
-            <div class="chip" data-val="Activación interna"><span class="chip-dot"></span>Activación interna</div>
-            <div class="chip" data-val="Bienestar para colaboradores"><span class="chip-dot"></span>Bienestar colaboradores</div>
-            <div class="chip" data-val="Evento corporativo"><span class="chip-dot"></span>Evento corporativo</div>
-            <div class="chip" data-val="Networking o lanzamiento"><span class="chip-dot"></span>Networking / Lanzamiento</div>
-            <div class="chip" data-val="Otro"><span class="chip-dot"></span>Otro</div>
-          </div>
-          <div class="err-msg chips-err" id="err-tipo">Selecciona el tipo de experiencia</div>
-        </div>
-
-        <!-- Asistentes -->
-        <div class="form-group">
-          <label class="form-label">¿Cuántas personas asistirían? *</label>
-          <div class="chips-wrap" id="chips-asistentes">
-            <div class="chip" data-val="20-50"><span class="chip-dot"></span>20–50</div>
-            <div class="chip" data-val="50-100"><span class="chip-dot"></span>50–100</div>
-            <div class="chip" data-val="100-300"><span class="chip-dot"></span>100–300</div>
-            <div class="chip" data-val="300+"><span class="chip-dot"></span>300+</div>
-          </div>
-          <div class="err-msg chips-err" id="err-asistentes">Selecciona el rango</div>
-        </div>
-
-        <div class="divider"></div>
-
-        <!-- Celular -->
-        <div class="form-group">
-          <label class="form-label" for="inp-celular">WhatsApp *</label>
-          <div class="phone-wrap">
-            <span class="phone-prefix">+57</span>
-            <input type="tel" id="inp-celular" placeholder="300 000 0000" maxlength="10" inputmode="numeric">
-          </div>
-          <div class="err-msg" id="err-celular">Ingresa un celular válido (10 dígitos)</div>
-        </div>
-
-        <!-- CTA -->
-        <button class="btn" id="btnEnviar">
-          <span class="btn-text">Quiero Oakberry en mi evento 🎯</span>
-          <span class="btn-loader"><span class="spin"></span></span>
-        </button>
-
-        <div class="microcopy">
-          Bogotá · Sin costo de cotización · Respuesta en &lt;24h
-        </div>
-
-      </div><!-- /card-body -->
-    </div><!-- /card -->
-  </div><!-- /stateForm -->
-
-  <!-- ESTADO ÉXITO -->
-  <div id="stateSuccess" class="state">
-    <div class="success-card">
-      <div class="success-header">
-        <div class="card-header-inner">
-          <span class="success-icon">🎉</span>
-          <div class="success-title">¡Solicitud enviada!</div>
-          <div class="success-name" id="txt-success-name"></div>
-        </div>
+        <div class="err-msg" id="err-cargo">⚠ Selecciona tu cargo</div>
       </div>
-      <div class="success-body">
-        <p class="success-msg">
-          Recibimos tu solicitud. Un asesor de Oakberry Colombia se pondrá en contacto contigo en las próximas <strong style="color:var(--white)">24 horas</strong> para coordinar los detalles de tu evento.
-        </p>
-        <div class="next-steps">
-          <div class="next-step">
-            <div class="ns-num">1</div>
-            <div class="ns-text">Nuestro equipo revisará tu solicitud y te contactará por WhatsApp.</div>
-          </div>
-          <div class="next-step">
-            <div class="ns-num">2</div>
-            <div class="ns-text">Enviaremos una propuesta personalizada según el tamaño de tu evento.</div>
-          </div>
-          <div class="next-step">
-            <div class="ns-num">3</div>
-            <div class="ns-text">¡Coordinamos la fecha y dejamos todo listo para que tu equipo disfrute!</div>
-          </div>
+
+      <div class="divider"></div>
+
+      <!-- Tamaño empresa -->
+      <div class="form-group">
+        <span class="field-label">Tamaño de la empresa *</span>
+        <div class="chips-wrap" id="chips-tamano">
+          <div class="chip" data-val="Menos de 50">&lt;50</div>
+          <div class="chip" data-val="50-100">50–100</div>
+          <div class="chip" data-val="100-300">100–300</div>
+          <div class="chip" data-val="300-500">300–500</div>
+          <div class="chip" data-val="500+">500+</div>
         </div>
+        <div class="err-msg" id="err-tamano">⚠ Selecciona el tamaño</div>
       </div>
+
+      <!-- Tipo experiencia -->
+      <div class="form-group">
+        <span class="field-label">¿Qué tipo de experiencia te interesa? *</span>
+        <div class="chips-wrap" id="chips-tipo">
+          <div class="chip" data-val="Activación interna">Activación interna</div>
+          <div class="chip" data-val="Bienestar para colaboradores">Bienestar colaboradores</div>
+          <div class="chip" data-val="Evento corporativo">Evento corporativo</div>
+          <div class="chip" data-val="Networking o lanzamiento">Networking / Lanzamiento</div>
+          <div class="chip" data-val="Otro">Otro</div>
+        </div>
+        <div class="err-msg" id="err-tipo">⚠ Selecciona el tipo de experiencia</div>
+      </div>
+
+      <!-- Asistentes -->
+      <div class="form-group">
+        <span class="field-label">¿Cuántas personas asistirían? *</span>
+        <div class="chips-wrap" id="chips-asistentes">
+          <div class="chip" data-val="20-50">20–50</div>
+          <div class="chip" data-val="50-100">50–100</div>
+          <div class="chip" data-val="100-300">100–300</div>
+          <div class="chip" data-val="300+">300+</div>
+        </div>
+        <div class="err-msg" id="err-asistentes">⚠ Selecciona el rango</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Celular -->
+      <div class="form-group">
+        <div class="phone-wrap">
+          <span class="phone-prefix">+57</span>
+          <input type="tel" id="inp-celular" placeholder="300 000 0000" maxlength="10" inputmode="numeric">
+        </div>
+        <div class="err-msg" id="err-celular">⚠ Celular inválido — 10 dígitos</div>
+      </div>
+
+      <!-- Pill -->
+      <div class="validity-pill">
+        <span class="validity-dot"></span>
+        <span>Bogotá · Cotización gratuita · Respuesta en &lt;24h</span>
+      </div>
+
+      <div class="info-rules">
+        🫐 <strong>+50 empresas</strong> ya disfrutaron Oakberry en sus eventos · Sin costo de cotización
+      </div>
+
+      <button class="btn" id="btnEnviar">
+        <span class="btn-text">Quiero Oakberry en mi evento →</span>
+        <span class="btn-loader"><span class="spin"></span></span>
+      </button>
+
+      <p class="terms">Solo Bogotá · Sin compromiso · Respuesta garantizada</p>
     </div>
   </div>
+</div>
 
-  <!-- ESTADO ERROR -->
-  <div id="stateError" class="state">
-    <div class="card">
-      <div class="card-header" style="background:linear-gradient(135deg,#7c1d2e,#c0392b);">
-        <div class="card-header-inner">
-          <span class="success-icon" style="font-size:40px;">⚠️</span>
-          <div class="success-title">Algo salió mal</div>
-          <div class="success-name">Intenta de nuevo</div>
-        </div>
+<!-- ÉXITO -->
+<div id="stateSuccess" class="state">
+  <div class="card">
+    <div class="result-header">
+      <span class="result-icon">🎉</span>
+      <div class="result-title">¡Solicitud enviada!</div>
+      <div class="result-name" id="txt-success-name"></div>
+    </div>
+    <div class="result-body">
+      <div style="text-align:center;">
+        <div class="success-badge">✅ Recibimos tu solicitud</div>
       </div>
-      <div class="success-body" style="padding:24px 28px 28px;">
-        <p class="success-msg" id="txt-error-msg"></p>
-        <button class="btn" onclick="reintentar()" style="margin-top:8px;">
-          <span class="btn-text">Reintentar</span>
-        </button>
+      <div class="next-step">
+        <div class="ns-num">1</div>
+        <div class="ns-text">Un asesor revisará tu solicitud y te contactará por WhatsApp.</div>
       </div>
+      <div class="next-step">
+        <div class="ns-num">2</div>
+        <div class="ns-text">Recibirás una propuesta personalizada según el tamaño de tu evento.</div>
+      </div>
+      <div class="next-step" style="margin-bottom:16px;">
+        <div class="ns-num">3</div>
+        <div class="ns-text">¡Coordinamos la fecha y tu equipo disfruta açaí fresco! 🫐</div>
+      </div>
+      <p class="terms">Tiempo de respuesta: menos de 24 horas hábiles</p>
     </div>
   </div>
+</div>
 
-  <div class="footer">© 2025 Oakberry Colombia · Manel Foods S.A.S.</div>
-
-</div><!-- /page-wrap -->
+<!-- ERROR -->
+<div id="stateError" class="state">
+  <div class="card">
+    <div class="result-header" style="background:#c0392b;">
+      <span class="result-icon">⚠️</span>
+      <div class="result-title">Algo salió mal</div>
+      <div class="result-name">Intenta de nuevo</div>
+    </div>
+    <div class="result-body">
+      <p style="font-size:13px;font-weight:600;color:#555;text-align:center;margin-bottom:20px;line-height:1.6;" id="txt-error-msg"></p>
+      <button class="btn" onclick="reintentar()">
+        <span class="btn-text">Reintentar</span>
+      </button>
+    </div>
+  </div>
+</div>
 
 <script>
-// ── CONFIGURACIÓN ─────────────────────────────────────────────
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbySGsrq722MsYNYi_erfXLlzdWGIXF-5s-cu59PYSkooC1IbErTDjsDWwMxiTJ16cFr9w/exec";
 
-// ── UTMs desde URL ────────────────────────────────────────────
-function getParam(k) {
-  return new URLSearchParams(window.location.search).get(k) || "";
-}
-
+function getParam(k){ return new URLSearchParams(window.location.search).get(k)||""; }
 const UTM = {
   source:   getParam("utm_source"),
   medium:   getParam("utm_medium"),
   campaign: getParam("utm_campaign"),
-  ad:       getParam("utm_ad")   || getParam("utm_content"),
-  adset:    getParam("utm_adset")|| getParam("utm_term"),
+  ad:       getParam("utm_ad")||getParam("utm_content"),
+  adset:    getParam("utm_adset")||getParam("utm_term"),
   fbclid:   getParam("fbclid"),
 };
 
-// ── ESTADO CHIPS ──────────────────────────────────────────────
-const chipState = {
-  cargo:      null,
-  tamano:     null,
-  tipo:       null,
-  asistentes: null,
-};
+const chipState = { cargo:null, tamano:null, tipo:null, asistentes:null };
 
 document.querySelectorAll(".chips-wrap").forEach(wrap => {
-  const key = wrap.id.replace("chips-", "");
+  const key = wrap.id.replace("chips-","");
   wrap.querySelectorAll(".chip").forEach(chip => {
     chip.addEventListener("click", () => {
       wrap.querySelectorAll(".chip").forEach(c => c.classList.remove("selected"));
       chip.classList.add("selected");
       chipState[key] = chip.dataset.val;
-      document.getElementById("err-" + key).classList.remove("show");
+      document.getElementById("err-"+key).classList.remove("show");
     });
   });
 });
 
-// ── VALIDACIÓN ────────────────────────────────────────────────
-function setErr(id, show) {
-  const el = document.getElementById(id);
-  if (el) show ? el.classList.add("show") : el.classList.remove("show");
-}
+function setErr(id,s){ document.getElementById(id)?.classList[s?"add":"remove"]("show"); }
+function setInpErr(id,s){ document.getElementById(id)?.classList[s?"add":"remove"]("err"); }
 
-function setInpErr(id, show) {
-  const el = document.getElementById(id);
-  if (el) show ? el.classList.add("err") : el.classList.remove("err");
-}
-
-function validar() {
-  let ok = true;
-
+function validar(){
+  let ok=true;
   const nombre  = document.getElementById("inp-nombre").value.trim();
   const empresa = document.getElementById("inp-empresa").value.trim();
-  const celular = document.getElementById("inp-celular").value.replace(/\D/g,"").trim();
-
-  if (!nombre)  { setErr("err-nombre", true);  setInpErr("inp-nombre", true);  ok = false; }
-  else          { setErr("err-nombre", false); setInpErr("inp-nombre", false); }
-
-  if (!empresa) { setErr("err-empresa", true);  setInpErr("inp-empresa", true);  ok = false; }
-  else          { setErr("err-empresa", false); setInpErr("inp-empresa", false); }
-
-  if (!chipState.cargo)      { setErr("err-cargo",      true); ok = false; }
-  if (!chipState.tamano)     { setErr("err-tamano",      true); ok = false; }
-  if (!chipState.tipo)       { setErr("err-tipo",        true); ok = false; }
-  if (!chipState.asistentes) { setErr("err-asistentes",  true); ok = false; }
-
-  if (!celular || celular.length < 10) {
-    setErr("err-celular", true); setInpErr("inp-celular", true); ok = false;
-  } else {
-    setErr("err-celular", false); setInpErr("inp-celular", false);
-  }
-
+  const celular = document.getElementById("inp-celular").value.replace(/\D/g,"");
+  if(!nombre) { setErr("err-nombre",true); setInpErr("inp-nombre",true); ok=false; }
+  else        { setErr("err-nombre",false); setInpErr("inp-nombre",false); }
+  if(!empresa){ setErr("err-empresa",true); setInpErr("inp-empresa",true); ok=false; }
+  else        { setErr("err-empresa",false); setInpErr("inp-empresa",false); }
+  if(!chipState.cargo)      { setErr("err-cargo",true);      ok=false; }
+  if(!chipState.tamano)     { setErr("err-tamano",true);     ok=false; }
+  if(!chipState.tipo)       { setErr("err-tipo",true);       ok=false; }
+  if(!chipState.asistentes) { setErr("err-asistentes",true); ok=false; }
+  if(!celular||celular.length<10){ setErr("err-celular",true); setInpErr("inp-celular",true); ok=false; }
+  else                           { setErr("err-celular",false); setInpErr("inp-celular",false); }
   return ok;
 }
 
-// ── STATES ───────────────────────────────────────────────────
-function showState(id) {
-  ["stateForm","stateSuccess","stateError"].forEach(s => {
-    document.getElementById(s).classList.remove("show");
-  });
+function showState(id){
+  ["stateForm","stateSuccess","stateError"].forEach(s=>
+    document.getElementById(s).classList.remove("show"));
   document.getElementById(id).classList.add("show");
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  window.scrollTo({top:0,behavior:"smooth"});
 }
 
-function reintentar() { showState("stateForm"); }
+function reintentar(){ showState("stateForm"); }
 
-// ── ENVÍO ─────────────────────────────────────────────────────
-document.getElementById("btnEnviar").addEventListener("click", async () => {
-  if (!validar()) return;
-
-  const btn = document.getElementById("btnEnviar");
-  btn.classList.add("loading");
-  btn.disabled = true;
-
+document.getElementById("btnEnviar").addEventListener("click",()=>{
+  if(!validar()) return;
+  const btn=document.getElementById("btnEnviar");
+  btn.classList.add("loading"); btn.disabled=true;
   const nombre  = document.getElementById("inp-nombre").value.trim();
   const empresa = document.getElementById("inp-empresa").value.trim();
-  const celular = "57" + document.getElementById("inp-celular").value.replace(/\D/g,"").trim();
+  const celular = "57"+document.getElementById("inp-celular").value.replace(/\D/g,"");
+  const cbName  = "cb_"+Date.now();
+  let done=false;
 
-  const params = new URLSearchParams({
-    accion:           "registrarLead",
-    nombre,
-    empresa,
-    cargo:            chipState.cargo,
-    tamano_empresa:   chipState.tamano,
-    tipo_experiencia: chipState.tipo,
-    asistentes:       chipState.asistentes,
-    whatsapp:         celular,
-    utm_source:       UTM.source,
-    utm_medium:       UTM.medium,
-    utm_campaign:     UTM.campaign,
-    utm_ad:           UTM.ad,
-    utm_adset:        UTM.adset,
-    fbclid:           UTM.fbclid,
-    callback:         "cb_" + Date.now(),
+  const params=new URLSearchParams({
+    accion:"registrarLead", nombre, empresa,
+    cargo:chipState.cargo, tamano_empresa:chipState.tamano,
+    tipo_experiencia:chipState.tipo, asistentes:chipState.asistentes,
+    whatsapp:celular,
+    utm_source:UTM.source, utm_medium:UTM.medium,
+    utm_campaign:UTM.campaign, utm_ad:UTM.ad,
+    utm_adset:UTM.adset, fbclid:UTM.fbclid,
+    callback:cbName,
   });
 
-  const url = SCRIPT_URL + "?" + params.toString();
+  if(typeof fbq!=="undefined") fbq("track","Lead",{content_name:"Evento B2B",content_category:chipState.tipo||"evento"});
 
-  // Registrar ViewContent en Meta Pixel
-  if (typeof fbq !== "undefined") {
-    fbq("track", "Lead", {
-      content_name: "Evento B2B",
-      content_category: chipState.tipo || "evento",
-    });
-  }
+  const timeout=setTimeout(()=>{
+    if(done)return; done=true;
+    btn.classList.remove("loading"); btn.disabled=false;
+    document.getElementById("txt-error-msg").textContent="La conexión tardó demasiado. Intenta de nuevo.";
+    showState("stateError");
+  },12000);
 
-  let done = false;
-
-  // Timeout de seguridad
-  const timeout = setTimeout(() => {
-    if (!done) {
-      done = true;
-      btn.classList.remove("loading");
-      btn.disabled = false;
-      document.getElementById("txt-error-msg").textContent =
-        "La conexión tardó demasiado. Verifica tu internet y vuelve a intentar.";
-      showState("stateError");
-    }
-  }, 12000);
-
-  // JSONP
-  const cbName = "cb_" + Date.now();
-  window[cbName] = function(res) {
-    if (done) return;
-    done = true;
+  window[cbName]=function(res){
+    if(done)return; done=true;
     clearTimeout(timeout);
-    btn.classList.remove("loading");
-    btn.disabled = false;
+    btn.classList.remove("loading"); btn.disabled=false;
     delete window[cbName];
-    if (script.parentNode) script.parentNode.removeChild(script);
-
-    if (res && res.ok) {
-      document.getElementById("txt-success-name").textContent =
-        "Hola, " + nombre.split(" ")[0] + " 👋";
+    if(script.parentNode) script.parentNode.removeChild(script);
+    if(res&&res.ok){
+      document.getElementById("txt-success-name").textContent="Hola, "+nombre.split(" ")[0]+" 👋";
       showState("stateSuccess");
     } else {
-      document.getElementById("txt-error-msg").textContent =
-        (res && res.msg) ? res.msg : "Ocurrió un error. Intenta de nuevo.";
+      document.getElementById("txt-error-msg").textContent=(res&&res.msg)?res.msg:"Error inesperado. Intenta de nuevo.";
       showState("stateError");
     }
   };
 
-  // Actualizar callback en URL
-  const finalUrl = SCRIPT_URL + "?" + new URLSearchParams({
-    ...Object.fromEntries(params),
-    callback: cbName,
-  }).toString();
-
-  const script = document.createElement("script");
-  script.src = finalUrl;
-  script.onerror = function() {
-    if (done) return;
-    done = true;
+  const script=document.createElement("script");
+  script.src=SCRIPT_URL+"?"+params.toString();
+  script.onerror=function(){
+    if(done)return; done=true;
     clearTimeout(timeout);
-    btn.classList.remove("loading");
-    btn.disabled = false;
-    document.getElementById("txt-error-msg").textContent =
-      "No pudimos conectar con el servidor. Intenta más tarde.";
+    btn.classList.remove("loading"); btn.disabled=false;
+    document.getElementById("txt-error-msg").textContent="No pudimos conectar. Intenta más tarde.";
     showState("stateError");
   };
   document.head.appendChild(script);
 });
 
-// ── SOLO NÚMEROS EN CELULAR ───────────────────────────────────
-document.getElementById("inp-celular").addEventListener("input", function() {
-  this.value = this.value.replace(/\D/g, "").slice(0, 10);
+document.getElementById("inp-celular").addEventListener("input",function(){
+  this.value=this.value.replace(/\D/g,"").slice(0,10);
 });
 </script>
 
