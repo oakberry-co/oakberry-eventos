@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oakberry en tu Evento — Bogotá</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+<!-- META PIXEL -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '914682538016264');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=914682538016264&ev=PageView&noscript=1"/></noscript>
+
+<style>
+/* ── TOKENS ─────────────────────────────────────────────────── */
+:root {
+  --purple:     #12091F;
+  --purple-mid: #1e1035;
+  --purple-card:#251442;
+  --accent:     #FF2068;
+  --accent-dark:#cc1a54;
+  --gold:       #F5C842;
+  --white:      #ffffff;
+  --off-white:  #faf8ff;
+  --muted:      rgba(255,255,255,0.45);
+  --border:     rgba(255,255,255,0.1);
+  --border-inp: rgba(255,255,255,0.18);
+  --red:        #ff4d6d;
+  --radius-card:28px;
+  --radius-inp: 14px;
+}
+
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: var(--purple);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 16px 48px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ── FONDO ATMOSFÉRICO ──────────────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(255,32,104,0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(95,75,139,0.25) 0%, transparent 60%),
+    url('bg.jpg') center/cover no-repeat;
+  background-color: var(--purple);
+  z-index: 0;
+}
+
+/* Overlay oscuro sobre el bg.jpg */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(18,9,31,0.82) 0%, rgba(18,9,31,0.70) 100%);
+  z-index: 1;
+}
+
+/* ── LAYOUT ──────────────────────────────────────────────────── */
+.page-wrap {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 480px;
+  padding-top: 40px;
+}
+
+/* ── HERO ────────────────────────────────────────────────────── */
+.hero {
+  text-align: center;
+  margin-bottom: 28px;
+  padding: 0 8px;
+}
+
+.hero-logo {
+  width: 52px;
+  height: 52px;
+  background: var(--accent);
+  border-radius: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  box-shadow: 0 8px 32px rgba(255,32,104,0.4);
+}
+
+.hero-logo svg { width: 32px; height: 32px; fill: var(--white); }
+
+.hero-eyebrow {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.hero-eyebrow::before,
+.hero-eyebrow::after {
+  content: '';
+  width: 28px;
+  height: 1px;
+  background: var(--accent);
+  opacity: 0.6;
+}
+
+.hero-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(42px, 10vw, 62px);
+  color: var(--white);
+  line-height: 0.95;
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+}
+
+.hero-title span {
+  color: var(--accent);
+  display: block;
+}
+
+.hero-sub {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 340px;
+  margin: 0 auto 20px;
+}
+
+/* ── PILLS DE PROPUESTA ──────────────────────────────────────── */
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+
+.pill {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  padding: 6px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.7);
+  letter-spacing: 0.3px;
+}
+
+.pill.hot {
+  background: rgba(255,32,104,0.12);
+  border-color: rgba(255,32,104,0.3);
+  color: var(--accent);
+}
+
+/* ── CARD ────────────────────────────────────────────────────── */
+.card {
+  background: rgba(37,20,66,0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,32,104,0.08);
+  animation: cardIn 0.5s cubic-bezier(0.22,1,0.36,1) both;
+}
+
+@keyframes cardIn {
+  from { opacity:0; transform:translateY(24px) scale(0.98); }
+  to   { opacity:1; transform:translateY(0)    scale(1); }
+}
+
+/* ── CARD HEADER ─────────────────────────────────────────────── */
+.card-header {
+  background: linear-gradient(135deg, var(--accent) 0%, #c1185a 100%);
+  padding: 24px 28px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.card-header::before {
+  content: '';
+  position: absolute;
+  top: -30px; right: -30px;
+  width: 140px; height: 140px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+}
+
+.card-header::after {
+  content: '';
+  position: absolute;
+  bottom: -20px; left: -10px;
+  width: 90px; height: 90px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+}
+
+.card-header-inner { position: relative; z-index: 1; }
+
+.ch-step {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 4px;
+}
+
+.ch-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px;
+  letter-spacing: 1px;
+  color: var(--white);
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.ch-sub {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.65);
+}
+
+/* ── CARD BODY ───────────────────────────────────────────────── */
+.card-body {
+  padding: 24px 24px 28px;
+}
+
+/* ── FORM GROUPS ─────────────────────────────────────────────── */
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.form-group {
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.form-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+  padding-left: 2px;
+}
+
+input[type=text],
+input[type=tel] {
+  width: 100%;
+  padding: 13px 16px;
+  background: rgba(255,255,255,0.05);
+  border: 1.5px solid var(--border-inp);
+  border-radius: var(--radius-inp);
+  color: var(--white);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  outline: none;
+  transition: border-color 0.18s, background 0.18s, box-shadow 0.18s;
+  -webkit-appearance: none;
+}
+
+input::placeholder { color: rgba(255,255,255,0.2); font-weight: 500; }
+
+input:focus {
+  border-color: var(--accent);
+  background: rgba(255,32,104,0.06);
+  box-shadow: 0 0 0 3px rgba(255,32,104,0.12);
+}
+
+input.err {
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px rgba(255,77,109,0.12);
+}
+
+/* Prefijo celular */
+.phone-wrap { position: relative; }
+.phone-prefix {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.4);
+  pointer-events: none;
+}
+.phone-wrap input { padding-left: 48px; }
+
+/* ── SELECT CHIPS ────────────────────────────────────────────── */
+.chips-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 13px;
+  background: rgba(255,255,255,0.05);
+  border: 1.5px solid var(--border-inp);
+  border-radius: 50px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.5);
+  cursor: pointer;
+  transition: all 0.15s;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.chip:hover {
+  border-color: rgba(255,32,104,0.4);
+  color: rgba(255,255,255,0.8);
+}
+
+.chip.selected {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--white);
+  box-shadow: 0 4px 14px rgba(255,32,104,0.3);
+}
+
+.chip.selected .chip-dot { background: var(--white); }
+
+.chip-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+/* ── ERROR MSG ───────────────────────────────────────────────── */
+.err-msg {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--red);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-top: 5px;
+  display: none;
+  padding-left: 2px;
+}
+.err-msg.show { display: block; }
+.chips-err { margin-top: 6px; }
+
+/* ── DIVIDER ─────────────────────────────────────────────────── */
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 18px 0;
+}
+
+/* ── SUBMIT BTN ──────────────────────────────────────────────── */
+.btn {
+  width: 100%;
+  padding: 17px;
+  background: var(--accent);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius-inp);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.18s, transform 0.12s, box-shadow 0.18s;
+  box-shadow: 0 8px 28px rgba(255,32,104,0.4);
+  margin-top: 4px;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.btn:hover:not(:disabled) {
+  background: var(--accent-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 12px 36px rgba(255,32,104,0.5);
+}
+
+.btn:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+
+.btn-text { transition: opacity 0.18s; }
+.btn-loader {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity 0.18s;
+}
+.btn.loading .btn-text { opacity: 0; }
+.btn.loading .btn-loader { opacity: 1; }
+
+.spin {
+  width: 20px; height: 20px;
+  border: 2.5px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.65s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── MICROCOPY ───────────────────────────────────────────────── */
+.microcopy {
+  text-align: center;
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.25);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 10px;
+  line-height: 1.6;
+}
+
+/* ── ESTADO: ÉXITO ───────────────────────────────────────────── */
+.state { display: none; }
+.state.show {
+  display: block;
+  animation: cardIn 0.4s cubic-bezier(0.22,1,0.36,1) both;
+}
+
+.success-card {
+  background: rgba(37,20,66,0.9);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+  text-align: center;
+}
+
+.success-header {
+  background: linear-gradient(135deg, #1a8c56 0%, #0f6b41 100%);
+  padding: 36px 28px 28px;
+  position: relative;
+  overflow: hidden;
+}
+
+.success-header::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 160px; height: 160px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+}
+
+.success-icon {
+  font-size: 52px;
+  display: block;
+  margin-bottom: 12px;
+  animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.15s both;
+}
+
+@keyframes popIn {
+  from { opacity:0; transform:scale(0.3); }
+  to   { opacity:1; transform:scale(1); }
+}
+
+.success-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 30px;
+  color: var(--white);
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.success-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.6);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.success-body {
+  padding: 28px 28px 32px;
+}
+
+.success-msg {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+
+.next-steps {
+  text-align: left;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 18px;
+}
+
+.next-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.next-step:last-child { margin-bottom: 0; }
+
+.ns-num {
+  width: 22px; height: 22px;
+  background: var(--accent);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 900;
+  color: var(--white);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.ns-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.5;
+}
+
+/* ── FOOTER ──────────────────────────────────────────────────── */
+.footer {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.2);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+</style>
+</head>
+<body>
+
+<div class="page-wrap">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-logo">
+      <!-- Logo placeholder — reemplaza con <img> cuando tengas el archivo -->
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C9.2 2 7 4.2 7 7c0 1.8.9 3.3 2.2 4.3C6.3 12.5 4 15.5 4 19h2c0-3.3 2.7-6 6-6s6 2.7 6 6h2c0-3.5-2.3-6.5-5.2-7.7C16.1 10.3 17 8.8 17 7c0-2.8-2.2-5-5-5zm0 2c1.7 0 3 1.3 3 3s-1.3 3-3 3-3-1.3-3-3 1.3-3 3-3z"/>
+      </svg>
+    </div>
+
+    <div class="hero-eyebrow">Oakberry Colombia · B2B</div>
+
+    <h1 class="hero-title">
+      Tu evento<br>
+      <span>con sabor</span><br>
+      Oakberry
+    </h1>
+
+    <p class="hero-sub">
+      Llevamos nuestro açaí fresco directamente a tu empresa, evento o activación. Déjanos los datos y te contactamos en menos de 24 horas.
+    </p>
+
+    <div class="pills">
+      <span class="pill hot">🔥 Bogotá</span>
+      <span class="pill">Eventos corporativos</span>
+      <span class="pill">Activaciones</span>
+      <span class="pill">Bienestar laboral</span>
+    </div>
+  </div>
+
+  <!-- FORMULARIO -->
+  <div id="stateForm" class="state show">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-inner">
+          <div class="ch-step">Paso 1 de 1 · Solo toma 1 minuto</div>
+          <div class="ch-title">Cuéntanos tu idea</div>
+          <div class="ch-sub">Completa el formulario y te contactamos pronto</div>
+        </div>
+      </div>
+
+      <div class="card-body">
+
+        <!-- Nombre y empresa -->
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="inp-nombre">Nombre y apellido *</label>
+            <input type="text" id="inp-nombre" placeholder="Ej: Laura Gómez" autocomplete="name">
+            <div class="err-msg" id="err-nombre">Requerido</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="inp-empresa">Empresa *</label>
+            <input type="text" id="inp-empresa" placeholder="Ej: Bancolombia">
+            <div class="err-msg" id="err-empresa">Requerido</div>
+          </div>
+        </div>
+
+        <!-- Cargo -->
+        <div class="form-group">
+          <label class="form-label">Cargo *</label>
+          <div class="chips-wrap" id="chips-cargo">
+            <div class="chip" data-val="Marketing"><span class="chip-dot"></span>Marketing</div>
+            <div class="chip" data-val="Talento Humano"><span class="chip-dot"></span>Talento Humano</div>
+            <div class="chip" data-val="Bienestar"><span class="chip-dot"></span>Bienestar</div>
+            <div class="chip" data-val="Gerencia"><span class="chip-dot"></span>Gerencia</div>
+            <div class="chip" data-val="Eventos"><span class="chip-dot"></span>Eventos</div>
+            <div class="chip" data-val="Otro"><span class="chip-dot"></span>Otro</div>
+          </div>
+          <div class="err-msg chips-err" id="err-cargo">Selecciona tu cargo</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Tamaño empresa -->
+        <div class="form-group">
+          <label class="form-label">Tamaño de la empresa *</label>
+          <div class="chips-wrap" id="chips-tamano">
+            <div class="chip" data-val="Menos de 50"><span class="chip-dot"></span>&lt;50</div>
+            <div class="chip" data-val="50-100"><span class="chip-dot"></span>50–100</div>
+            <div class="chip" data-val="100-300"><span class="chip-dot"></span>100–300</div>
+            <div class="chip" data-val="300-500"><span class="chip-dot"></span>300–500</div>
+            <div class="chip" data-val="500+"><span class="chip-dot"></span>500+</div>
+          </div>
+          <div class="err-msg chips-err" id="err-tamano">Selecciona el tamaño</div>
+        </div>
+
+        <!-- Tipo experiencia -->
+        <div class="form-group">
+          <label class="form-label">¿Qué tipo de experiencia buscas? *</label>
+          <div class="chips-wrap" id="chips-tipo">
+            <div class="chip" data-val="Activación interna"><span class="chip-dot"></span>Activación interna</div>
+            <div class="chip" data-val="Bienestar para colaboradores"><span class="chip-dot"></span>Bienestar colaboradores</div>
+            <div class="chip" data-val="Evento corporativo"><span class="chip-dot"></span>Evento corporativo</div>
+            <div class="chip" data-val="Networking o lanzamiento"><span class="chip-dot"></span>Networking / Lanzamiento</div>
+            <div class="chip" data-val="Otro"><span class="chip-dot"></span>Otro</div>
+          </div>
+          <div class="err-msg chips-err" id="err-tipo">Selecciona el tipo de experiencia</div>
+        </div>
+
+        <!-- Asistentes -->
+        <div class="form-group">
+          <label class="form-label">¿Cuántas personas asistirían? *</label>
+          <div class="chips-wrap" id="chips-asistentes">
+            <div class="chip" data-val="20-50"><span class="chip-dot"></span>20–50</div>
+            <div class="chip" data-val="50-100"><span class="chip-dot"></span>50–100</div>
+            <div class="chip" data-val="100-300"><span class="chip-dot"></span>100–300</div>
+            <div class="chip" data-val="300+"><span class="chip-dot"></span>300+</div>
+          </div>
+          <div class="err-msg chips-err" id="err-asistentes">Selecciona el rango</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Celular -->
+        <div class="form-group">
+          <label class="form-label" for="inp-celular">WhatsApp *</label>
+          <div class="phone-wrap">
+            <span class="phone-prefix">+57</span>
+            <input type="tel" id="inp-celular" placeholder="300 000 0000" maxlength="10" inputmode="numeric">
+          </div>
+          <div class="err-msg" id="err-celular">Ingresa un celular válido (10 dígitos)</div>
+        </div>
+
+        <!-- CTA -->
+        <button class="btn" id="btnEnviar">
+          <span class="btn-text">Quiero Oakberry en mi evento 🎯</span>
+          <span class="btn-loader"><span class="spin"></span></span>
+        </button>
+
+        <div class="microcopy">
+          Bogotá · Sin costo de cotización · Respuesta en &lt;24h
+        </div>
+
+      </div><!-- /card-body -->
+    </div><!-- /card -->
+  </div><!-- /stateForm -->
+
+  <!-- ESTADO ÉXITO -->
+  <div id="stateSuccess" class="state">
+    <div class="success-card">
+      <div class="success-header">
+        <div class="card-header-inner">
+          <span class="success-icon">🎉</span>
+          <div class="success-title">¡Solicitud enviada!</div>
+          <div class="success-name" id="txt-success-name"></div>
+        </div>
+      </div>
+      <div class="success-body">
+        <p class="success-msg">
+          Recibimos tu solicitud. Un asesor de Oakberry Colombia se pondrá en contacto contigo en las próximas <strong style="color:var(--white)">24 horas</strong> para coordinar los detalles de tu evento.
+        </p>
+        <div class="next-steps">
+          <div class="next-step">
+            <div class="ns-num">1</div>
+            <div class="ns-text">Nuestro equipo revisará tu solicitud y te contactará por WhatsApp.</div>
+          </div>
+          <div class="next-step">
+            <div class="ns-num">2</div>
+            <div class="ns-text">Enviaremos una propuesta personalizada según el tamaño de tu evento.</div>
+          </div>
+          <div class="next-step">
+            <div class="ns-num">3</div>
+            <div class="ns-text">¡Coordinamos la fecha y dejamos todo listo para que tu equipo disfrute!</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ESTADO ERROR -->
+  <div id="stateError" class="state">
+    <div class="card">
+      <div class="card-header" style="background:linear-gradient(135deg,#7c1d2e,#c0392b);">
+        <div class="card-header-inner">
+          <span class="success-icon" style="font-size:40px;">⚠️</span>
+          <div class="success-title">Algo salió mal</div>
+          <div class="success-name">Intenta de nuevo</div>
+        </div>
+      </div>
+      <div class="success-body" style="padding:24px 28px 28px;">
+        <p class="success-msg" id="txt-error-msg"></p>
+        <button class="btn" onclick="reintentar()" style="margin-top:8px;">
+          <span class="btn-text">Reintentar</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">© 2025 Oakberry Colombia · Manel Foods S.A.S.</div>
+
+</div><!-- /page-wrap -->
+
+<script>
+// ── CONFIGURACIÓN ─────────────────────────────────────────────
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbySGsrq722MsYNYi_erfXLlzdWGIXF-5s-cu59PYSkooC1IbErTDjsDWwMxiTJ16cFr9w/exec";
+
+// ── UTMs desde URL ────────────────────────────────────────────
+function getParam(k) {
+  return new URLSearchParams(window.location.search).get(k) || "";
+}
+
+const UTM = {
+  source:   getParam("utm_source"),
+  medium:   getParam("utm_medium"),
+  campaign: getParam("utm_campaign"),
+  ad:       getParam("utm_ad")   || getParam("utm_content"),
+  adset:    getParam("utm_adset")|| getParam("utm_term"),
+  fbclid:   getParam("fbclid"),
+};
+
+// ── ESTADO CHIPS ──────────────────────────────────────────────
+const chipState = {
+  cargo:      null,
+  tamano:     null,
+  tipo:       null,
+  asistentes: null,
+};
+
+document.querySelectorAll(".chips-wrap").forEach(wrap => {
+  const key = wrap.id.replace("chips-", "");
+  wrap.querySelectorAll(".chip").forEach(chip => {
+    chip.addEventListener("click", () => {
+      wrap.querySelectorAll(".chip").forEach(c => c.classList.remove("selected"));
+      chip.classList.add("selected");
+      chipState[key] = chip.dataset.val;
+      document.getElementById("err-" + key).classList.remove("show");
+    });
+  });
+});
+
+// ── VALIDACIÓN ────────────────────────────────────────────────
+function setErr(id, show) {
+  const el = document.getElementById(id);
+  if (el) show ? el.classList.add("show") : el.classList.remove("show");
+}
+
+function setInpErr(id, show) {
+  const el = document.getElementById(id);
+  if (el) show ? el.classList.add("err") : el.classList.remove("err");
+}
+
+function validar() {
+  let ok = true;
+
+  const nombre  = document.getElementById("inp-nombre").value.trim();
+  const empresa = document.getElementById("inp-empresa").value.trim();
+  const celular = document.getElementById("inp-celular").value.replace(/\D/g,"").trim();
+
+  if (!nombre)  { setErr("err-nombre", true);  setInpErr("inp-nombre", true);  ok = false; }
+  else          { setErr("err-nombre", false); setInpErr("inp-nombre", false); }
+
+  if (!empresa) { setErr("err-empresa", true);  setInpErr("inp-empresa", true);  ok = false; }
+  else          { setErr("err-empresa", false); setInpErr("inp-empresa", false); }
+
+  if (!chipState.cargo)      { setErr("err-cargo",      true); ok = false; }
+  if (!chipState.tamano)     { setErr("err-tamano",      true); ok = false; }
+  if (!chipState.tipo)       { setErr("err-tipo",        true); ok = false; }
+  if (!chipState.asistentes) { setErr("err-asistentes",  true); ok = false; }
+
+  if (!celular || celular.length < 10) {
+    setErr("err-celular", true); setInpErr("inp-celular", true); ok = false;
+  } else {
+    setErr("err-celular", false); setInpErr("inp-celular", false);
+  }
+
+  return ok;
+}
+
+// ── STATES ───────────────────────────────────────────────────
+function showState(id) {
+  ["stateForm","stateSuccess","stateError"].forEach(s => {
+    document.getElementById(s).classList.remove("show");
+  });
+  document.getElementById(id).classList.add("show");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function reintentar() { showState("stateForm"); }
+
+// ── ENVÍO ─────────────────────────────────────────────────────
+document.getElementById("btnEnviar").addEventListener("click", async () => {
+  if (!validar()) return;
+
+  const btn = document.getElementById("btnEnviar");
+  btn.classList.add("loading");
+  btn.disabled = true;
+
+  const nombre  = document.getElementById("inp-nombre").value.trim();
+  const empresa = document.getElementById("inp-empresa").value.trim();
+  const celular = "57" + document.getElementById("inp-celular").value.replace(/\D/g,"").trim();
+
+  const params = new URLSearchParams({
+    accion:           "registrarLead",
+    nombre,
+    empresa,
+    cargo:            chipState.cargo,
+    tamano_empresa:   chipState.tamano,
+    tipo_experiencia: chipState.tipo,
+    asistentes:       chipState.asistentes,
+    whatsapp:         celular,
+    utm_source:       UTM.source,
+    utm_medium:       UTM.medium,
+    utm_campaign:     UTM.campaign,
+    utm_ad:           UTM.ad,
+    utm_adset:        UTM.adset,
+    fbclid:           UTM.fbclid,
+    callback:         "cb_" + Date.now(),
+  });
+
+  const url = SCRIPT_URL + "?" + params.toString();
+
+  // Registrar ViewContent en Meta Pixel
+  if (typeof fbq !== "undefined") {
+    fbq("track", "Lead", {
+      content_name: "Evento B2B",
+      content_category: chipState.tipo || "evento",
+    });
+  }
+
+  let done = false;
+
+  // Timeout de seguridad
+  const timeout = setTimeout(() => {
+    if (!done) {
+      done = true;
+      btn.classList.remove("loading");
+      btn.disabled = false;
+      document.getElementById("txt-error-msg").textContent =
+        "La conexión tardó demasiado. Verifica tu internet y vuelve a intentar.";
+      showState("stateError");
+    }
+  }, 12000);
+
+  // JSONP
+  const cbName = "cb_" + Date.now();
+  window[cbName] = function(res) {
+    if (done) return;
+    done = true;
+    clearTimeout(timeout);
+    btn.classList.remove("loading");
+    btn.disabled = false;
+    delete window[cbName];
+    if (script.parentNode) script.parentNode.removeChild(script);
+
+    if (res && res.ok) {
+      document.getElementById("txt-success-name").textContent =
+        "Hola, " + nombre.split(" ")[0] + " 👋";
+      showState("stateSuccess");
+    } else {
+      document.getElementById("txt-error-msg").textContent =
+        (res && res.msg) ? res.msg : "Ocurrió un error. Intenta de nuevo.";
+      showState("stateError");
+    }
+  };
+
+  // Actualizar callback en URL
+  const finalUrl = SCRIPT_URL + "?" + new URLSearchParams({
+    ...Object.fromEntries(params),
+    callback: cbName,
+  }).toString();
+
+  const script = document.createElement("script");
+  script.src = finalUrl;
+  script.onerror = function() {
+    if (done) return;
+    done = true;
+    clearTimeout(timeout);
+    btn.classList.remove("loading");
+    btn.disabled = false;
+    document.getElementById("txt-error-msg").textContent =
+      "No pudimos conectar con el servidor. Intenta más tarde.";
+    showState("stateError");
+  };
+  document.head.appendChild(script);
+});
+
+// ── SOLO NÚMEROS EN CELULAR ───────────────────────────────────
+document.getElementById("inp-celular").addEventListener("input", function() {
+  this.value = this.value.replace(/\D/g, "").slice(0, 10);
+});
+</script>
+
+</body>
+</html>
