@@ -2,8 +2,13 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#5F4B8B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Oakberry en tu Evento — Bogotá</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
 
 <!-- META PIXEL -->
@@ -14,392 +19,345 @@ n.callMethod.apply(n,arguments):n.queue.push(arguments)};
 if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
 n.queue=[];t=b.createElement(e);t.async=!0;
 t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
+s.parentNode.insertBefore(t,s)}(window,document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '914682538016264');
-fbq('track', 'PageView');
+fbq('init','914682538016264');
+fbq('track','PageView');
 </script>
 <noscript><img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id=914682538016264&ev=PageView&noscript=1"/></noscript>
+src="https://www.facebook.com/tr?id=914682538016264&ev=PageView&noscript=1"/></noscript>
 
 <style>
-/* ── TOKENS — sistema cupones ────────────────────────────────── */
-:root {
+/* ── TOKENS ──────────────────────────────────────────────────── */
+:root{
   --primary:      #5F4B8B;
   --primary-dark: #4a3a6e;
   --yellow:       #F5C842;
   --white:        #ffffff;
-  --off-white:    rgba(255,255,255,0.96);
+  --off-white:    #fdfcff;
   --border:       #e8e3f4;
   --gray:         #999;
   --gray-light:   #f7f4ff;
   --red:          #c0392b;
+  /* Mobile touch targets */
+  --tap-min:      48px;
 }
 
-*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+/* ── RESET ───────────────────────────────────────────────────── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;}
 
-body {
-  font-family: 'Montserrat', sans-serif;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 24px 16px 48px;
+/* ── BODY ────────────────────────────────────────────────────── */
+body{
+  font-family:'Montserrat',sans-serif;
+  min-height:100vh;
+  min-height:-webkit-fill-available;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  /* Mobile: sin padding horizontal excesivo, la card ocupa todo */
+  padding:0 0 env(safe-area-inset-bottom,24px);
   background:
-    linear-gradient(rgba(95,75,139,0.52), rgba(95,75,139,0.52)),
+    linear-gradient(rgba(95,75,139,0.55),rgba(95,75,139,0.55)),
     url('Oakville.jpg') center/cover no-repeat fixed;
-  background-color: #5F4B8B;
+  background-color:#5F4B8B;
+  /* Evita overscroll color blanco en iOS */
+  overscroll-behavior:none;
 }
 
 /* ── CARD ────────────────────────────────────────────────────── */
-.card {
-  background: var(--off-white);
-  border-radius: 30px;
-  width: 100%;
-  max-width: 420px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.35);
-  overflow: hidden;
-  animation: cardIn 0.5s cubic-bezier(0.22,1,0.36,1) both;
-  margin-top: 16px;
+.card{
+  background:var(--off-white);
+  width:100%;
+  /* Mobile: sin border-radius arriba, la card llena la pantalla */
+  border-radius:0 0 28px 28px;
+  box-shadow:0 8px 40px rgba(0,0,0,0.3);
+  overflow:hidden;
+  animation:cardIn 0.45s cubic-bezier(0.22,1,0.36,1) both;
+  /* Desktop: máx 440px centrado con margen */
+  max-width:440px;
 }
 
-@keyframes cardIn {
-  from { opacity:0; transform:translateY(28px) scale(0.97); }
-  to   { opacity:1; transform:translateY(0)    scale(1); }
+@media(min-width:480px){
+  body{padding:28px 16px 48px;}
+  .card{border-radius:28px;margin-top:8px;}
+}
+
+@keyframes cardIn{
+  from{opacity:0;transform:translateY(20px);}
+  to{opacity:1;transform:translateY(0);}
 }
 
 /* ── CARD HEADER ─────────────────────────────────────────────── */
-.card-header {
-  background: var(--primary);
-  padding: 28px 30px 24px;
-  text-align: center;
+.card-header{
+  background:var(--primary);
+  padding:28px 24px 22px;
+  padding-top:calc(28px + env(safe-area-inset-top,0px));
+  text-align:center;
 }
 
-.brand {
-  font-size: 28px;
-  font-weight: 900;
-  color: var(--white);
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-bottom: 4px;
+.brand{
+  font-size:26px;
+  font-weight:900;
+  color:var(--white);
+  text-transform:uppercase;
+  letter-spacing:2px;
+  margin-bottom:3px;
 }
 
-.brand-sub {
-  font-size: 11px;
-  font-weight: 700;
-  color: rgba(255,255,255,0.6);
-  text-transform: uppercase;
-  letter-spacing: 2.5px;
-  margin-bottom: 16px;
+.brand-sub{
+  font-size:10px;
+  font-weight:700;
+  color:rgba(255,255,255,0.55);
+  text-transform:uppercase;
+  letter-spacing:2.5px;
+  margin-bottom:14px;
 }
 
-.event-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: var(--yellow);
-  border-radius: 50px;
-  padding: 10px 22px;
+.event-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  background:var(--yellow);
+  border-radius:50px;
+  padding:9px 20px;
 }
-
-.event-badge .icon { font-size: 24px; line-height: 1; }
-
-.event-badge .desc {
-  font-size: 11px;
-  font-weight: 900;
-  color: var(--primary);
-  text-transform: uppercase;
-  text-align: left;
-  line-height: 1.4;
-  letter-spacing: 0.3px;
+.event-badge .icon{font-size:22px;line-height:1;}
+.event-badge .desc{
+  font-size:11px;font-weight:900;color:var(--primary);
+  text-transform:uppercase;text-align:left;line-height:1.4;
 }
 
 /* ── CARD BODY ───────────────────────────────────────────────── */
-.card-body { padding: 26px 28px 30px; }
+.card-body{padding:22px 20px 28px;}
 
-.section-title {
-  color: var(--primary);
-  text-transform: uppercase;
-  font-weight: 900;
-  font-size: 16px;
-  letter-spacing: 0.5px;
-  text-align: center;
-  margin-bottom: 4px;
+@media(min-width:380px){.card-body{padding:24px 24px 30px;}}
+
+.section-title{
+  color:var(--primary);text-transform:uppercase;font-weight:900;
+  font-size:15px;letter-spacing:0.5px;text-align:center;margin-bottom:3px;
+}
+.section-sub{
+  font-size:11px;font-weight:600;color:var(--gray);text-align:center;
+  margin-bottom:18px;text-transform:uppercase;letter-spacing:0.3px;line-height:1.5;
 }
 
-.section-sub {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--gray);
-  text-align: center;
-  margin-bottom: 20px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  line-height: 1.6;
+/* ── INPUTS ──────────────────────────────────────────────────── */
+/* Mobile: stacked, nunca grid de 2 en pantallas pequeñas */
+.form-grid-2{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-bottom:10px;
 }
 
-/* ── FORM ────────────────────────────────────────────────────── */
-.form-grid-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 12px;
+@media(min-width:400px){
+  .form-grid-2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+  }
 }
 
-.form-group { margin-bottom: 12px; position: relative; }
+.form-group{margin-bottom:10px;position:relative;}
+.form-group.no-mb{margin-bottom:0;}
 
-input[type=text], input[type=tel] {
-  width: 100%;
-  padding: 14px 16px;
-  border-radius: 12px;
-  border: 2px solid var(--border);
-  font-family: 'Montserrat', sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--primary);
-  outline: none;
-  background: #fff;
-  transition: border-color 0.18s, box-shadow 0.18s;
-  -webkit-appearance: none;
+input[type=text],input[type=tel]{
+  width:100%;
+  /* Altura mínima de tap target */
+  min-height:var(--tap-min);
+  padding:13px 16px;
+  border-radius:12px;
+  border:2px solid var(--border);
+  font-family:'Montserrat',sans-serif;
+  /* 16px mínimo evita zoom automático en iOS */
+  font-size:16px;
+  font-weight:700;
+  color:var(--primary);
+  outline:none;
+  background:#fff;
+  transition:border-color 0.18s,box-shadow 0.18s;
+  -webkit-appearance:none;
+  /* Previene zoom al enfocar en iOS */
+  transform:translateZ(0);
 }
 
-input::placeholder { color: #bbb; font-weight: 600; }
+input::placeholder{color:#bbb;font-weight:500;font-size:14px;}
+input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(95,75,139,0.12);}
+input.err{border-color:var(--red);box-shadow:0 0 0 3px rgba(192,57,43,0.1);}
 
-input:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(95,75,139,0.12);
+.phone-prefix{
+  position:absolute;left:16px;top:50%;transform:translateY(-50%);
+  font-size:15px;font-weight:700;color:var(--primary);pointer-events:none;
 }
-
-input.err {
-  border-color: var(--red);
-  box-shadow: 0 0 0 3px rgba(192,57,43,0.1);
-}
-
-.phone-prefix {
-  position: absolute;
-  left: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--primary);
-  pointer-events: none;
-}
-
-.phone-wrap { position: relative; }
-.phone-wrap input { padding-left: 52px; }
+.phone-wrap{position:relative;}
+.phone-wrap input{padding-left:52px;}
 
 /* ── CHIPS ───────────────────────────────────────────────────── */
-.field-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--gray);
-  margin-bottom: 7px;
-  padding-left: 2px;
-  display: block;
+.field-label{
+  font-size:10px;font-weight:700;letter-spacing:1px;
+  text-transform:uppercase;color:var(--gray);
+  margin-bottom:7px;padding-left:2px;display:block;
 }
 
-.chips-wrap {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
+.chips-wrap{display:flex;flex-wrap:wrap;gap:7px;}
+
+.chip{
+  display:inline-flex;
+  align-items:center;
+  /* Tap target mínimo vertical */
+  min-height:36px;
+  padding:0 14px;
+  background:#fff;
+  border:2px solid var(--border);
+  border-radius:50px;
+  font-family:'Montserrat',sans-serif;
+  font-size:12px;
+  font-weight:700;
+  color:var(--gray);
+  cursor:pointer;
+  transition:border-color 0.15s,color 0.15s,background 0.15s,box-shadow 0.15s;
+  user-select:none;
+  -webkit-tap-highlight-color:transparent;
+  /* Feedback táctil inmediato */
+  touch-action:manipulation;
 }
 
-.chip {
-  display: inline-flex;
-  align-items: center;
-  padding: 8px 13px;
-  background: #fff;
-  border: 2px solid var(--border);
-  border-radius: 50px;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--gray);
-  cursor: pointer;
-  transition: all 0.15s;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-}
+.chip:active{transform:scale(0.96);}
 
-.chip:hover { border-color: var(--primary); color: var(--primary); }
-
-.chip.selected {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: var(--white);
-  box-shadow: 0 4px 12px rgba(95,75,139,0.3);
+.chip.selected{
+  background:var(--primary);
+  border-color:var(--primary);
+  color:var(--white);
+  box-shadow:0 3px 10px rgba(95,75,139,0.28);
 }
 
 /* ── ERRORS ──────────────────────────────────────────────────── */
-.err-msg {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--red);
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-  margin-top: 5px;
-  display: none;
-  padding-left: 4px;
+.err-msg{
+  font-size:11px;font-weight:700;color:var(--red);
+  text-transform:uppercase;letter-spacing:0.3px;
+  margin-top:5px;display:none;padding-left:4px;
 }
-.err-msg.show { display: block; }
+.err-msg.show{display:block;}
 
 /* ── DIVIDER ─────────────────────────────────────────────────── */
-.divider { height: 1px; background: var(--border); margin: 16px 0; }
+.divider{height:1px;background:var(--border);margin:14px 0;}
 
 /* ── INFO BOX ────────────────────────────────────────────────── */
-.info-rules {
-  font-size: 11px;
-  font-weight: 600;
-  color: #555;
-  background: var(--gray-light);
-  border: 1.5px solid #e0d8f8;
-  border-radius: 10px;
-  padding: 10px 14px;
-  margin-bottom: 14px;
-  line-height: 1.6;
+.info-rules{
+  font-size:12px;font-weight:600;color:#555;
+  background:var(--gray-light);border:1.5px solid #e0d8f8;
+  border-radius:10px;padding:11px 14px;
+  margin-bottom:14px;line-height:1.6;
 }
-.info-rules strong { color: var(--primary); }
+.info-rules strong{color:var(--primary);}
 
 /* ── VALIDITY PILL ───────────────────────────────────────────── */
-.validity-pill {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  background: var(--gray-light);
-  border: 1.5px solid #d4c8f5;
-  border-radius: 50px;
-  padding: 8px 16px;
-  margin-bottom: 14px;
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--primary);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+.validity-pill{
+  display:flex;align-items:center;justify-content:center;gap:7px;
+  background:var(--gray-light);border:1.5px solid #d4c8f5;border-radius:50px;
+  padding:9px 16px;margin-bottom:14px;
+  font-size:10px;font-weight:700;color:var(--primary);
+  text-transform:uppercase;letter-spacing:0.5px;
+  text-align:center;line-height:1.4;
 }
-
-.validity-dot {
-  width: 6px; height: 6px;
-  background: #27ae60;
-  border-radius: 50%;
-  animation: blink 1.6s ease-in-out infinite;
-  flex-shrink: 0;
+.validity-dot{
+  width:7px;height:7px;background:#27ae60;border-radius:50%;
+  animation:blink 1.6s ease-in-out infinite;flex-shrink:0;
 }
-@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
 
 /* ── BTN ─────────────────────────────────────────────────────── */
-.btn {
-  width: 100%;
-  padding: 18px;
-  background: var(--primary);
-  color: var(--white);
-  border: none;
-  border-radius: 12px;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 14px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: background 0.18s, transform 0.12s, box-shadow 0.18s;
-  box-shadow: 0 6px 20px rgba(95,75,139,0.4);
+.btn{
+  width:100%;
+  min-height:56px;
+  padding:0 18px;
+  background:var(--primary);
+  color:var(--white);
+  border:none;
+  border-radius:14px;
+  font-family:'Montserrat',sans-serif;
+  font-size:14px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  cursor:pointer;
+  position:relative;
+  overflow:hidden;
+  transition:background 0.18s,transform 0.1s,box-shadow 0.18s;
+  box-shadow:0 6px 20px rgba(95,75,139,0.4);
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
 }
+.btn:active:not(:disabled){transform:scale(0.98);}
+.btn:hover:not(:disabled){background:var(--primary-dark);}
+.btn:disabled{opacity:0.55;cursor:not-allowed;box-shadow:none;}
+.btn-text{transition:opacity 0.18s;}
+.btn-loader{
+  position:absolute;inset:0;display:flex;
+  align-items:center;justify-content:center;
+  opacity:0;transition:opacity 0.18s;
+}
+.btn.loading .btn-text{opacity:0;}
+.btn.loading .btn-loader{opacity:1;}
+.spin{
+  width:22px;height:22px;
+  border:2.5px solid rgba(255,255,255,0.3);
+  border-top-color:#fff;border-radius:50%;
+  animation:spin 0.65s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
 
-.btn:hover:not(:disabled) { background: var(--primary-dark); transform: translateY(-1px); }
-.btn:disabled { opacity: 0.55; cursor: not-allowed; box-shadow: none; }
-.btn-text { transition: opacity 0.18s; }
-.btn-loader {
-  position: absolute; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; transition: opacity 0.18s;
-}
-.btn.loading .btn-text { opacity: 0; }
-.btn.loading .btn-loader { opacity: 1; }
-.spin {
-  width: 20px; height: 20px;
-  border: 2.5px solid rgba(255,255,255,0.3);
-  border-top-color: #fff;
-  border-radius: 50%;
-  animation: spin 0.65s linear infinite;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.terms {
-  font-size: 10px;
-  font-weight: 600;
-  color: #bbb;
-  text-align: center;
-  margin-top: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-  line-height: 1.6;
+.terms{
+  font-size:10px;font-weight:600;color:#bbb;text-align:center;
+  margin-top:10px;text-transform:uppercase;letter-spacing:0.3px;line-height:1.6;
 }
 
 /* ── ESTADOS ─────────────────────────────────────────────────── */
-.state { display: none; }
-.state.show { display: block; animation: cardIn 0.4s cubic-bezier(0.22,1,0.36,1) both; }
+.state{display:none;}
+.state.show{display:block;animation:cardIn 0.4s cubic-bezier(0.22,1,0.36,1) both;}
 
 /* ── RESULT ──────────────────────────────────────────────────── */
-.result-header {
-  background: var(--primary);
-  padding: 28px 30px 24px;
-  text-align: center;
+.result-header{
+  background:var(--primary);
+  padding:32px 24px 24px;
+  padding-top:calc(32px + env(safe-area-inset-top,0px));
+  text-align:center;
 }
-.result-icon {
-  font-size: 48px; display: block; margin-bottom: 10px;
-  animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.15s both;
+.result-icon{
+  font-size:50px;display:block;margin-bottom:10px;
+  animation:popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.15s both;
 }
-@keyframes popIn { from{opacity:0;transform:scale(0.3);} to{opacity:1;transform:scale(1);} }
-.result-title { font-size: 20px; font-weight: 900; color: var(--white); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
-.result-name  { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.6); text-transform: uppercase; letter-spacing: 1px; }
+@keyframes popIn{from{opacity:0;transform:scale(0.3);}to{opacity:1;transform:scale(1);}}
+.result-title{font-size:20px;font-weight:900;color:var(--white);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.result-name{font-size:12px;font-weight:700;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:1px;}
 
-.result-body { padding: 24px 28px 30px; }
+.result-body{padding:22px 20px 28px;}
+@media(min-width:380px){.result-body{padding:24px 24px 32px;}}
 
-.next-step {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 10px;
-  background: var(--gray-light);
-  border: 1.5px solid #e0d8f8;
-  border-radius: 12px;
-  padding: 12px 14px;
+.next-step{
+  display:flex;align-items:flex-start;gap:12px;
+  margin-bottom:10px;background:var(--gray-light);
+  border:1.5px solid #e0d8f8;border-radius:12px;padding:12px 14px;
 }
-.ns-num {
-  width: 22px; height: 22px;
-  background: var(--primary);
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 10px; font-weight: 900; color: var(--white);
-  flex-shrink: 0; margin-top: 1px;
+.ns-num{
+  width:24px;height:24px;background:var(--primary);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:900;color:var(--white);flex-shrink:0;margin-top:1px;
 }
-.ns-text { font-size: 12px; font-weight: 600; color: #555; line-height: 1.5; }
+.ns-text{font-size:12px;font-weight:600;color:#555;line-height:1.55;}
 
-.success-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--yellow);
-  border-radius: 50px;
-  padding: 8px 18px;
-  font-size: 11px;
-  font-weight: 900;
-  color: var(--primary);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 18px;
+.success-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--yellow);border-radius:50px;padding:8px 18px;
+  font-size:11px;font-weight:900;color:var(--primary);
+  text-transform:uppercase;letter-spacing:0.5px;margin-bottom:16px;
 }
 </style>
 </head>
 <body>
 
-<!-- FORMULARIO -->
+<!-- ── FORMULARIO ─────────────────────────────────────────────── -->
 <div id="stateForm" class="state show">
   <div class="card">
     <div class="card-header">
@@ -417,12 +375,17 @@ input.err {
 
       <!-- Nombre y empresa -->
       <div class="form-grid-2">
-        <div class="form-group" style="margin-bottom:0;">
-          <input type="text" id="inp-nombre" placeholder="NOMBRE Y APELLIDO" autocomplete="name">
+        <div class="form-group no-mb">
+          <input type="text" id="inp-nombre"
+            placeholder="Nombre y apellido"
+            autocomplete="name"
+            autocorrect="off" autocapitalize="words" spellcheck="false">
           <div class="err-msg" id="err-nombre">⚠ Requerido</div>
         </div>
-        <div class="form-group" style="margin-bottom:0;">
-          <input type="text" id="inp-empresa" placeholder="EMPRESA">
+        <div class="form-group no-mb">
+          <input type="text" id="inp-empresa"
+            placeholder="Empresa"
+            autocorrect="off" autocapitalize="words" spellcheck="false">
           <div class="err-msg" id="err-empresa">⚠ Requerido</div>
         </div>
       </div>
@@ -487,15 +450,20 @@ input.err {
       <div class="form-group">
         <div class="phone-wrap">
           <span class="phone-prefix">+57</span>
-          <input type="tel" id="inp-celular" placeholder="300 000 0000" maxlength="10" inputmode="numeric">
+          <input type="tel" id="inp-celular"
+            placeholder="300 000 0000"
+            maxlength="10"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            autocomplete="tel-national">
         </div>
         <div class="err-msg" id="err-celular">⚠ Celular inválido — 10 dígitos</div>
       </div>
 
-      <!-- Pill -->
+      <!-- Pill live -->
       <div class="validity-pill">
         <span class="validity-dot"></span>
-        <span>Bogotá · Cotización gratuita · Respuesta en &lt;24h</span>
+        <span>Bogotá · Cotización gratuita · Respuesta &lt;24h</span>
       </div>
 
       <div class="info-rules">
@@ -512,7 +480,7 @@ input.err {
   </div>
 </div>
 
-<!-- ÉXITO -->
+<!-- ── ÉXITO ───────────────────────────────────────────────────── -->
 <div id="stateSuccess" class="state">
   <div class="card">
     <div class="result-header">
@@ -541,7 +509,7 @@ input.err {
   </div>
 </div>
 
-<!-- ERROR -->
+<!-- ── ERROR ───────────────────────────────────────────────────── -->
 <div id="stateError" class="state">
   <div class="card">
     <div class="result-header" style="background:#c0392b;">
@@ -559,102 +527,112 @@ input.err {
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbySGsrq722MsYNYi_erfXLlzdWGIXF-5s-cu59PYSkooC1IbErTDjsDWwMxiTJ16cFr9w/exec";
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycbySGsrq722MsYNYi_erfXLlzdWGIXF-5s-cu59PYSkooC1IbErTDjsDWwMxiTJ16cFr9w/exec";
 
-function getParam(k){ return new URLSearchParams(window.location.search).get(k)||""; }
-const UTM = {
-  source:   getParam("utm_source"),
-  medium:   getParam("utm_medium"),
-  campaign: getParam("utm_campaign"),
-  ad:       getParam("utm_ad")||getParam("utm_content"),
-  adset:    getParam("utm_adset")||getParam("utm_term"),
-  fbclid:   getParam("fbclid"),
+function getParam(k){return new URLSearchParams(window.location.search).get(k)||"";}
+const UTM={
+  source:  getParam("utm_source"),
+  medium:  getParam("utm_medium"),
+  campaign:getParam("utm_campaign"),
+  ad:      getParam("utm_ad")||getParam("utm_content"),
+  adset:   getParam("utm_adset")||getParam("utm_term"),
+  fbclid:  getParam("fbclid"),
 };
 
-const chipState = { cargo:null, tamano:null, tipo:null, asistentes:null };
+// ── CHIPS ─────────────────────────────────────────────────────
+const chipState={cargo:null,tamano:null,tipo:null,asistentes:null};
 
-document.querySelectorAll(".chips-wrap").forEach(wrap => {
-  const key = wrap.id.replace("chips-","");
-  wrap.querySelectorAll(".chip").forEach(chip => {
-    chip.addEventListener("click", () => {
-      wrap.querySelectorAll(".chip").forEach(c => c.classList.remove("selected"));
+document.querySelectorAll(".chips-wrap").forEach(wrap=>{
+  const key=wrap.id.replace("chips-","");
+  wrap.querySelectorAll(".chip").forEach(chip=>{
+    chip.addEventListener("click",()=>{
+      wrap.querySelectorAll(".chip").forEach(c=>c.classList.remove("selected"));
       chip.classList.add("selected");
-      chipState[key] = chip.dataset.val;
+      chipState[key]=chip.dataset.val;
       document.getElementById("err-"+key).classList.remove("show");
     });
   });
 });
 
-function setErr(id,s){ document.getElementById(id)?.classList[s?"add":"remove"]("show"); }
-function setInpErr(id,s){ document.getElementById(id)?.classList[s?"add":"remove"]("err"); }
+// ── VALIDACIÓN ────────────────────────────────────────────────
+function setErr(id,s){document.getElementById(id)?.classList[s?"add":"remove"]("show");}
+function setInpErr(id,s){document.getElementById(id)?.classList[s?"add":"remove"]("err");}
 
 function validar(){
   let ok=true;
-  const nombre  = document.getElementById("inp-nombre").value.trim();
-  const empresa = document.getElementById("inp-empresa").value.trim();
-  const celular = document.getElementById("inp-celular").value.replace(/\D/g,"");
-  if(!nombre) { setErr("err-nombre",true); setInpErr("inp-nombre",true); ok=false; }
-  else        { setErr("err-nombre",false); setInpErr("inp-nombre",false); }
-  if(!empresa){ setErr("err-empresa",true); setInpErr("inp-empresa",true); ok=false; }
-  else        { setErr("err-empresa",false); setInpErr("inp-empresa",false); }
-  if(!chipState.cargo)      { setErr("err-cargo",true);      ok=false; }
-  if(!chipState.tamano)     { setErr("err-tamano",true);     ok=false; }
-  if(!chipState.tipo)       { setErr("err-tipo",true);       ok=false; }
-  if(!chipState.asistentes) { setErr("err-asistentes",true); ok=false; }
-  if(!celular||celular.length<10){ setErr("err-celular",true); setInpErr("inp-celular",true); ok=false; }
-  else                           { setErr("err-celular",false); setInpErr("inp-celular",false); }
+  const nombre =document.getElementById("inp-nombre").value.trim();
+  const empresa=document.getElementById("inp-empresa").value.trim();
+  const celular=document.getElementById("inp-celular").value.replace(/\D/g,"");
+  if(!nombre) {setErr("err-nombre",true); setInpErr("inp-nombre",true);  ok=false;}
+  else        {setErr("err-nombre",false);setInpErr("inp-nombre",false);}
+  if(!empresa){setErr("err-empresa",true);setInpErr("inp-empresa",true); ok=false;}
+  else        {setErr("err-empresa",false);setInpErr("inp-empresa",false);}
+  if(!chipState.cargo)     {setErr("err-cargo",true);      ok=false;}
+  if(!chipState.tamano)    {setErr("err-tamano",true);     ok=false;}
+  if(!chipState.tipo)      {setErr("err-tipo",true);       ok=false;}
+  if(!chipState.asistentes){setErr("err-asistentes",true); ok=false;}
+  if(!celular||celular.length<10){setErr("err-celular",true); setInpErr("inp-celular",true);  ok=false;}
+  else                           {setErr("err-celular",false);setInpErr("inp-celular",false);}
+  // Scroll al primer error
+  if(!ok){
+    const first=document.querySelector(".err-msg.show,.input.err");
+    if(first) first.scrollIntoView({behavior:"smooth",block:"center"});
+  }
   return ok;
 }
 
+// ── STATES ────────────────────────────────────────────────────
 function showState(id){
   ["stateForm","stateSuccess","stateError"].forEach(s=>
     document.getElementById(s).classList.remove("show"));
   document.getElementById(id).classList.add("show");
   window.scrollTo({top:0,behavior:"smooth"});
 }
+function reintentar(){showState("stateForm");}
 
-function reintentar(){ showState("stateForm"); }
-
+// ── ENVÍO ─────────────────────────────────────────────────────
 document.getElementById("btnEnviar").addEventListener("click",()=>{
-  if(!validar()) return;
+  if(!validar())return;
   const btn=document.getElementById("btnEnviar");
-  btn.classList.add("loading"); btn.disabled=true;
-  const nombre  = document.getElementById("inp-nombre").value.trim();
-  const empresa = document.getElementById("inp-empresa").value.trim();
-  const celular = "57"+document.getElementById("inp-celular").value.replace(/\D/g,"");
-  const cbName  = "cb_"+Date.now();
+  btn.classList.add("loading");btn.disabled=true;
+
+  const nombre =document.getElementById("inp-nombre").value.trim();
+  const empresa=document.getElementById("inp-empresa").value.trim();
+  const celular="57"+document.getElementById("inp-celular").value.replace(/\D/g,"");
+  const cbName ="cb_"+Date.now();
   let done=false;
 
   const params=new URLSearchParams({
-    accion:"registrarLead", nombre, empresa,
-    cargo:chipState.cargo, tamano_empresa:chipState.tamano,
-    tipo_experiencia:chipState.tipo, asistentes:chipState.asistentes,
+    accion:"registrarLead",nombre,empresa,
+    cargo:chipState.cargo,tamano_empresa:chipState.tamano,
+    tipo_experiencia:chipState.tipo,asistentes:chipState.asistentes,
     whatsapp:celular,
-    utm_source:UTM.source, utm_medium:UTM.medium,
-    utm_campaign:UTM.campaign, utm_ad:UTM.ad,
-    utm_adset:UTM.adset, fbclid:UTM.fbclid,
+    utm_source:UTM.source,utm_medium:UTM.medium,
+    utm_campaign:UTM.campaign,utm_ad:UTM.ad,
+    utm_adset:UTM.adset,fbclid:UTM.fbclid,
     callback:cbName,
   });
 
-  if(typeof fbq!=="undefined") fbq("track","Lead",{content_name:"Evento B2B",content_category:chipState.tipo||"evento"});
+  if(typeof fbq!=="undefined")
+    fbq("track","Lead",{content_name:"Evento B2B",content_category:chipState.tipo||"evento"});
 
   const timeout=setTimeout(()=>{
-    if(done)return; done=true;
-    btn.classList.remove("loading"); btn.disabled=false;
+    if(done)return;done=true;
+    btn.classList.remove("loading");btn.disabled=false;
     document.getElementById("txt-error-msg").textContent="La conexión tardó demasiado. Intenta de nuevo.";
     showState("stateError");
   },12000);
 
   window[cbName]=function(res){
-    if(done)return; done=true;
+    if(done)return;done=true;
     clearTimeout(timeout);
-    btn.classList.remove("loading"); btn.disabled=false;
+    btn.classList.remove("loading");btn.disabled=false;
     delete window[cbName];
-    if(script.parentNode) script.parentNode.removeChild(script);
+    if(script.parentNode)script.parentNode.removeChild(script);
     if(res&&res.ok){
       document.getElementById("txt-success-name").textContent="Hola, "+nombre.split(" ")[0]+" 👋";
       showState("stateSuccess");
-    } else {
+    }else{
       document.getElementById("txt-error-msg").textContent=(res&&res.msg)?res.msg:"Error inesperado. Intenta de nuevo.";
       showState("stateError");
     }
@@ -663,18 +641,22 @@ document.getElementById("btnEnviar").addEventListener("click",()=>{
   const script=document.createElement("script");
   script.src=SCRIPT_URL+"?"+params.toString();
   script.onerror=function(){
-    if(done)return; done=true;
+    if(done)return;done=true;
     clearTimeout(timeout);
-    btn.classList.remove("loading"); btn.disabled=false;
+    btn.classList.remove("loading");btn.disabled=false;
     document.getElementById("txt-error-msg").textContent="No pudimos conectar. Intenta más tarde.";
     showState("stateError");
   };
   document.head.appendChild(script);
 });
 
+// Solo números en celular
 document.getElementById("inp-celular").addEventListener("input",function(){
   this.value=this.value.replace(/\D/g,"").slice(0,10);
 });
+
+// Prevenir zoom al tocar inputs en iOS (font-size ya es 16px, pero por si acaso)
+document.addEventListener("gesturestart",e=>e.preventDefault());
 </script>
 
 </body>
