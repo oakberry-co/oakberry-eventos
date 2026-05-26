@@ -162,7 +162,7 @@ body{
 .form-group{margin-bottom:10px;position:relative;}
 .form-group.no-mb{margin-bottom:0;}
 
-input[type=text],input[type=tel]{
+input[type=text],input[type=tel],input[type=email]{
   width:100%;
   /* Altura mínima de tap target */
   min-height:var(--tap-min);
@@ -365,7 +365,7 @@ input.err{border-color:var(--red);box-shadow:0 0 0 3px rgba(192,57,43,0.1);}
       <div class="brand-sub">Eventos · Bogotá Colombia</div>
       <div class="event-badge">
         <span class="icon">🎪</span>
-        <span class="desc">Lleva Oakberry<br>a tu empresa</span>
+        <span class="desc">Lleva Oakberry<br>a tu evento</span>
       </div>
     </div>
 
@@ -373,85 +373,78 @@ input.err{border-color:var(--red);box-shadow:0 0 0 3px rgba(192,57,43,0.1);}
       <h2 class="section-title">Cuéntanos tu idea</h2>
       <p class="section-sub">Completa el formulario · te contactamos en &lt;24h</p>
 
-      <!-- Nombre y empresa -->
+      <!-- Nombre (obligatorio) -->
+      <div class="form-group">
+        <input type="text" id="inp-nombre"
+          placeholder="Nombre y apellido *"
+          autocomplete="name"
+          autocorrect="off" autocapitalize="words" spellcheck="false">
+        <div class="err-msg" id="err-nombre">⚠ Requerido</div>
+      </div>
+
+      <!-- Ciudad + Empresa en grid -->
       <div class="form-grid-2">
-        <div class="form-group no-mb">
-          <input type="text" id="inp-nombre"
-            placeholder="Nombre y apellido"
-            autocomplete="name"
+        <div class="form-group" style="margin-bottom:0;">
+          <input type="text" id="inp-ciudad"
+            placeholder="Ciudad *"
             autocorrect="off" autocapitalize="words" spellcheck="false">
-          <div class="err-msg" id="err-nombre">⚠ Requerido</div>
+          <div class="err-msg" id="err-ciudad">⚠ Requerido</div>
         </div>
-        <div class="form-group no-mb">
+        <div class="form-group" style="margin-bottom:0;">
           <input type="text" id="inp-empresa"
-            placeholder="Empresa"
+            placeholder="Empresa (opcional)"
             autocorrect="off" autocapitalize="words" spellcheck="false">
-          <div class="err-msg" id="err-empresa">⚠ Requerido</div>
         </div>
       </div>
 
-      <!-- Cargo -->
+      <!-- Tipo de evento -->
       <div class="form-group">
-        <span class="field-label">Cargo *</span>
-        <div class="chips-wrap" id="chips-cargo">
-          <div class="chip" data-val="Marketing">Marketing</div>
-          <div class="chip" data-val="Talento Humano">Talento Humano</div>
-          <div class="chip" data-val="Bienestar">Bienestar</div>
-          <div class="chip" data-val="Gerencia">Gerencia</div>
-          <div class="chip" data-val="Eventos">Eventos</div>
+        <span class="field-label">¿Qué tipo de evento necesitas? *</span>
+        <div class="chips-wrap" id="chips-tipo-evento">
+          <div class="chip" data-val="Empresarial">Empresarial</div>
+          <div class="chip" data-val="Activación de marca">Activación de marca</div>
+          <div class="chip" data-val="Boda">Boda</div>
+          <div class="chip" data-val="Cumpleaños">Cumpleaños</div>
+          <div class="chip" data-val="Concierto / Festival">Concierto / Festival</div>
+          <div class="chip" data-val="Deportivo">Deportivo</div>
+          <div class="chip" data-val="Universitario">Universitario</div>
           <div class="chip" data-val="Otro">Otro</div>
         </div>
-        <div class="err-msg" id="err-cargo">⚠ Selecciona tu cargo</div>
+        <div class="err-msg" id="err-tipo-evento">⚠ Selecciona el tipo de evento</div>
       </div>
 
       <div class="divider"></div>
 
-      <!-- Tamaño empresa -->
+      <!-- Tamaño del evento -->
       <div class="form-group">
-        <span class="field-label">Tamaño de la empresa *</span>
+        <span class="field-label">¿Cuántas personas asistirán? *</span>
         <div class="chips-wrap" id="chips-tamano">
-          <div class="chip" data-val="Menos de 50">&lt;50</div>
-          <div class="chip" data-val="50-100">50–100</div>
-          <div class="chip" data-val="100-300">100–300</div>
-          <div class="chip" data-val="300-500">300–500</div>
-          <div class="chip" data-val="500+">500+</div>
+          <div class="chip" data-val="Menos de 50">Menos de 50</div>
+          <div class="chip" data-val="50-200">50–200</div>
+          <div class="chip" data-val="200-500">200–500</div>
+          <div class="chip" data-val="Más de 500">Más de 500</div>
         </div>
-        <div class="err-msg" id="err-tamano">⚠ Selecciona el tamaño</div>
-      </div>
-
-      <!-- Tipo experiencia -->
-      <div class="form-group">
-        <span class="field-label">¿Qué tipo de experiencia te interesa? *</span>
-        <div class="chips-wrap" id="chips-tipo">
-          <div class="chip" data-val="Activación interna">Activación interna</div>
-          <div class="chip" data-val="Bienestar para colaboradores">Bienestar colaboradores</div>
-          <div class="chip" data-val="Evento corporativo">Evento corporativo</div>
-          <div class="chip" data-val="Networking o lanzamiento">Networking / Lanzamiento</div>
-          <div class="chip" data-val="Otro">Otro</div>
-        </div>
-        <div class="err-msg" id="err-tipo">⚠ Selecciona el tipo de experiencia</div>
-      </div>
-
-      <!-- Asistentes -->
-      <div class="form-group">
-        <span class="field-label">¿Cuántas personas asistirían? *</span>
-        <div class="chips-wrap" id="chips-asistentes">
-          <div class="chip" data-val="20-50">20–50</div>
-          <div class="chip" data-val="50-100">50–100</div>
-          <div class="chip" data-val="100-300">100–300</div>
-          <div class="chip" data-val="300+">300+</div>
-        </div>
-        <div class="err-msg" id="err-asistentes">⚠ Selecciona el rango</div>
+        <div class="err-msg" id="err-tamano">⚠ Selecciona el rango</div>
       </div>
 
       <div class="divider"></div>
+
+      <!-- Correo -->
+      <div class="form-group">
+        <input type="email" id="inp-email"
+          placeholder="Correo electrónico *"
+          autocomplete="email"
+          autocorrect="off" autocapitalize="none" spellcheck="false"
+          inputmode="email">
+        <div class="err-msg" id="err-email">⚠ Correo inválido</div>
+      </div>
 
       <!-- Celular -->
       <div class="form-group">
         <div class="phone-wrap">
           <span class="phone-prefix">+57</span>
           <input type="tel" id="inp-celular"
-            placeholder="300 000 0000"
+            placeholder="300 000 0000 *"
             maxlength="10"
             inputmode="numeric"
             pattern="[0-9]*"
@@ -540,7 +533,7 @@ const UTM={
 };
 
 // ── CHIPS ─────────────────────────────────────────────────────
-const chipState={cargo:null,tamano:null,tipo:null,asistentes:null};
+const chipState={"tipo-evento":null,tamano:null};
 
 document.querySelectorAll(".chips-wrap").forEach(wrap=>{
   const key=wrap.id.replace("chips-","");
@@ -560,22 +553,29 @@ function setInpErr(id,s){document.getElementById(id)?.classList[s?"add":"remove"
 
 function validar(){
   let ok=true;
-  const nombre =document.getElementById("inp-nombre").value.trim();
-  const empresa=document.getElementById("inp-empresa").value.trim();
-  const celular=document.getElementById("inp-celular").value.replace(/\D/g,"");
-  if(!nombre) {setErr("err-nombre",true); setInpErr("inp-nombre",true);  ok=false;}
-  else        {setErr("err-nombre",false);setInpErr("inp-nombre",false);}
-  if(!empresa){setErr("err-empresa",true);setInpErr("inp-empresa",true); ok=false;}
-  else        {setErr("err-empresa",false);setInpErr("inp-empresa",false);}
-  if(!chipState.cargo)     {setErr("err-cargo",true);      ok=false;}
-  if(!chipState.tamano)    {setErr("err-tamano",true);     ok=false;}
-  if(!chipState.tipo)      {setErr("err-tipo",true);       ok=false;}
-  if(!chipState.asistentes){setErr("err-asistentes",true); ok=false;}
+  const nombre  = document.getElementById("inp-nombre").value.trim();
+  const email   = document.getElementById("inp-email").value.trim();
+  const ciudad  = document.getElementById("inp-ciudad").value.trim();
+  const celular = document.getElementById("inp-celular").value.replace(/\D/g,"");
+
+  if(!nombre)  {setErr("err-nombre",true); setInpErr("inp-nombre",true);   ok=false;}
+  else         {setErr("err-nombre",false);setInpErr("inp-nombre",false);}
+
+  if(!ciudad)  {setErr("err-ciudad",true); setInpErr("inp-ciudad",true);   ok=false;}
+  else         {setErr("err-ciudad",false);setInpErr("inp-ciudad",false);}
+
+  if(!chipState["tipo-evento"]){setErr("err-tipo-evento",true); ok=false;}
+  if(!chipState.tamano)        {setErr("err-tamano",true);      ok=false;}
+
+  const emailOk = email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  if(!emailOk) {setErr("err-email",true); setInpErr("inp-email",true);   ok=false;}
+  else         {setErr("err-email",false);setInpErr("inp-email",false);}
+
   if(!celular||celular.length<10){setErr("err-celular",true); setInpErr("inp-celular",true);  ok=false;}
   else                           {setErr("err-celular",false);setInpErr("inp-celular",false);}
-  // Scroll al primer error
+
   if(!ok){
-    const first=document.querySelector(".err-msg.show,.input.err");
+    const first=document.querySelector(".err-msg.show");
     if(first) first.scrollIntoView({behavior:"smooth",block:"center"});
   }
   return ok;
@@ -596,16 +596,19 @@ document.getElementById("btnEnviar").addEventListener("click",()=>{
   const btn=document.getElementById("btnEnviar");
   btn.classList.add("loading");btn.disabled=true;
 
-  const nombre =document.getElementById("inp-nombre").value.trim();
-  const empresa=document.getElementById("inp-empresa").value.trim();
-  const celular="57"+document.getElementById("inp-celular").value.replace(/\D/g,"");
-  const cbName ="cb_"+Date.now();
+  const nombre  = document.getElementById("inp-nombre").value.trim();
+  const empresa = document.getElementById("inp-empresa").value.trim();
+  const email   = document.getElementById("inp-email").value.trim();
+  const ciudad  = document.getElementById("inp-ciudad").value.trim();
+  const celular = "57"+document.getElementById("inp-celular").value.replace(/\D/g,"");
+  const cbName  = "cb_"+Date.now();
   let done=false;
 
   const params=new URLSearchParams({
     accion:"registrarLead",nombre,empresa,
-    cargo:chipState.cargo,tamano_empresa:chipState.tamano,
-    tipo_experiencia:chipState.tipo,asistentes:chipState.asistentes,
+    tipo_evento:   chipState["tipo-evento"],
+    asistentes:    chipState.tamano,
+    email, ciudad,
     whatsapp:celular,
     utm_source:UTM.source,utm_medium:UTM.medium,
     utm_campaign:UTM.campaign,utm_ad:UTM.ad,
@@ -614,7 +617,7 @@ document.getElementById("btnEnviar").addEventListener("click",()=>{
   });
 
   if(typeof fbq!=="undefined")
-    fbq("track","Lead",{content_name:"Evento B2B",content_category:chipState.tipo||"evento"});
+    fbq("track","Lead",{content_name:"Evento",content_category:chipState["tipo-evento"]||"evento"});
 
   const timeout=setTimeout(()=>{
     if(done)return;done=true;
@@ -655,7 +658,6 @@ document.getElementById("inp-celular").addEventListener("input",function(){
   this.value=this.value.replace(/\D/g,"").slice(0,10);
 });
 
-// Prevenir zoom al tocar inputs en iOS (font-size ya es 16px, pero por si acaso)
 document.addEventListener("gesturestart",e=>e.preventDefault());
 </script>
 
