@@ -601,7 +601,7 @@ input.err,textarea.err{border-color:var(--red);box-shadow:0 0 0 3px rgba(192,57,
 document.querySelector('.footer').innerHTML = document.querySelector('.footer').innerHTML.replace('{AÑO}', new Date().getFullYear());
 
 /* ⚠️ PEGAR AQUÍ la URL /exec del Apps Script de RD (deploy → Web app) */
-const SCRIPT_URL = "__PEGAR_URL_APPS_SCRIPT_RD__";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxo4JWkj3s9O-I_v1ilMzyxKdUa6TncYZFyyJyHrbcxXXI8KH0dyOaihZMw6i4P0fpG4w/exec";
 
 function getParam(k){return new URLSearchParams(window.location.search).get(k)||"";}
 const UTM={
