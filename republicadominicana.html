@@ -676,7 +676,9 @@ document.getElementById("btnEnviar").addEventListener("click",()=>{
   const btn=document.getElementById("btnEnviar");
   btn.classList.add("loading");btn.disabled=true;
 
-  const val=id=>document.getElementById(id).value.trim();
+  // Antepone apóstrofo si el valor empieza con = + - @ para que Sheets no lo lea como fórmula (#ERROR!)
+  const sane=s=>{s=(s==null?"":String(s));return /^[=+\-@]/.test(s.trim())?"'"+s:s;};
+  const val=id=>sane(document.getElementById(id).value.trim());
   const cbName="cb_"+Date.now();
   let done=false;
 
@@ -684,11 +686,11 @@ document.getElementById("btnEnviar").addEventListener("click",()=>{
     accion:"registrarLead",
     programa:"franquicia_maestra_rd",
     nombre:val("inp-nombre"),
-    whatsapp:document.getElementById("inp-whatsapp").value.trim(),
+    whatsapp:sane(document.getElementById("inp-whatsapp").value.trim()),
     email:val("inp-email"),
     residencia:val("inp-residencia"),
     linkedin:val("inp-linkedin"),
-    capacidad_inversion:chipState.capacidad||"",
+    capacidad_inversion:sane(chipState.capacidad||""),
     origen_capital:chipState.origen||"",
     experiencia_franquicias:chipState.experiencia||"",
     experiencia_detalle:val("inp-exp-detalle"),
