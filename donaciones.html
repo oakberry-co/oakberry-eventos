@@ -142,6 +142,24 @@
   footer a{color:var(--yellow)}
   footer .brand{font-weight:800; color:#fff; white-space:nowrap}
 
+  /* Aliados en respuesta */
+  .aliados{background:var(--gray-light); border-top:1px solid var(--border); padding:34px 0 42px}
+  .aliados h2{font-size:clamp(20px,3vw,27px); text-align:center; color:var(--primary-deep)}
+  .aliados .lead{text-align:center; color:var(--muted); font-size:14px; max-width:62ch; margin:9px auto 26px; font-weight:500}
+  .agrupo{margin-bottom:24px}
+  .agrupo h3{font-size:12.5px; text-transform:uppercase; letter-spacing:.8px; color:var(--primary); margin-bottom:12px; font-weight:800; display:flex; align-items:center; gap:8px}
+  .agrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(238px,1fr)); gap:12px}
+  .acard{background:var(--white); border:1px solid var(--border); border-radius:12px; padding:13px 15px; box-shadow:var(--shadow)}
+  .acard .an{font-weight:800; font-size:13.5px; color:var(--ink); line-height:1.28}
+  .acard .at{font-size:12px; color:var(--muted); margin-top:3px; font-weight:500}
+  .acard .arow{display:flex; gap:6px; align-items:center; flex-wrap:wrap; margin-top:10px}
+  .acov{font-size:11px; font-weight:700; color:var(--primary); background:var(--gray-light); border:1px solid var(--border); padding:2px 8px; border-radius:50px}
+  .aest{font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:.3px; padding:2px 8px; border-radius:50px}
+  .aest.activa{color:#0a7a3f; background:#f0fbf4; border:1px solid #bce7cd}
+  .aest.resp{color:#8a5b00; background:#fff7e0; border:1px solid #ffe0a3}
+  .aest.alianza{color:#5F4B8B; background:#efeaf9; border:1px solid #e0d8f8}
+  .aliados .note{text-align:center; font-size:12.5px; color:var(--gray); margin-top:16px; font-weight:500}
+
   /* preview banner */
   .preview-banner{display:none; background:#fff7e0; border-bottom:1px solid #ffe2a0; color:#8a5b00; font-size:12.5px; text-align:center; padding:7px 18px; font-weight:600}
   .preview-banner.show{display:block}
@@ -237,6 +255,14 @@
     <div id="list"></div>
   </aside>
 </div>
+
+<!-- Aliados en respuesta -->
+<section class="aliados"><div class="wrap">
+  <h2>Aliados en respuesta</h2>
+  <p class="lead">Organizaciones y entidades activas en la atención del terremoto. Listado informativo; para <b>donar</b> o coordinar <b>transporte</b> usa los puntos del mapa de arriba.</p>
+  <div id="aliadosGrid"></div>
+  <p class="note">¿Tu organización está respondiendo y no aparece? <a href="#" onclick="openForm();return false">Repórtala</a>.</p>
+</div></section>
 
 <!-- Footer -->
 <footer><div class="wrap">
@@ -692,10 +718,48 @@ const DEMO=[
   {id:'demo5', tipo:'logistica', nombre:'(EJEMPLO) Transportes del Pacífico', ciudad:'Buenaventura', direccion:'Terminal de carga', lat:3.8790,lng:-77.0250, descripcion:'Camión 8 ton, ruta Buenaventura–Cali–Quibdó, cupo diario.', horario:'24 h', web:'transportespacifico.co'}
 ];
 
+/* ================= ALIADOS EN RESPUESTA ================= */
+const ALIADOS=[
+  {g:"Entidades oficiales", n:"UNGRD", t:"Entidad pública", c:"Nacional", e:"ACTIVA"},
+  {g:"Entidades oficiales", n:"Defensa Civil Colombiana", t:"Entidad pública / voluntariado", c:"Nacional", e:"ACTIVA"},
+  {g:"Entidades oficiales", n:"Dirección Nacional de Bomberos (DNBC)", t:"Entidad pública", c:"Nacional", e:"ACTIVA"},
+  {g:"Entidades oficiales", n:"Ministerio de Salud y Protección Social", t:"Entidad pública", c:"Nacional", e:"ACTIVA"},
+  {g:"Entidades oficiales", n:"ADRES", t:"Entidad pública de salud", c:"Nacional", e:"ACTIVA"},
+  {g:"Entidades oficiales", n:"Servicio Geológico Colombiano (SGC)", t:"Entidad científica pública", c:"Nacional", e:"ACTIVA"},
+  {g:"Cruz Roja Colombiana", n:"Sociedad Nacional de la Cruz Roja Colombiana", t:"Organización humanitaria", c:"Nacional", e:"ACTIVA"},
+  {g:"Cruz Roja Colombiana", n:"Cruz Roja Seccional Valle del Cauca", t:"Humanitaria territorial", c:"Valle del Cauca", e:"ACTIVA"},
+  {g:"Cruz Roja Colombiana", n:"Cruz Roja Seccional Chocó", t:"Humanitaria territorial", c:"Chocó", e:"ACTIVA"},
+  {g:"Cruz Roja Colombiana", n:"Cruz Roja Seccional Caldas", t:"Humanitaria territorial", c:"Caldas", e:"ACTIVA"},
+  {g:"Cruz Roja Colombiana", n:"Cruz Roja Seccional Quindío", t:"Humanitaria territorial", c:"Quindío", e:"ACTIVA"},
+  {g:"Cruz Roja Colombiana", n:"Cruz Roja Seccional Risaralda", t:"Humanitaria territorial", c:"Risaralda", e:"ACTIVA"},
+  {g:"Alimentación", n:"Asociación de Bancos de Alimentos (ABACO)", t:"Red de bancos de alimentos", c:"Nacional", e:"ACTIVA"},
+  {g:"Alimentación", n:"World Central Kitchen (WCK)", t:"ONG internacional", c:"Chocó, Cali, Pereira, Manizales", e:"ACTIVA"},
+  {g:"Alimentación", n:"Fundación Gastronomía Social", t:"Fundación / socio local", c:"Colombia", e:"ACTIVA_EN_RESPUESTA"},
+  {g:"Salud y apoyo psicosocial", n:"Universidad de Manizales", t:"Universidad", c:"Manizales", e:"ACTIVA_EN_RESPUESTA"},
+  {g:"Salud y apoyo psicosocial", n:"IPS Plenamente", t:"IPS", c:"Manizales", e:"ACTIVA_EN_RESPUESTA"},
+  {g:"Salud y apoyo psicosocial", n:"Colegio Colombiano de Psicólogos (COLPSIC)", t:"Organización profesional", c:"Manizales", e:"ACTIVA_EN_RESPUESTA"},
+  {g:"Salud y apoyo psicosocial", n:"AMPE Colombia", t:"Psicología en emergencias", c:"Nacional", e:"ALIANZA_INSTITUCIONAL"}
+];
+const AEST={ACTIVA:{txt:"Activa",cls:"activa"}, ACTIVA_EN_RESPUESTA:{txt:"En respuesta",cls:"resp"}, ALIANZA_INSTITUCIONAL:{txt:"Alianza",cls:"alianza"}};
+const AGRUPO_ICON={"Entidades oficiales":"🏛️","Cruz Roja Colombiana":"⛑️","Alimentación":"🍲","Salud y apoyo psicosocial":"🧠"};
+function renderAliados(){
+  const grid=document.getElementById('aliadosGrid');
+  const grupos=[...new Set(ALIADOS.map(a=>a.g))];
+  grid.innerHTML=grupos.map(g=>{
+    const items=ALIADOS.filter(a=>a.g===g);
+    return `<div class="agrupo"><h3>${AGRUPO_ICON[g]||''} ${g}</h3><div class="agrid">`+
+      items.map(a=>{
+        const est=AEST[a.e]||{txt:a.e,cls:"activa"};
+        return `<div class="acard"><div class="an">${esc(a.n)}</div><div class="at">${esc(a.t)}</div>
+          <div class="arow"><span class="acov">📍 ${esc(a.c)}</span><span class="aest ${est.cls}">${est.txt}</span></div></div>`;
+      }).join('')+`</div></div>`;
+  }).join('');
+}
+
 /* ================= INIT ================= */
 window.addEventListener('DOMContentLoaded',()=>{
   if(!CONFIG.API_URL) document.getElementById('previewBanner').classList.add('show');
-  initMap(); buildChips(); buildTypeCards(); buildCitySelect(); initPickMap(); loadPuntos();
+  initMap(); buildChips(); buildTypeCards(); buildCitySelect(); initPickMap(); loadPuntos(); renderAliados();
 });
 </script>
 </body>
