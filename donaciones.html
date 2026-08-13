@@ -70,6 +70,7 @@
   .hero h1 em{color:var(--yellow); font-style:normal}
   .hero-sub{font-size:clamp(14px,2.1vw,17px); font-weight:500; color:rgba(255,255,255,.9); max-width:60ch; margin:0 auto}
   .hero-actions{display:flex; gap:11px; justify-content:center; margin-top:22px; flex-wrap:wrap}
+  .hero-trust{margin-top:16px; font-size:12.5px; font-weight:700; color:rgba(255,255,255,.86); letter-spacing:.2px}
   .btn{border:0; cursor:pointer; font-weight:800; font-size:14.5px; border-radius:50px; padding:13px 22px; display:inline-flex; align-items:center; gap:8px; transition:transform .1s, box-shadow .18s, background .15s; text-decoration:none; letter-spacing:.2px}
   .btn:active{transform:translateY(1px)}
   .btn-primary{background:var(--yellow); color:var(--primary-deep); box-shadow:0 6px 20px rgba(245,200,66,.35)}
@@ -112,6 +113,7 @@
   .pill.wa{color:#0a7a3f; border-color:#bce7cd; background:#f0fbf4}
   .pill.ig{color:#b5197b; border-color:#f2c7e3; background:#fdf2f9}
   .unver{font-size:10.5px; color:#8a5b00; background:#fff7e0; border:1px solid #ffe0a3; padding:2px 8px; border-radius:50px; font-weight:800; text-transform:uppercase; letter-spacing:.3px}
+  .val{font-size:10.5px; color:#0a7a3f; background:#f0fbf4; border:1px solid #bce7cd; padding:2px 8px; border-radius:50px; font-weight:800; text-transform:uppercase; letter-spacing:.3px}
   .empty{padding:44px 22px; text-align:center; color:var(--muted); font-size:14px}
   .empty .big{font-size:36px; margin-bottom:10px}
 
@@ -212,11 +214,12 @@
 <section class="hero"><div class="wrap">
   <span class="kicker"><span class="dot"></span>Respuesta comunitaria · Sismo 10 ago 2026</span>
   <h1>Mapa de <em>Ayuda</em> — Terremoto Colombia</h1>
-  <p class="hero-sub">Sismo de magnitud 7.4 con epicentro en Chocó. Mapeemos entre todos <b>dónde recibir donaciones</b> y <b>quién puede transportarlas</b> a las zonas afectadas. Si conoces un punto, repórtalo: aparecerá en el mapa para que cualquiera lo contacte.</p>
+  <p class="hero-sub">Para que la ayuda llegue más rápido necesitamos dos cosas: saber <b>dónde donar</b> y sumar a <b>quienes pueden transportarla</b> —dentro de una ciudad o entre ciudades—. Cada punto en el mapa hace la red más fuerte y rápida.</p>
   <div class="hero-actions">
-    <button class="btn btn-primary" onclick="openForm()">＋ Reportar un punto</button>
-    <a class="btn btn-outline" href="#mapa">Ver el mapa ↓</a>
+    <button class="btn btn-primary" onclick="openForm()">＋ Ofrecer acopio o transporte</button>
+    <a class="btn btn-outline" href="#mapa">Ver dónde donar ↓</a>
   </div>
+  <p class="hero-trust">✔ Validamos cada punto antes de publicarlo en el mapa</p>
 </div></section>
 
 <!-- Toolbar -->
@@ -238,7 +241,7 @@
 <!-- Footer -->
 <footer><div class="wrap">
   <div class="disc">
-    <b>Aviso:</b> mapa <b>colaborativo y no oficial</b>. Los puntos los reporta la comunidad y pueden no estar verificados — confirma siempre por el número de contacto antes de desplazarte o enviar donaciones. En emergencia llama al <b>123</b>. Fuente oficial: <a href="https://portal.gestiondelriesgo.gov.co/" target="_blank" rel="noopener">UNGRD</a>.
+    <b>Aviso:</b> mapa <b>colaborativo y no oficial</b>. <b>Validamos cada punto antes de publicarlo</b>, pero confirma por el número de contacto antes de desplazarte o enviar donaciones (los cupos y las necesidades cambian rápido). En emergencia llama al <b>123</b>. Fuente oficial: <a href="https://portal.gestiondelriesgo.gov.co/" target="_blank" rel="noopener">UNGRD</a>.
   </div>
   <div class="brand">Una iniciativa de OAKBERRY 💜 y la comunidad</div>
 </div></footer>
@@ -252,7 +255,7 @@
     <div class="modal-head">
       <div>
         <h2 id="formTitle">Reportar un punto</h2>
-        <p>Ayuda a que llegue la ayuda. Toma 1 minuto.</p>
+        <p>Validamos cada punto antes de publicarlo. Toma 1 minuto.</p>
       </div>
       <button class="x" onclick="closeForm()" aria-label="Cerrar">✕</button>
     </div>
@@ -343,8 +346,8 @@
         </label>
 
         <div class="err" id="formErr"></div>
-        <div style="margin-top:16px"><button type="submit" class="btn btn-primary btn-block" id="submitBtn">Publicar en el mapa</button></div>
-        <p class="form-note">Al publicar, estos datos serán visibles públicamente en el mapa para coordinar la ayuda. No incluyas información sensible de terceros.</p>
+        <div style="margin-top:16px"><button type="submit" class="btn btn-primary btn-block" id="submitBtn">Enviar reporte</button></div>
+        <p class="form-note">Revisamos y validamos tu reporte antes de publicarlo. Una vez validado será visible en el mapa para coordinar la ayuda. No incluyas información sensible de terceros.</p>
       </form>
     </div>
   </div>
@@ -361,8 +364,8 @@ const CONFIG = {
 
 /* ---------- 2 categorías principales ---------- */
 const CAT_MAIN = {
-  acopio:    {label:"Centro de acopio",                short:"Acopio",    emoji:"📦", color:"#6C4FB0", sub:"Recibe donaciones"},
-  logistica: {label:"Empresa / encargado de logística", short:"Logística", emoji:"🚚", color:"#E67514", sub:"Transporta la ayuda"}
+  acopio:    {label:"Tengo un centro de acopio",    short:"Acopio",     emoji:"📦", color:"#6C4FB0", sub:"Un lugar que recibe donaciones"},
+  logistica: {label:"Puedo transportar / repartir", short:"Transporte", emoji:"🚚", color:"#E67514", sub:"Empresa, transportador o voluntario · dentro o entre ciudades"}
 };
 const MAIN_KEYS = Object.keys(CAT_MAIN);
 
@@ -468,7 +471,7 @@ function renderList(pts){
       <div class="row1">
         <span class="badge" style="background:${c.color}">${c.emoji} ${c.short}</span>
         ${ss?`<span class="subtag">${ss}</span>`:''}
-        ${p.verificado?'':'<span class="unver">Sin verificar</span>'}
+        ${p.verificado?'<span class="val">✓ Validado</span>':''}
       </div>
       <h3>${esc(p.nombre)}</h3>
       <div class="meta">📍 ${esc(p.ciudad||'—')}${p.direccion?' · '+esc(p.direccion):''}${p.horario?' · 🕒 '+esc(p.horario):''}</div>
@@ -493,7 +496,7 @@ function popupHtml(p){
   return `<div class="pop">
     <span class="badge" style="background:${c.color}">${c.emoji} ${c.short}</span>
     ${ss?`<span class="subtag" style="margin-left:5px">${ss}</span>`:''}
-    ${p.verificado?'':'<span class="unver" style="margin-left:5px">Sin verificar</span>'}
+    ${p.verificado?'<span class="val" style="margin-left:5px">✓ Validado</span>':''}
     <h3>${esc(p.nombre)}</h3>
     <div class="pmeta">📍 ${esc(p.ciudad||'—')}${p.direccion?'<br>'+esc(p.direccion):''}${p.horario?'<br>🕒 '+esc(p.horario):''}</div>
     ${p.descripcion?`<div class="pdesc">${esc(p.descripcion)}</div>`:''}
@@ -637,17 +640,17 @@ document.getElementById('reportForm').addEventListener('submit',function(ev){
     .then(r=>r.json())
     .then(res=>{
       if(res && res.ok){ afterSubmit(); loadPuntos(); }
-      else { btn.disabled=false; btn.textContent='Publicar en el mapa'; showErr(res&&res.error?('No se pudo publicar: '+res.error):'No se pudo publicar. Intenta de nuevo.'); }
+      else { btn.disabled=false; btn.textContent='Enviar reporte'; showErr(res&&res.error?('No se pudo publicar: '+res.error):'No se pudo publicar. Intenta de nuevo.'); }
     })
-    .catch(()=>{ btn.disabled=false; btn.textContent='Publicar en el mapa'; showErr('Sin conexión con el servidor. Intenta de nuevo.'); });
+    .catch(()=>{ btn.disabled=false; btn.textContent='Enviar reporte'; showErr('Sin conexión con el servidor. Intenta de nuevo.'); });
 });
 
 function afterSubmit(){
   document.getElementById('formBody').innerHTML=`
     <div class="success">
       <div class="big">🙏</div>
-      <h2>¡Gracias! Tu punto quedó en el mapa</h2>
-      <p>Aparecerá para que la comunidad lo contacte. Compártelo para que llegue la ayuda a donde se necesita.</p>
+      <h2>¡Gracias! Recibimos tu reporte</h2>
+      <p>Lo <b>validamos</b> y lo publicamos en el mapa apenas confirmemos los datos. Comparte la iniciativa para que la red crezca.</p>
       <div style="margin-top:20px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap">
         <a class="btn btn-primary" href="${shareLink()}" target="_blank" rel="noopener">Compartir por WhatsApp</a>
         <button class="btn btn-ghost" onclick="location.reload()">Reportar otro</button>
