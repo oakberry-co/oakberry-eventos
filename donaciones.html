@@ -11,16 +11,18 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="Mapa de Ayuda · Terremoto Colombia 10-ago-2026">
 <meta property="og:description" content="Reporta y encuentra centros de acopio y logística disponibles por ciudad. Sumemos capacidad para llegar a las zonas afectadas.">
-<meta property="og:image" content="https://www.oakberry-eventos.com/Oakville.jpg">
+<meta property="og:image" content="https://www.oakberry-eventos.com/Oakville-hero.jpg">
 <meta name="twitter:card" content="summary_large_image">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://a.tile.openstreetmap.org" crossorigin>
+<link rel="preconnect" href="https://b.tile.openstreetmap.org" crossorigin>
 
-<!-- Leaflet -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- Leaflet (local, servido por Vercel — rápido y confiable, no depende de un CDN externo) -->
+<link rel="stylesheet" href="/vendor/leaflet/leaflet.css">
+<script defer src="/vendor/leaflet/leaflet.js"></script>
 
 <style>
   :root{
@@ -56,12 +58,22 @@
   .top-cta:hover{transform:translateY(-1px); box-shadow:0 6px 18px rgba(245,200,66,.45)}
 
   /* Hero */
+  /* Móvil: gradiente puro, sin imagen (0 KB, carga instantánea) */
   .hero{
     background:
-      linear-gradient(180deg, rgba(58,45,90,.72) 0%, rgba(54,43,82,.90) 80%, rgba(54,43,82,.98) 100%),
-      radial-gradient(120% 120% at 82% 0%, rgba(245,200,66,.16), transparent 55%),
-      url('/Oakville.jpg') center 40%/cover no-repeat;
+      linear-gradient(180deg, rgba(58,45,90,.93) 0%, rgba(54,43,82,.97) 100%),
+      radial-gradient(120% 120% at 82% 0%, rgba(245,200,66,.14), transparent 55%);
     background-color:var(--primary-dark); color:#fff; text-align:center; padding:38px 0 44px; position:relative
+  }
+  /* Desktop: imagen optimizada de fondo */
+  @media (min-width:768px){
+    .hero{
+      background:
+        linear-gradient(180deg, rgba(58,45,90,.72) 0%, rgba(54,43,82,.90) 80%, rgba(54,43,82,.98) 100%),
+        radial-gradient(120% 120% at 82% 0%, rgba(245,200,66,.16), transparent 55%),
+        url('/Oakville-hero.jpg') center 40%/cover no-repeat;
+      background-color:var(--primary-dark);
+    }
   }
   .kicker{display:inline-flex; align-items:center; gap:9px; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.22); border-radius:50px; padding:7px 16px; margin-bottom:16px; font-size:11.5px; font-weight:800; letter-spacing:1.4px; text-transform:uppercase; color:rgba(255,255,255,.94)}
   .kicker .dot{width:8px; height:8px; border-radius:50%; background:var(--yellow); animation:blink 1.6s ease-in-out infinite}
@@ -475,6 +487,7 @@ function buildCityFilter(){
 /* ================= RENDER ================= */
 function visiblePoints(){ return PUNTOS.filter(p=>activeCats.has(mainOf(p.tipo)) && (!activeCity||p.ciudad===activeCity)); }
 function render(){
+  if(!MAP) return;
   Object.values(MARKERS).forEach(m=>MAP.removeLayer(m));
   const pts=visiblePoints(), bounds=[];
   pts.forEach(p=>{
@@ -586,7 +599,7 @@ function buildCitySelect(){
   sel.onchange=()=>{
     const otra=sel.value==='__otra';
     document.getElementById('otraCityWrap').style.display=otra?'block':'none';
-    if(!otra && CITIES[sel.value] && !PICK_LATLNG){ PICKMAP.setView(CITIES[sel.value],12); }
+    if(!otra && CITIES[sel.value] && !PICK_LATLNG && PICKMAP){ PICKMAP.setView(CITIES[sel.value],12); }
   };
 }
 function initPickMap(){
@@ -612,7 +625,7 @@ function useMyLocation(){
     ()=>alert('No pudimos obtener tu ubicación. Marca el punto tocando el mapa.')
   );
 }
-function openForm(){ document.getElementById('overlay').classList.add('open'); document.body.style.overflow='hidden'; setTimeout(()=>{ if(PICKMAP) PICKMAP.invalidateSize(); },250); }
+function openForm(){ document.getElementById('overlay').classList.add('open'); document.body.style.overflow='hidden'; setTimeout(()=>{ try{ if(!PICKMAP) initPickMap(); PICKMAP.invalidateSize(); }catch(e){} },250); }
 function closeForm(){ document.getElementById('overlay').classList.remove('open'); document.body.style.overflow=''; }
 document.getElementById('overlay').addEventListener('click',e=>{ if(e.target.id==='overlay') closeForm(); });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeForm(); });
@@ -759,7 +772,16 @@ function renderAliados(){
 /* ================= INIT ================= */
 window.addEventListener('DOMContentLoaded',()=>{
   if(!CONFIG.API_URL) document.getElementById('previewBanner').classList.add('show');
-  initMap(); buildChips(); buildTypeCards(); buildCitySelect(); initPickMap(); loadPuntos(); renderAliados();
+  // Contenido que NO depende del mapa se pinta primero (nunca queda en blanco)
+  renderAliados(); buildChips(); buildTypeCards(); buildCitySelect();
+  // El mapa (Leaflet) va aislado: si algo falla, el resto de la página igual funciona
+  try{ initMap(); loadPuntos(); }
+  catch(err){
+    console.error('map init', err);
+    const m=document.getElementById('map');
+    if(m) m.innerHTML='<div style="padding:26px;text-align:center;color:#6b6479;font-weight:600">No se pudo cargar el mapa. Revisa tu conexión y recarga la página.</div>';
+  }
+  // El mapa del formulario se crea SOLO al abrir el formulario (ahorra datos en móvil)
 });
 </script>
 </body>
