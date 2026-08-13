@@ -1,0 +1,697 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mapa de Ayuda · Terremoto Colombia</title>
+<meta name="description" content="Mapa colaborativo de respuesta al terremoto del 10 de agosto de 2026 en Colombia. Reporta centros de acopio y operadores logísticos, y encuentra quién está disponible en cada ciudad.">
+
+<!-- Open Graph (para que se vea bien al compartir en WhatsApp / Instagram) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Mapa de Ayuda · Terremoto Colombia 10-ago-2026">
+<meta property="og:description" content="Reporta y encuentra centros de acopio y operadores logísticos disponibles por ciudad. Sumemos capacidad para llegar a las zonas afectadas.">
+<!-- TODO: subir una imagen 1200x630 y poner su URL absoluta aquí -->
+<meta property="og:image" content="">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- Leaflet (mapa) -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<style>
+  :root{
+    --bg:#f5f6f8; --surface:#ffffff; --surface-2:#fbfcfd;
+    --ink:#1c2430; --muted:#5c6673; --faint:#8a94a1;
+    --line:#e5e9ef; --line-strong:#d4dae2;
+    --accent:#0b6e7a;        /* teal serio y confiable */
+    --accent-ink:#08525b;
+    --cta:#d9480f;           /* naranja "ayuda" para el botón reportar */
+    --cta-ink:#b23a0b;
+    --danger:#c0392b;
+    --ok:#2f9e44;
+    --shadow:0 1px 2px rgba(16,24,40,.04), 0 6px 20px rgba(16,24,40,.08);
+    --radius:14px;
+    /* colores de categoría */
+    --c-acopio_masivo:#c0392b; --c-acopio_pequeno:#e67e22;
+    --c-log_intermunicipal:#2c7fb8; --c-log_intraciudad:#12a594;
+    --c-log_aereo:#8e44ad; --c-log_maritimo:#0f8a8a;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink); background:var(--bg); line-height:1.5;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  }
+  a{color:var(--accent); text-decoration:none}
+  a:hover{text-decoration:underline}
+  h1,h2,h3{margin:0; line-height:1.2; font-weight:700; letter-spacing:-.01em}
+  button{font-family:inherit}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 16px}
+
+  /* ---------- Banda de emergencia ---------- */
+  .emg{background:#fff4f2; border-bottom:1px solid #f4cdc6; color:#7a2318; font-size:13px}
+  .emg .wrap{display:flex; gap:12px; align-items:center; justify-content:center; padding:8px 16px; flex-wrap:wrap; text-align:center}
+  .emg b{color:var(--danger)}
+  .emg a{color:#7a2318; text-decoration:underline; font-weight:600}
+
+  /* ---------- Header ---------- */
+  header.top{background:var(--surface); border-bottom:1px solid var(--line)}
+  .top .wrap{padding:18px 16px 20px}
+  .kicker{display:inline-flex; align-items:center; gap:8px; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--accent); background:#e6f3f4; padding:5px 10px; border-radius:999px}
+  h1{font-size:clamp(22px,3.5vw,32px); margin:12px 0 6px}
+  .sub{color:var(--muted); font-size:15px; max-width:70ch}
+  .actions{display:flex; gap:10px; margin-top:16px; flex-wrap:wrap}
+  .btn{border:0; cursor:pointer; font-weight:600; font-size:15px; border-radius:11px; padding:12px 18px; display:inline-flex; align-items:center; gap:8px; transition:transform .04s ease, box-shadow .15s ease, background .15s}
+  .btn:active{transform:translateY(1px)}
+  .btn-cta{background:var(--cta); color:#fff; box-shadow:var(--shadow)}
+  .btn-cta:hover{background:var(--cta-ink)}
+  .btn-ghost{background:var(--surface); color:var(--ink); border:1px solid var(--line-strong)}
+  .btn-ghost:hover{background:var(--surface-2)}
+  .btn-block{width:100%; justify-content:center}
+
+  /* ---------- Barra de filtros ---------- */
+  .toolbar{position:sticky; top:0; z-index:600; background:rgba(255,255,255,.92); backdrop-filter:saturate(1.4) blur(8px); border-bottom:1px solid var(--line)}
+  .toolbar .wrap{padding:10px 16px; display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+  .chips{display:flex; gap:7px; flex-wrap:wrap; flex:1; min-width:0}
+  .chip{border:1px solid var(--line-strong); background:var(--surface); color:var(--ink); font-size:13px; font-weight:600; padding:6px 11px; border-radius:999px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; user-select:none; white-space:nowrap}
+  .chip .dot{width:9px; height:9px; border-radius:50%}
+  .chip[aria-pressed="false"]{opacity:.45}
+  .chip:hover{border-color:var(--faint)}
+  select,input,textarea{font-family:inherit; font-size:14px; color:var(--ink); background:var(--surface); border:1px solid var(--line-strong); border-radius:10px; padding:9px 11px; width:100%}
+  select:focus,input:focus,textarea:focus{outline:2px solid #bfe0e4; outline-offset:0; border-color:var(--accent)}
+  .toolbar select, .toolbar input{width:auto; min-width:140px}
+  .count{font-size:13px; color:var(--muted); white-space:nowrap; margin-left:auto}
+  .count b{color:var(--ink)}
+
+  /* ---------- Layout mapa + lista ---------- */
+  .app{display:grid; grid-template-columns:1fr 360px; gap:0; height:calc(100vh - 0px)}
+  #map{width:100%; height:100%; min-height:420px; background:#e9edf1; z-index:1}
+  .side{border-left:1px solid var(--line); background:var(--surface); overflow-y:auto; -webkit-overflow-scrolling:touch}
+  .side-head{position:sticky; top:0; background:var(--surface); border-bottom:1px solid var(--line); padding:12px 14px; font-size:13px; color:var(--muted); z-index:2}
+  .card{padding:13px 14px; border-bottom:1px solid var(--line); cursor:pointer; transition:background .12s}
+  .card:hover{background:var(--surface-2)}
+  .card .row1{display:flex; align-items:center; gap:8px; margin-bottom:4px}
+  .badge{font-size:11px; font-weight:700; color:#fff; padding:2px 8px; border-radius:999px; white-space:nowrap}
+  .card h3{font-size:15px}
+  .card .meta{font-size:12.5px; color:var(--muted); display:flex; gap:6px; flex-wrap:wrap; align-items:center; margin-top:3px}
+  .card .desc{font-size:13px; color:var(--ink); margin-top:6px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden}
+  .card .contacts{display:flex; gap:6px; flex-wrap:wrap; margin-top:9px}
+  .pill{font-size:12px; font-weight:600; padding:5px 9px; border-radius:8px; border:1px solid var(--line-strong); color:var(--ink); background:var(--surface); display:inline-flex; align-items:center; gap:5px}
+  .pill.wa{color:#0a7a3f; border-color:#bce7cd; background:#f0fbf4}
+  .pill.ig{color:#b5197b; border-color:#f2c7e3; background:#fdf2f9}
+  .unver{font-size:11px; color:#9a6a00; background:#fff7e6; border:1px solid #ffe0a3; padding:2px 7px; border-radius:999px; font-weight:600}
+  .empty{padding:40px 20px; text-align:center; color:var(--muted); font-size:14px}
+  .empty .big{font-size:34px; margin-bottom:8px}
+
+  /* marcador del mapa */
+  .mk{display:flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:50% 50% 50% 2px; transform:rotate(45deg); box-shadow:0 2px 6px rgba(0,0,0,.35); border:2px solid #fff}
+  .mk span{transform:rotate(-45deg); font-size:15px; line-height:1}
+
+  /* popup */
+  .leaflet-popup-content{margin:12px 14px; min-width:210px}
+  .pop h3{font-size:16px; margin-bottom:2px}
+  .pop .pmeta{font-size:12.5px; color:var(--muted); margin:2px 0 8px}
+  .pop .pdesc{font-size:13.5px; margin:8px 0}
+  .pop .pcont{display:flex; flex-direction:column; gap:6px; margin-top:10px}
+  .pop .pcont a{display:inline-flex; align-items:center; gap:8px; font-weight:600; font-size:13.5px}
+
+  /* ---------- Modal formulario ---------- */
+  .overlay{position:fixed; inset:0; background:rgba(20,26,34,.55); z-index:2000; display:none; align-items:flex-start; justify-content:center; padding:24px 14px; overflow-y:auto}
+  .overlay.open{display:flex}
+  .modal{background:var(--surface); border-radius:18px; width:100%; max-width:640px; box-shadow:0 20px 60px rgba(0,0,0,.3); overflow:hidden; margin:auto}
+  .modal-head{padding:18px 20px 14px; border-bottom:1px solid var(--line); display:flex; align-items:flex-start; justify-content:space-between; gap:12px; position:sticky; top:0; background:var(--surface); z-index:3}
+  .modal-head h2{font-size:19px}
+  .modal-head p{margin:4px 0 0; font-size:13px; color:var(--muted)}
+  .x{border:0; background:var(--surface-2); width:34px; height:34px; border-radius:9px; cursor:pointer; font-size:18px; color:var(--muted); flex:none}
+  .modal-body{padding:18px 20px 22px}
+  .field{margin-bottom:15px}
+  .field > label{display:block; font-size:13.5px; font-weight:600; margin-bottom:6px}
+  .field .hint{font-size:12px; color:var(--faint); font-weight:400; margin-left:4px}
+  .req{color:var(--cta)}
+  .typegrid{display:grid; grid-template-columns:1fr 1fr; gap:8px}
+  .typecard{border:1.5px solid var(--line-strong); border-radius:11px; padding:10px 11px; cursor:pointer; display:flex; gap:9px; align-items:center; font-size:13.5px; font-weight:600; transition:.12s; background:var(--surface)}
+  .typecard .ic{width:26px; height:26px; border-radius:7px; display:flex; align-items:center; justify-content:center; font-size:15px; flex:none}
+  .typecard[aria-pressed="true"]{border-color:var(--accent); background:#eefafb; box-shadow:0 0 0 3px #d6f0f2}
+  .typecard small{display:block; font-weight:400; color:var(--muted); font-size:11.5px}
+  .qchips{display:flex; gap:6px; flex-wrap:wrap; margin-top:8px}
+  .qchip{font-size:12px; border:1px dashed var(--line-strong); background:var(--surface-2); color:var(--muted); border-radius:999px; padding:4px 10px; cursor:pointer}
+  .qchip:hover{border-color:var(--accent); color:var(--accent)}
+  #pickmap{height:200px; border-radius:11px; border:1px solid var(--line-strong); margin-top:4px; z-index:1}
+  .pickrow{display:flex; gap:8px; align-items:center; margin-top:8px; font-size:12.5px; color:var(--muted)}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+  .check{display:flex; gap:10px; align-items:flex-start; font-size:13px; color:var(--ink); background:var(--surface-2); border:1px solid var(--line); border-radius:11px; padding:11px 12px}
+  .check input{width:auto; margin-top:2px}
+  .form-note{font-size:12px; color:var(--faint); margin-top:10px}
+  .err{color:var(--danger); font-size:13px; margin-top:8px; display:none}
+  .success{text-align:center; padding:34px 20px}
+  .success .big{font-size:44px}
+  .success h2{margin:10px 0 6px}
+  .success p{color:var(--muted); font-size:14px; max-width:44ch; margin:0 auto}
+
+  /* ---------- Footer ---------- */
+  footer{background:var(--surface); border-top:1px solid var(--line); padding:22px 16px; color:var(--muted); font-size:13px}
+  footer .wrap{display:flex; gap:18px; justify-content:space-between; flex-wrap:wrap; align-items:center}
+  footer .disc{max-width:62ch}
+
+  /* banner de vista previa */
+  .preview-banner{display:none; background:#fff8e6; border-bottom:1px solid #ffe2a0; color:#8a5b00; font-size:12.5px; text-align:center; padding:7px 16px}
+  .preview-banner.show{display:block}
+
+  /* mobile */
+  @media (max-width:860px){
+    .app{grid-template-columns:1fr; height:auto}
+    #map{height:56vh; min-height:340px}
+    .side{border-left:0; border-top:1px solid var(--line); max-height:none}
+    .toolbar .count{width:100%; margin:2px 0 0}
+    .typegrid{grid-template-columns:1fr}
+    .grid2{grid-template-columns:1fr}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- Banda de emergencia -->
+<div class="emg"><div class="wrap">
+  <span>⚠️ <b>Emergencia:</b> línea nacional <b>123</b> · Bomberos <b>119</b> · Cruz Roja <b>132</b></span>
+  <span>· Información oficial: <a href="https://portal.gestiondelriesgo.gov.co/" target="_blank" rel="noopener">UNGRD</a></span>
+</div></div>
+
+<!-- Banner de vista previa (solo si no hay backend configurado) -->
+<div class="preview-banner" id="previewBanner">
+  🔧 <b>Modo vista previa</b> — los puntos que ves son <b>de ejemplo</b>. Falta definir <code>CONFIG.API_URL</code> para recibir reportes reales.
+</div>
+
+<!-- Header -->
+<header class="top"><div class="wrap">
+  <span class="kicker">🇨🇴 Respuesta comunitaria</span>
+  <h1>Mapa de Ayuda — Terremoto Colombia</h1>
+  <p class="sub">Sismo de magnitud 7.4 del <b>10 de agosto de 2026</b> (epicentro Chocó). Mapeemos entre todos <b>dónde recibir donaciones</b> y <b>quién puede transportarlas</b> hacia las zonas afectadas. Si conoces un punto, repórtalo: aparecerá en el mapa para que cualquiera lo contacte.</p>
+  <div class="actions">
+    <button class="btn btn-cta" onclick="openForm()">＋ Reportar un punto</button>
+    <a class="btn btn-ghost" href="#mapa">Ver el mapa ↓</a>
+  </div>
+</div></header>
+
+<!-- Toolbar de filtros -->
+<div class="toolbar" id="mapa"><div class="wrap">
+  <div class="chips" id="chips"><!-- chips de categoría inyectados por JS --></div>
+  <select id="cityFilter" aria-label="Filtrar por ciudad"><option value="">Todas las ciudades</option></select>
+  <div class="count" id="count">Cargando…</div>
+</div></div>
+
+<!-- App: mapa + lista -->
+<div class="app">
+  <div id="map"></div>
+  <aside class="side">
+    <div class="side-head" id="sideHead">Puntos reportados</div>
+    <div id="list"></div>
+  </aside>
+</div>
+
+<!-- Footer -->
+<footer><div class="wrap">
+  <div class="disc">
+    <b>Aviso:</b> este es un mapa <b>colaborativo y no oficial</b>. Los puntos los reporta la comunidad y pueden no estar verificados — confirma siempre por el número de contacto antes de desplazarte o enviar donaciones. En emergencia llama al <b>123</b>. Fuente oficial: <a href="https://portal.gestiondelriesgo.gov.co/" target="_blank" rel="noopener">UNGRD</a>.
+  </div>
+  <div>Una iniciativa de <b>Oakberry Colombia</b> 💜 y la comunidad</div>
+</div></footer>
+
+<!-- Modal: formulario de reporte -->
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="formTitle">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <h2 id="formTitle">Reportar un punto</h2>
+        <p>Ayuda a que llegue la ayuda. Toma 1 minuto.</p>
+      </div>
+      <button class="x" onclick="closeForm()" aria-label="Cerrar">✕</button>
+    </div>
+
+    <div class="modal-body" id="formBody">
+      <form id="reportForm" novalidate>
+        <!-- Tipo -->
+        <div class="field">
+          <label>¿Qué tipo de punto es? <span class="req">*</span></label>
+          <div class="typegrid" id="typeGrid"></div>
+        </div>
+
+        <!-- Nombre -->
+        <div class="field">
+          <label for="f_nombre">Nombre del lugar u operador <span class="req">*</span></label>
+          <input id="f_nombre" name="nombre" placeholder="Ej: Parroquia San José / Transportes del Pacífico" maxlength="120">
+        </div>
+
+        <!-- Ciudad -->
+        <div class="grid2">
+          <div class="field">
+            <label for="f_ciudad">Ciudad <span class="req">*</span></label>
+            <select id="f_ciudad" name="ciudad"></select>
+          </div>
+          <div class="field" id="otraCityWrap" style="display:none">
+            <label for="f_ciudad_otra">Escribe la ciudad</label>
+            <input id="f_ciudad_otra" placeholder="Ciudad / municipio">
+          </div>
+        </div>
+
+        <!-- Dirección / cobertura -->
+        <div class="field">
+          <label for="f_direccion" id="lbl_direccion">Dirección exacta <span class="hint">(o punto de referencia)</span></label>
+          <input id="f_direccion" name="direccion" placeholder="Calle 10 # 5-20, barrio Centro" maxlength="160">
+        </div>
+
+        <!-- Mapa selector -->
+        <div class="field">
+          <label>Ubica el punto en el mapa <span class="hint">(toca el mapa para mover el marcador)</span></label>
+          <div id="pickmap"></div>
+          <div class="pickrow">
+            <button type="button" class="qchip" onclick="useMyLocation()">📍 Usar mi ubicación</button>
+            <span id="coordLabel">Sin coordenadas — se usará el centro de la ciudad</span>
+          </div>
+        </div>
+
+        <!-- Descripción -->
+        <div class="field">
+          <label for="f_desc" id="lbl_desc">¿Qué reciben o qué pueden mover?</label>
+          <textarea id="f_desc" name="descripcion" rows="3" placeholder="Ej: Recibimos agua, alimentos no perecederos, aseo personal y ropa." maxlength="500"></textarea>
+          <div class="qchips" id="qchips"></div>
+        </div>
+
+        <!-- Horario -->
+        <div class="field">
+          <label for="f_horario">Horario / disponibilidad</label>
+          <input id="f_horario" name="horario" placeholder="Ej: Lun a Sáb 8am–6pm / 24 horas / según necesidad" maxlength="120">
+        </div>
+
+        <!-- Contacto -->
+        <div class="field">
+          <label>Contacto del punto <span class="hint">(al menos un medio) <span class="req">*</span></span></label>
+          <div class="grid2">
+            <input id="f_tel" name="telefono" placeholder="WhatsApp / teléfono" maxlength="40" inputmode="tel">
+            <input id="f_ig" name="instagram" placeholder="Instagram (@usuario)" maxlength="60">
+          </div>
+          <div style="margin-top:12px">
+            <input id="f_web" name="web" placeholder="Sitio web o enlace (opcional)" maxlength="160">
+          </div>
+          <div style="margin-top:12px">
+            <input id="f_contacto_nombre" name="contacto_nombre" placeholder="Nombre del responsable (opcional)" maxlength="80">
+          </div>
+        </div>
+
+        <!-- Quién reporta -->
+        <div class="field">
+          <label>Tus datos <span class="hint">(solo para verificar, no se muestran)</span></label>
+          <div class="grid2">
+            <input id="f_rep_nombre" name="reporta_nombre" placeholder="Tu nombre" maxlength="80">
+            <input id="f_rep_tel" name="reporta_telefono" placeholder="Tu WhatsApp" maxlength="40" inputmode="tel">
+          </div>
+        </div>
+
+        <!-- Confirmación -->
+        <label class="check">
+          <input type="checkbox" id="f_confirm">
+          <span>Confirmo que esta información es real y que tengo permiso para compartir estos datos de contacto públicamente.</span>
+        </label>
+
+        <div class="err" id="formErr"></div>
+
+        <div style="margin-top:16px">
+          <button type="submit" class="btn btn-cta btn-block" id="submitBtn">Publicar en el mapa</button>
+        </div>
+        <p class="form-note">Al publicar, estos datos serán visibles públicamente en el mapa para coordinar la ayuda. No incluyas información sensible de terceros.</p>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   CONFIGURACIÓN
+   API REST propio (Cloud Run → BigQuery). Robusto, sin Google Sheets.
+   Si se deja vacío, el mapa corre en modo vista previa con puntos de EJEMPLO.
+   ========================================================================= */
+const CONFIG = {
+  API_URL: "https://oakberry-donaciones-api-664413392517.us-central1.run.app"
+};
+
+/* ---------- Catálogo de categorías ---------- */
+const CATS = {
+  acopio_masivo:      {label:"Centro de acopio masivo",  short:"Acopio masivo",  emoji:"🏭", color:"#c0392b", sub:"Bodega / gran capacidad"},
+  acopio_pequeno:     {label:"Centro de acopio pequeño", short:"Acopio pequeño", emoji:"📦", color:"#e67e22", sub:"Local, parroquia, tienda"},
+  log_intermunicipal: {label:"Transporte intermunicipal",short:"Intermunicipal", emoji:"🚚", color:"#2c7fb8", sub:"Entre ciudades"},
+  log_intraciudad:    {label:"Transporte intraciudad",   short:"Intraciudad",    emoji:"🛵", color:"#12a594", sub:"Dentro de la ciudad"},
+  log_aereo:          {label:"Transporte aéreo",         short:"Aéreo",          emoji:"✈️", color:"#8e44ad", sub:"Avioneta / helicóptero"},
+  log_maritimo:       {label:"Transporte marítimo/fluvial",short:"Marítimo/fluvial",emoji:"⛴️",color:"#0f8a8a", sub:"Lancha / barco / río"}
+};
+const CAT_KEYS = Object.keys(CATS);
+
+/* ---------- Centroides de ciudades (prioridad: zona afectada) ---------- */
+const CITIES = {
+  "Quibdó":[5.6919,-76.6583], "San José del Palmar":[4.8990,-76.2380], "Istmina":[5.1596,-76.6847],
+  "Condoto":[5.0900,-76.6500], "Tadó":[5.2647,-76.5606],
+  "Cali":[3.4516,-76.5320], "Buenaventura":[3.8801,-77.0313], "Palmira":[3.5394,-76.3036],
+  "Tuluá":[4.0847,-76.1954], "Cartago":[4.7460,-75.9116], "Buga":[3.9008,-76.2980],
+  "Pereira":[4.8143,-75.6946], "Dosquebradas":[4.8333,-75.6667], "Manizales":[5.0703,-75.5138],
+  "Armenia":[4.5339,-75.6811], "Popayán":[2.4448,-76.6147],
+  "Medellín":[6.2442,-75.5812], "Bogotá":[4.7110,-74.0721], "Ibagué":[4.4389,-75.2322],
+  "Pasto":[1.2136,-77.2811], "Barranquilla":[10.9685,-74.7813], "Cartagena":[10.3910,-75.4794],
+  "Bucaramanga":[7.1193,-73.1227], "Cúcuta":[7.8939,-72.5078], "Santa Marta":[11.2408,-74.1990],
+  "Neiva":[2.9273,-75.2819], "Villavicencio":[4.1420,-73.6266]
+};
+const COLOMBIA_CENTER = [4.6, -75.6];
+
+/* ---------- Chips rápidos por grupo ---------- */
+const QCHIPS = {
+  acopio: ["Agua","Alimentos no perecederos","Aseo personal","Ropa","Cobijas","Medicamentos","Pañales / bebé","Linternas y pilas"],
+  logistica: ["Carga liviana","Carga pesada","Refrigerado","Voluntario con vehículo","Combustible propio","Disponible ya"]
+};
+function groupOf(tipo){ return tipo && tipo.startsWith("acopio") ? "acopio" : "logistica"; }
+
+/* ---------- Estado ---------- */
+let PUNTOS = [];
+let MAP, PICKMAP, PICKMARKER, PICK_LATLNG=null;
+const MARKERS = {}; // id -> leaflet marker
+const activeCats = new Set(CAT_KEYS);
+let activeCity = "";
+let selectedType = null;
+
+/* ================= MAPA PRINCIPAL ================= */
+function initMap(){
+  MAP = L.map('map', {scrollWheelZoom:true}).setView(COLOMBIA_CENTER, 6);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom:19, attribution:'&copy; OpenStreetMap'
+  }).addTo(MAP);
+}
+
+function markerIcon(tipo){
+  const c = CATS[tipo] || {color:"#555", emoji:"📍"};
+  return L.divIcon({
+    className:'', html:`<div class="mk" style="background:${c.color}"><span>${c.emoji}</span></div>`,
+    iconSize:[30,30], iconAnchor:[15,28], popupAnchor:[0,-26]
+  });
+}
+
+/* ================= FILTROS / CHIPS ================= */
+function buildChips(){
+  const el = document.getElementById('chips');
+  el.innerHTML = CAT_KEYS.map(k=>{
+    const c=CATS[k];
+    return `<button class="chip" data-k="${k}" aria-pressed="true" onclick="toggleCat('${k}')">
+      <span class="dot" style="background:${c.color}"></span>${c.short}</button>`;
+  }).join('');
+}
+function toggleCat(k){
+  if(activeCats.has(k)) activeCats.delete(k); else activeCats.add(k);
+  const b=document.querySelector(`.chip[data-k="${k}"]`);
+  b.setAttribute('aria-pressed', activeCats.has(k));
+  render();
+}
+function buildCityFilter(){
+  const sel=document.getElementById('cityFilter');
+  const cities=[...new Set(PUNTOS.map(p=>p.ciudad).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'es'));
+  sel.innerHTML='<option value="">Todas las ciudades</option>'+cities.map(c=>`<option>${esc(c)}</option>`).join('');
+  sel.value=activeCity;
+  sel.onchange=()=>{activeCity=sel.value; render();};
+}
+
+/* ================= RENDER ================= */
+function visiblePoints(){
+  return PUNTOS.filter(p=>activeCats.has(p.tipo) && (!activeCity || p.ciudad===activeCity));
+}
+function render(){
+  // limpiar marcadores
+  Object.values(MARKERS).forEach(m=>MAP.removeLayer(m));
+  const pts=visiblePoints();
+  const bounds=[];
+  pts.forEach(p=>{
+    if(p.lat==null||p.lng==null) return;
+    const m=L.marker([p.lat,p.lng], {icon:markerIcon(p.tipo)}).addTo(MAP).bindPopup(popupHtml(p));
+    m.on('click',()=>highlightCard(p.id));
+    MARKERS[p.id]=m;
+    bounds.push([p.lat,p.lng]);
+  });
+  renderList(pts);
+  document.getElementById('count').innerHTML=`<b>${pts.length}</b> punto${pts.length===1?'':'s'}`;
+  document.getElementById('sideHead').textContent = activeCity ? `Puntos en ${activeCity}` : "Puntos reportados";
+  if(bounds.length){ try{ MAP.fitBounds(bounds,{padding:[40,40], maxZoom:12}); }catch(e){} }
+}
+function renderList(pts){
+  const el=document.getElementById('list');
+  if(!pts.length){
+    el.innerHTML=`<div class="empty"><div class="big">🗺️</div>Aún no hay puntos con estos filtros.<br>¿Conoces uno? <a href="#" onclick="openForm();return false">Repórtalo</a>.</div>`;
+    return;
+  }
+  el.innerHTML=pts.map(p=>{
+    const c=CATS[p.tipo]||{};
+    return `<div class="card" id="card-${p.id}" onclick="focusPoint('${p.id}')">
+      <div class="row1">
+        <span class="badge" style="background:${c.color}">${c.emoji||''} ${c.short||p.tipo}</span>
+        ${p.verificado?'' : '<span class="unver">Sin verificar</span>'}
+      </div>
+      <h3>${esc(p.nombre)}</h3>
+      <div class="meta">📍 ${esc(p.ciudad||'—')}${p.direccion?' · '+esc(p.direccion):''}${p.horario?' · 🕒 '+esc(p.horario):''}</div>
+      ${p.descripcion?`<div class="desc">${esc(p.descripcion)}</div>`:''}
+      <div class="contacts">${contactPills(p)}</div>
+    </div>`;
+  }).join('');
+}
+function contactPills(p){
+  let out='';
+  if(p.telefono){ out+=`<a class="pill wa" href="${waLink(p.telefono)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">💬 WhatsApp</a>`; }
+  if(p.instagram){ out+=`<a class="pill ig" href="${igLink(p.instagram)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Instagram</a>`; }
+  if(p.web){ out+=`<a class="pill" href="${urlLink(p.web)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">🌐 Web</a>`; }
+  return out || '<span class="pill" style="opacity:.6">Sin contacto</span>';
+}
+function popupHtml(p){
+  const c=CATS[p.tipo]||{};
+  let cont='';
+  if(p.telefono) cont+=`<a href="${waLink(p.telefono)}" target="_blank" rel="noopener">💬 ${esc(p.telefono)}</a>`;
+  if(p.instagram) cont+=`<a href="${igLink(p.instagram)}" target="_blank" rel="noopener">📷 ${esc(p.instagram)}</a>`;
+  if(p.web) cont+=`<a href="${urlLink(p.web)}" target="_blank" rel="noopener">🌐 Abrir enlace</a>`;
+  return `<div class="pop">
+    <span class="badge" style="background:${c.color}">${c.emoji||''} ${c.short||p.tipo}</span>
+    ${p.verificado?'':'<span class="unver" style="margin-left:6px">Sin verificar</span>'}
+    <h3 style="margin-top:8px">${esc(p.nombre)}</h3>
+    <div class="pmeta">📍 ${esc(p.ciudad||'—')}${p.direccion?'<br>'+esc(p.direccion):''}${p.horario?'<br>🕒 '+esc(p.horario):''}</div>
+    ${p.descripcion?`<div class="pdesc">${esc(p.descripcion)}</div>`:''}
+    <div class="pcont">${cont||'<span style="color:#888">Sin datos de contacto</span>'}</div>
+  </div>`;
+}
+function focusPoint(id){
+  const p=PUNTOS.find(x=>String(x.id)===String(id));
+  if(!p||p.lat==null) return;
+  MAP.setView([p.lat,p.lng], 14, {animate:true});
+  const m=MARKERS[id]; if(m) m.openPopup();
+  document.getElementById('map').scrollIntoView({behavior:'smooth', block:'center'});
+}
+function highlightCard(id){
+  const card=document.getElementById('card-'+id);
+  if(card){ card.scrollIntoView({behavior:'smooth', block:'center'}); card.style.background='#eefafb'; setTimeout(()=>card.style.background='',1200); }
+}
+
+/* ================= HELPERS ================= */
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+function digits(s){ return String(s||'').replace(/\D/g,''); }
+function waLink(tel){ let d=digits(tel); if(d.length===10) d='57'+d; return 'https://wa.me/'+d; }
+function igLink(ig){ let u=String(ig||'').trim().replace(/^@/,'').replace(/^https?:\/\/(www\.)?instagram\.com\//i,'').replace(/\/$/,''); return 'https://instagram.com/'+encodeURIComponent(u); }
+function urlLink(w){ let u=String(w||'').trim(); if(!/^https?:\/\//i.test(u)) u='https://'+u; return u; }
+
+/* ================= FORMULARIO ================= */
+function buildTypeCards(){
+  const g=document.getElementById('typeGrid');
+  g.innerHTML=CAT_KEYS.map(k=>{
+    const c=CATS[k];
+    return `<button type="button" class="typecard" data-k="${k}" aria-pressed="false" onclick="selectType('${k}')">
+      <span class="ic" style="background:${c.color}22; color:${c.color}">${c.emoji}</span>
+      <span>${c.short}<small>${c.sub}</small></span>
+    </button>`;
+  }).join('');
+}
+function selectType(k){
+  selectedType=k;
+  document.querySelectorAll('.typecard').forEach(t=>t.setAttribute('aria-pressed', t.dataset.k===k));
+  // ajustar labels y chips según grupo
+  const grp=groupOf(k);
+  document.getElementById('lbl_direccion').innerHTML = grp==='acopio'
+    ? 'Dirección exacta <span class="hint">(o punto de referencia)</span>'
+    : 'Zona / rutas de cobertura <span class="hint">(o base de operación)</span>';
+  document.getElementById('lbl_desc').textContent = grp==='acopio'
+    ? '¿Qué donaciones reciben?' : '¿Qué pueden mover y con qué capacidad?';
+  document.getElementById('f_desc').placeholder = grp==='acopio'
+    ? 'Ej: Agua, alimentos no perecederos, aseo, ropa, cobijas…'
+    : 'Ej: Camión 5 ton, disponible para Cali–Quibdó, cupo diario, refrigerado…';
+  const qc=document.getElementById('qchips');
+  qc.innerHTML=QCHIPS[grp].map(t=>`<span class="qchip" onclick="addChip('${t.replace(/'/g,"\\'")}')">+ ${t}</span>`).join('');
+}
+function addChip(t){
+  const ta=document.getElementById('f_desc');
+  const cur=ta.value.trim();
+  ta.value = cur ? (cur.replace(/[.\s]*$/,'')+', '+t) : t;
+  ta.focus();
+}
+function buildCitySelect(){
+  const sel=document.getElementById('f_ciudad');
+  const names=Object.keys(CITIES).sort((a,b)=>a.localeCompare(b,'es'));
+  sel.innerHTML='<option value="">Selecciona…</option>'+names.map(n=>`<option>${n}</option>`).join('')+'<option value="__otra">Otra ciudad…</option>';
+  sel.onchange=()=>{
+    const otra=sel.value==='__otra';
+    document.getElementById('otraCityWrap').style.display=otra?'block':'none';
+    // recentra el selector a la ciudad solo si aún no hay pin manual
+    if(!otra && CITIES[sel.value] && !PICK_LATLNG){ PICKMAP.setView(CITIES[sel.value],12); }
+  };
+}
+function initPickMap(){
+  PICKMAP=L.map('pickmap',{scrollWheelZoom:false}).setView(COLOMBIA_CENTER,5);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OSM'}).addTo(PICKMAP);
+  PICKMAP.on('click',e=>setPick(e.latlng.lat,e.latlng.lng));
+}
+function setPick(lat,lng){
+  PICK_LATLNG=[lat,lng];
+  if(PICKMARKER) PICKMARKER.setLatLng([lat,lng]);
+  else PICKMARKER=L.marker([lat,lng],{draggable:true}).addTo(PICKMAP).on('dragend',ev=>{const ll=ev.target.getLatLng();PICK_LATLNG=[ll.lat,ll.lng];updateCoordLabel();});
+  updateCoordLabel();
+}
+function updateCoordLabel(){
+  document.getElementById('coordLabel').textContent = PICK_LATLNG
+    ? `✅ Ubicación marcada (${PICK_LATLNG[0].toFixed(4)}, ${PICK_LATLNG[1].toFixed(4)})`
+    : 'Sin coordenadas — se usará el centro de la ciudad';
+}
+function useMyLocation(){
+  if(!navigator.geolocation){ alert('Tu navegador no permite geolocalización.'); return; }
+  navigator.geolocation.getCurrentPosition(
+    pos=>{ setPick(pos.coords.latitude,pos.coords.longitude); PICKMAP.setView(PICK_LATLNG,15); },
+    ()=>alert('No pudimos obtener tu ubicación. Marca el punto tocando el mapa.')
+  );
+}
+
+function openForm(){
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  setTimeout(()=>{ if(PICKMAP) PICKMAP.invalidateSize(); },250);
+}
+function closeForm(){
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.getElementById('overlay').addEventListener('click',e=>{ if(e.target.id==='overlay') closeForm(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeForm(); });
+
+function getCity(){
+  const sel=document.getElementById('f_ciudad');
+  if(sel.value==='__otra') return document.getElementById('f_ciudad_otra').value.trim();
+  return sel.value;
+}
+function showErr(msg){ const e=document.getElementById('formErr'); e.textContent=msg; e.style.display='block'; }
+
+document.getElementById('reportForm').addEventListener('submit',function(ev){
+  ev.preventDefault();
+  document.getElementById('formErr').style.display='none';
+  const nombre=document.getElementById('f_nombre').value.trim();
+  const ciudad=getCity();
+  const tel=document.getElementById('f_tel').value.trim();
+  const ig=document.getElementById('f_ig').value.trim();
+  const web=document.getElementById('f_web').value.trim();
+
+  if(!selectedType) return showErr('Selecciona el tipo de punto.');
+  if(!nombre) return showErr('Escribe el nombre del lugar u operador.');
+  if(!ciudad) return showErr('Indica la ciudad.');
+  if(!tel && !ig && !web) return showErr('Deja al menos un medio de contacto (WhatsApp, Instagram o web).');
+  if(!document.getElementById('f_confirm').checked) return showErr('Confirma que la información es real y puedes compartirla.');
+
+  // coordenadas: pin o centroide de ciudad
+  let lat=null,lng=null;
+  if(PICK_LATLNG){ [lat,lng]=PICK_LATLNG; }
+  else if(CITIES[ciudad]){ [lat,lng]=CITIES[ciudad]; }
+
+  const data={
+    tipo:selectedType, nombre, ciudad,
+    direccion:document.getElementById('f_direccion').value.trim(),
+    lat:lat==null?'':lat, lng:lng==null?'':lng,
+    descripcion:document.getElementById('f_desc').value.trim(),
+    horario:document.getElementById('f_horario').value.trim(),
+    contacto_nombre:document.getElementById('f_contacto_nombre').value.trim(),
+    telefono:tel, instagram:ig, web:web,
+    reporta_nombre:document.getElementById('f_rep_nombre').value.trim(),
+    reporta_telefono:document.getElementById('f_rep_tel').value.trim()
+  };
+
+  const btn=document.getElementById('submitBtn');
+  btn.disabled=true; btn.textContent='Publicando…';
+
+  if(!CONFIG.API_URL){
+    // modo vista previa: agrega localmente
+    setTimeout(()=>{ data.id='local-'+Date.now(); data.verificado=false; PUNTOS.unshift(normalize(data)); afterSubmit(true); },600);
+    return;
+  }
+  fetch(CONFIG.API_URL+'/donaciones',{
+    method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data)
+  })
+    .then(r=>r.json())
+    .then(res=>{
+      if(res && res.ok){ afterSubmit(true); loadPuntos(); }
+      else { btn.disabled=false; btn.textContent='Publicar en el mapa'; showErr(res&&res.error ? ('No se pudo publicar: '+res.error) : 'No se pudo publicar. Intenta de nuevo.'); }
+    })
+    .catch(()=>{ btn.disabled=false; btn.textContent='Publicar en el mapa'; showErr('Sin conexión con el servidor. Intenta de nuevo.'); });
+});
+
+function afterSubmit(){
+  document.getElementById('formBody').innerHTML=`
+    <div class="success">
+      <div class="big">🙏</div>
+      <h2>¡Gracias! Tu punto quedó en el mapa</h2>
+      <p>Aparecerá para que la comunidad lo contacte. Compártelo para que llegue la ayuda a donde se necesita.</p>
+      <div style="margin-top:18px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap">
+        <a class="btn btn-cta" href="${shareLink()}" target="_blank" rel="noopener">Compartir por WhatsApp</a>
+        <button class="btn btn-ghost" onclick="location.reload()">Reportar otro</button>
+      </div>
+    </div>`;
+  buildCityFilter(); render();
+}
+function shareLink(){
+  const txt=`🗺️ Mapa de Ayuda — Terremoto Colombia. Reporta o encuentra centros de acopio y transporte para llegar a las zonas afectadas: ${location.href}`;
+  return 'https://wa.me/?text='+encodeURIComponent(txt);
+}
+
+/* ================= CARGA DE DATOS (API REST) ================= */
+function normalize(r){
+  return {
+    id:r.id, tipo:r.tipo, nombre:r.nombre, ciudad:r.ciudad, direccion:r.direccion,
+    lat:(r.lat===''||r.lat==null)?null:parseFloat(r.lat),
+    lng:(r.lng===''||r.lng==null)?null:parseFloat(r.lng),
+    descripcion:r.descripcion, horario:r.horario, contacto_nombre:r.contacto_nombre,
+    telefono:r.telefono, instagram:r.instagram, web:r.web,
+    verificado: r.verificado===true || String(r.estado||'').toLowerCase()==='verificado'
+  };
+}
+function loadPuntos(){
+  if(!CONFIG.API_URL){ PUNTOS=DEMO.slice(); afterLoad(); return; }
+  fetch(CONFIG.API_URL+'/donaciones')
+    .then(r=>r.json())
+    .then(res=>{ PUNTOS=(res&&res.ok&&Array.isArray(res.puntos))?res.puntos.map(normalize):[]; afterLoad(); })
+    .catch(()=>{ PUNTOS=[]; afterLoad(); });
+}
+function afterLoad(){ buildCityFilter(); render(); }
+
+/* ---------- Datos DEMO (solo modo vista previa) ---------- */
+const DEMO=[
+  {id:'demo1', tipo:'acopio_masivo', nombre:'(EJEMPLO) Bodega Central de Donaciones', ciudad:'Cali', direccion:'Coliseo El Pueblo', lat:3.4280,lng:-76.5410, descripcion:'Recibe agua, alimentos no perecederos, aseo y ropa. Cuenta con montacargas.', horario:'8am–8pm', telefono:'3001234567', instagram:'', web:'', estado:'verificado'},
+  {id:'demo2', tipo:'acopio_pequeno', nombre:'(EJEMPLO) Parroquia San José', ciudad:'Pereira', direccion:'Cra 7 # 20-30', lat:4.8135,lng:-75.6960, descripcion:'Kits de aseo, pañales y agua.', horario:'Lun–Sáb 9am–5pm', telefono:'3109876543', instagram:'@parroquia_ejemplo', web:''},
+  {id:'demo3', tipo:'log_aereo', nombre:'(EJEMPLO) Aeroclub Voluntarios', ciudad:'Quibdó', direccion:'Base Aeropuerto El Caraño', lat:5.6900,lng:-76.6410, descripcion:'Avioneta disponible para llevar medicamentos a zonas sin vía terrestre. 300 kg por vuelo.', horario:'Según clima', telefono:'3155551212', instagram:'', web:''},
+  {id:'demo4', tipo:'log_maritimo', nombre:'(EJEMPLO) Lancheros del Atrato', ciudad:'Quibdó', direccion:'Muelle río Atrato', lat:5.6960,lng:-76.6600, descripcion:'Lanchas para llevar ayuda por el río a corregimientos aislados.', horario:'6am–4pm', telefono:'3200001111', instagram:'', web:''},
+  {id:'demo5', tipo:'log_intermunicipal', nombre:'(EJEMPLO) Transportes del Pacífico', ciudad:'Buenaventura', direccion:'Terminal de carga', lat:3.8790,lng:-77.0250, descripcion:'Camión 8 ton, ruta Buenaventura–Cali–Quibdó, cupo diario.', horario:'24 h', telefono:'3012223344', instagram:'', web:'transportespacifico.co'}
+];
+
+/* ================= INIT ================= */
+window.addEventListener('DOMContentLoaded',()=>{
+  if(!CONFIG.API_URL) document.getElementById('previewBanner').classList.add('show');
+  initMap();
+  buildChips();
+  buildTypeCards();
+  buildCitySelect();
+  initPickMap();
+  loadPuntos();
+});
+</script>
+</body>
+</html>
