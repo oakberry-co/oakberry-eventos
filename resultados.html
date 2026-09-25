@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#F5EEE0">
+<title>Resultados encuestas · OAKBERRY</title>
+<!-- Tablero interno: solo agregados, con clave en el link (?k=). No se indexa. -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="preload" href="pd-assets/nexa-slab-black.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="pd-assets/nexa-slab-regular.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* ─────────────────────────────────────────────────────────────────────────
+   Tablero de resultados de las encuestas del Purple Day (25–27 sep 2026).
+   Datos: api.oakberry-cupones.com?accion=encuestasResultados (solo agregados).
+   Se recalcula como máximo 1 vez por hora y queda congelado el domingo 27 a
+   medianoche (decisión de Daniel: que no coma máquina). Esta página pide los
+   datos al abrir y vuelve a pedir cuando toca la próxima foto.
+   Una sola serie por gráfico → un solo color (morado); el número va escrito.
+   ───────────────────────────────────────────────────────────────────────── */
+@font-face{font-family:'Nexa Slab';src:url('pd-assets/nexa-slab-regular.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Nexa Slab';src:url('pd-assets/nexa-slab-bold.woff2') format('woff2');font-weight:600 700;font-display:swap}
+@font-face{font-family:'Nexa Slab';src:url('pd-assets/nexa-slab-black.woff2') format('woff2');font-weight:800 900;font-display:swap}
+:root{
+  --crema:#FBF6E9; --cielo:#F5EEE0; --hueso:#EAE1CC;
+  --tinta:#21152A; --tinta-suave:#5C4A66; --tinta-tenue:#8A7A92;
+  --morado:#4B1F60; --lila:#B79CC8; --lila-claro:#EFE6F3; --oro:#F4B223;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{background:var(--cielo);-webkit-text-size-adjust:100%}
+body{font-family:'Nexa Slab',Rockwell,Georgia,serif;background:var(--cielo);color:var(--tinta);font-size:15px;line-height:1.45}
+.wrap{max-width:1180px;margin:0 auto;padding:0 16px 48px}
+header{padding:26px 0 14px;display:flex;flex-wrap:wrap;gap:10px 24px;align-items:flex-end;justify-content:space-between}
+h1{font-size:clamp(1.5rem,4.5vw,2.2rem);font-weight:900;text-transform:uppercase;color:var(--morado);line-height:1}
+.sub{font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--tinta-suave);font-weight:700;margin-bottom:6px}
+.estado{font-size:.85rem;color:var(--tinta-suave);text-align:right}
+.estado b{color:var(--tinta)}
+.tabs,.chips{display:flex;flex-wrap:wrap;gap:8px}
+.tabs{margin:6px 0 16px}
+.tab,.chip{font-family:inherit;cursor:pointer;border:2px solid var(--morado);background:var(--crema);color:var(--morado);
+  font-weight:800;border-radius:999px;padding:9px 16px;font-size:.88rem}
+.tab.on,.chip.on{background:var(--morado);color:var(--crema)}
+.chip{border-width:1.5px;padding:6px 12px;font-size:.8rem;font-weight:700}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.kpi{background:var(--crema);border-radius:16px;padding:14px 16px;box-shadow:0 3px 0 var(--hueso)}
+.kpi .l{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--tinta-suave);font-weight:700}
+.kpi .v{font-size:1.9rem;font-weight:900;color:var(--tinta);line-height:1.1;margin-top:4px;font-variant-numeric:tabular-nums}
+.kpi .d{font-size:.8rem;color:var(--tinta-suave);margin-top:2px}
+.filtro{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:4px 0 14px}
+.filtro span{font-size:.8rem;color:var(--tinta-suave);font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:12px}
+.card{background:var(--crema);border-radius:16px;padding:16px 16px 12px;box-shadow:0 3px 0 var(--hueso)}
+.card h3{font-size:1rem;font-weight:900;color:var(--morado);line-height:1.25}
+.card .q{font-size:.8rem;color:var(--tinta-suave);margin:3px 0 12px}
+.fila{display:grid;grid-template-columns:minmax(120px,42%) 1fr 74px;align-items:center;gap:10px;padding:4px 0;position:relative}
+.fila .et{font-size:.83rem;line-height:1.2}
+.fila .pista{height:14px;background:var(--lila-claro);border-radius:0 4px 4px 0}
+.fila .barra{height:14px;background:var(--morado);border-radius:0 4px 4px 0;min-width:2px}
+.fila .num{font-size:.83rem;text-align:right;font-variant-numeric:tabular-nums;color:var(--tinta)}
+.fila .num small{color:var(--tinta-tenue)}
+.fila:hover .barra{background:#6A3585}
+.vacio{font-size:.85rem;color:var(--tinta-tenue);padding:8px 0}
+.n{font-size:.75rem;color:var(--tinta-tenue);margin-top:8px}
+.horas{display:flex;align-items:flex-end;gap:3px;height:120px;padding-top:6px}
+.horas .col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;min-width:0;height:100%}
+.horas .b{width:100%;max-width:28px;background:var(--morado);border-radius:4px 4px 0 0;min-height:2px}
+.horas .x{font-size:.6rem;color:var(--tinta-tenue);margin-top:4px;white-space:nowrap}
+.textos{list-style:none;max-height:360px;overflow:auto}
+.textos li{padding:8px 0;border-bottom:1px solid var(--hueso);font-size:.88rem}
+.textos li small{display:block;color:var(--tinta-tenue);font-size:.72rem;margin-top:2px}
+.ancho{grid-column:1 / -1}
+#tip{position:fixed;pointer-events:none;background:var(--tinta);color:var(--crema);font-size:.8rem;padding:6px 9px;border-radius:8px;opacity:0;transition:opacity .1s;z-index:9}
+.err{background:#fff;border:2px solid #B3261E;color:#B3261E;border-radius:12px;padding:14px;margin-top:20px;font-weight:700}
+.oculto{display:none!important}
+@media (max-width:520px){ .fila{grid-template-columns:minmax(96px,40%) 1fr 64px} .grid{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div><p class="sub">Purple Day · 6 años</p><h1>Resultados de las encuestas</h1></div>
+    <p class="estado" id="estado">Cargando…</p>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button class="tab on" data-enc="cuentanos">Clientes Loopy · por qué cayó la venta</button>
+    <button class="tab" data-enc="celebra">Cupones sin canjear</button>
+  </div>
+
+  <div id="vista"></div>
+  <div id="err" class="err oculto"></div>
+</div>
+<div id="tip"></div>
+
+<script>
+const API = 'https://api.oakberry-cupones.com/';
+const K = new URLSearchParams(location.search).get('k') || '';
+const $ = id => document.getElementById(id);
+let D = null, ENC = 'cuentanos', SEG = 'todos', timer = null;
+
+const SEGS = { todos:'Todos', activo:'Activos (≤30 d)', bajo:'Bajaron (31–90 d)', se_fue:'Se fueron (>90 d)', nuevo_tienda:'Tienda · nuevos (QR)' };
+
+/* Cada pregunta: texto, y etiqueta legible por valor guardado. */
+const Q = {
+  celebra: [
+    ['p1_probado','¿Has probado OAKBERRY?',{varias:'Sí, varias veces',una_vez:'Sí, una vez',todavia_no:'Todavía no'}],
+    ['p2_antojo','Cuando se te antoja algo rico, ¿qué escoges? (varias)',{helado_postre:'Helado o postre',cafe_panaderia:'Café y panadería',saludable:'Jugo, fruta o saludable',acai_otra:'Açaí de otra marca',comida_rapida:'Comida rápida',otro:'Otra cosa'}],
+    ['p3_saber','Antes de probar un lugar nuevo, ¿qué te gustaría saber?',{que_es_acai:'Qué es el açaí',precio:'Cuánto cuesta',sabores:'Sabores y toppings',cerca:'Si queda cerca',recomendacion:'Si alguien lo recomienda',nada:'Nada, me arriesgo'}],
+    ['p4_invitacion','¿Qué pasó con la invitación (cupón)?',{no_vi:'No la vi / no me acuerdo',se_paso_fecha:'Se me pasó la fecha',tienda_lejos:'No encontré tienda cómoda',fui_no_pude:'Fui, pero no pude usarla',otro_momento:'La dejé para otro momento',otra:'Otra cosa'}],
+    ['p5_canal','Si hoy te antojaras, ¿cómo lo pedirías?',{tienda:'Iría a la tienda',domicilio:'A domicilio (Rappi u otra)',de_camino:'De camino a algo',no_se:'Todavía no sé'}],
+  ],
+  cuentanos: [
+    ['p1_describe','P1 · ¿Cómo le describirías OAKBERRY a un amigo?',{antojo:'Un antojo o postre',saludable:'Algo saludable para cualquier día',entreno:'Para después de entrenar',comida_ligera:'Desayuno o almuerzo ligero',gusto:'Un gusto de vez en cuando'}],
+    ['p2_siente','P2 · Después de comerte un OAKBERRY te sientes…',{energia:'Con energía y liviano',lleno:'Lleno, como una comida',gusto:'Como si me diera un gusto',empalagado:'Empalagado, muy dulce',hambre:'Con hambre al rato'}],
+    ['p3_causa','P3a · La última vez que no compraste, ¿qué pasó? (bajaron / se fueron)',{plata:'Mucha plata para ese momento',otra_cosa:'Compré otra cosa más fácil',tienda:'Cerrada, lejos o con fila',domicilio:'A domicilio salía caro',visto:'Muy visto, quería algo distinto',olvido:'Dejé de pensar en OAKBERRY'}],
+    ['p3_retener','P3b · ¿Qué haría que vinieras más seguido? (activos)',{precio:'Precio más cómodo',tamanos:'Tamaños más pequeños o completos',novedad:'Cosas nuevas',recordar:'Que me lo recuerden',cerca:'Más cerca / domicilio fácil'}],
+    ['p4_sustituto','P4 · Cuando no compras OAKBERRY, ¿qué compras?',{helado_yogurt:'Helado o yogurt',cafe_pastel:'Café y pastel',jugo_fruta:'Jugo o fruta',acai_otra:'Açaí de otra marca',comida_rapida:'Comida rápida',nada:'Nada'}],
+    ['p4_precio','P4 · ¿Cuánto pagas por eso? (nuestro 9 oz: $21.900 · 12 oz: $25.400)',{menos_10:'Menos de $10.000','10_15':'$10.000–15.000','15_20':'$15.000–20.000','20_25':'$20.000–25.000',mas_25:'Más de $25.000',mas_20:'Más de $20.000 (rango viejo)'},'orden'],
+    ['p5_oferta','P5 · Si hoy fueras, ¿cuál escogerías?',{pequeno:'Más pequeño y más barato',proteina:'Con más proteína, pagando más',combo:'Combo bowl + bebida',igual:'El de siempre, tal como está'}],
+    ['p6_novedad','P6 · ¿Sabías del topping choco avellana?',{probe:'Sí, y lo probé',sabia_no_probe:'Sí, pero no lo he probado',no_sabia:'No sabía'},'orden'],
+  ]
+};
+
+const fmt = n => (n || 0).toLocaleString('es-CO');
+const pct = (a, b) => b ? Math.round(a * 1000 / b) / 10 : 0;
+const hora = ts => new Date(ts * 1000).toLocaleString('es-CO', { weekday:'short', hour:'2-digit', minute:'2-digit', hour12:true, timeZone:'America/Bogota' });
+
+function sumaSeg(obj){  /* {seg:{v:n}} → {v:n} filtrado por SEG */
+  const out = {};
+  Object.entries(obj || {}).forEach(([s, d]) => { if (SEG === 'todos' || s === SEG) Object.entries(d).forEach(([v, n]) => out[v] = (out[v] || 0) + n); });
+  return out;
+}
+
+function tarjeta(titulo, cuentas, etiquetas, orden){
+  let filas = Object.entries(etiquetas).map(([v, et]) => [v, et, cuentas[v] || 0]).filter(f => f[2] > 0 || !f[1].includes('viejo'));
+  const total = filas.reduce((a, f) => a + f[2], 0);
+  if (!orden) filas.sort((a, b) => b[2] - a[2]);
+  const max = Math.max(1, ...filas.map(f => f[2]));
+  const cuerpo = total ? filas.map(([v, et, n]) =>
+    `<div class="fila" data-tip="${et}: ${fmt(n)} (${pct(n, total)}%)"><span class="et">${et}</span>` +
+    `<div class="pista"><div class="barra" style="width:${n / max * 100}%"></div></div>` +
+    `<span class="num">${pct(n, total)}% <small>${fmt(n)}</small></span></div>`).join('')
+    : '<p class="vacio">Sin respuestas todavía en este segmento.</p>';
+  return `<section class="card"><h3>${titulo}</h3>${cuerpo}<p class="n">${fmt(total)} respuestas</p></section>`;
+}
+
+function kpis(env, resp){
+  const e = env || {};
+  return `<div class="kpis">
+    <div class="kpi"><div class="l">Enviados</div><div class="v">${fmt(e.enviados)}</div><div class="d">WhatsApp aceptados por Meta</div></div>
+    <div class="kpi"><div class="l">Entregados</div><div class="v">${fmt(e.entregados)}</div><div class="d">${pct(e.entregados, e.enviados)}% de enviados</div></div>
+    <div class="kpi"><div class="l">Leídos</div><div class="v">${fmt(e.leidos)}</div><div class="d">${pct(e.leidos, e.entregados)}% de entregados</div></div>
+    <div class="kpi"><div class="l">Fallidos</div><div class="v">${fmt(e.fallidos)}</div><div class="d">${pct(e.fallidos, e.enviados)}% de enviados</div></div>
+    <div class="kpi"><div class="l">Respondieron</div><div class="v">${fmt(resp)}</div><div class="d">${pct(resp, e.entregados)}% de entregados</div></div>
+  </div>`;
+}
+
+function porHora(enc){
+  const filas = (D.por_hora || []).filter(r => r.enc === enc);
+  if (!filas.length) return '';
+  const max = Math.max(...filas.map(r => r.n));
+  return `<section class="card ancho"><h3>Respuestas por hora</h3><p class="q">Hora de Bogotá</p><div class="horas">` +
+    filas.map(r => `<div class="col" data-tip="${r.h}: ${fmt(r.n)} respuestas"><div class="b" style="height:${r.n / max * 100}%"></div><span class="x">${r.h.slice(-5)}</span></div>`).join('') +
+    `</div></section>`;
+}
+
+function pintar(){
+  if (!D) return;
+  document.querySelectorAll('.tab').forEach(b => b.classList.toggle('on', b.dataset.enc === ENC));
+  let h = '';
+  if (ENC === 'cuentanos') {
+    const r = D.cuentanos.respondieron || {};
+    const total = Object.entries(r).filter(([s]) => s !== 'qa').reduce((a, [, n]) => a + n, 0);
+    h += kpis(D.envios.cuentanos_6_anos, total);
+    h += '<div class="filtro"><span>Segmento (sale de Loopy):</span><div class="chips">' +
+      Object.entries(SEGS).map(([s, et]) => `<button class="chip${SEG === s ? ' on' : ''}" data-seg="${s}">${et}${s === 'todos' ? '' : ' · ' + fmt(r[s] || 0)}</button>`).join('') + '</div></div>';
+    h += '<div class="grid">' + Q.cuentanos.map(([k, t, et, o]) => tarjeta(t, sumaSeg(D.cuentanos.preguntas[k]), et, o)).join('');
+    const tx = (D.cuentanos.textos || []).filter(x => SEG === 'todos' || x.seg === SEG);
+    h += `<section class="card"><h3>P7 · Si pudieras cambiar una sola cosa…</h3><p class="q">Últimas respuestas, en sus palabras</p>` +
+      (tx.length ? '<ul class="textos">' + tx.map(x => `<li>${x.t.replace(/</g, '&lt;')}<small>${SEGS[x.seg] || x.seg} · ${x.h}</small></li>`).join('') + '</ul>' : '<p class="vacio">Sin respuestas todavía.</p>') + '</section>';
+    const mc = D.cuentanos.marcas || [];
+    if (mc.length) h += tarjeta('Açaí de otra marca · ¿cuál?', Object.fromEntries(mc.map(m => [m.m, m.n])), Object.fromEntries(mc.map(m => [m.m, m.m])));
+    h += porHora('cuentanos') + '</div>';
+  } else {
+    h += kpis(D.envios.celebra_6_anos, D.celebra.respondieron);
+    h += '<div class="grid">' + Q.celebra.map(([k, t, et, o]) => tarjeta(t, (D.celebra.preguntas[k] || {}).todos || {}, et, o)).join('');
+    h += porHora('celebra') + '</div>';
+  }
+  $('vista').innerHTML = h;
+  document.querySelectorAll('.chip').forEach(b => b.onclick = () => { SEG = b.dataset.seg; pintar(); });
+}
+
+function estado(){
+  if (!D) return;
+  $('estado').innerHTML = D.congelado
+    ? `Foto final: <b>${hora(D.corte)}</b><br>Congelado desde el domingo 27 a medianoche`
+    : `Actualizado: <b>${hora(D.corte)}</b><br>Próxima actualización: ${hora(D.proxima)}`;
+}
+
+function cargar(){
+  if (!K) { $('err').textContent = 'Falta la clave en el link (?k=…).'; $('err').classList.remove('oculto'); $('estado').textContent = ''; return; }
+  const qs = 'accion=encuestasResultados&k=' + encodeURIComponent(K);
+  const ok = d => {
+    if (!d || !d.ok) { $('err').textContent = (d && d.mensaje) || 'No se pudieron cargar los datos.'; $('err').classList.remove('oculto'); return; }
+    $('err').classList.add('oculto'); D = d; estado(); pintar();
+    clearTimeout(timer);
+    if (!d.congelado && d.proxima) timer = setTimeout(cargar, Math.max(60, d.proxima - Date.now() / 1000 + 30) * 1000);
+  };
+  fetch(API + '?' + qs).then(r => r.json()).then(ok).catch(() => {
+    const cb = 'dash_' + Date.now(); window[cb] = d => { delete window[cb]; ok(d); };
+    const s = document.createElement('script'); s.src = API + '?' + qs + '&callback=' + cb; document.body.appendChild(s);
+  });
+}
+
+document.querySelectorAll('.tab').forEach(b => b.onclick = () => { ENC = b.dataset.enc; SEG = 'todos'; pintar(); });
+/* Tooltip al pasar por cada barra (la cifra ya está escrita; esto es el detalle). */
+document.addEventListener('mousemove', e => {
+  const t = e.target.closest('[data-tip]'), tip = $('tip');
+  if (!t) { tip.style.opacity = 0; return; }
+  tip.textContent = t.dataset.tip; tip.style.opacity = 1;
+  tip.style.left = Math.min(e.clientX + 14, innerWidth - tip.offsetWidth - 8) + 'px'; tip.style.top = (e.clientY + 14) + 'px';
+});
+cargar();
+</script>
+</body>
+</html>
