@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F5EEE0">
+<title>Cuéntanos · OAKBERRY Colombia</title>
+<meta name="description" content="OAKBERRY cumple 6 años: cuéntanos un poco de ti. Domingo 27 de septiembre, de 11:00 a.m. a 1:00 p.m.">
+<!-- Llega por un link personal de WhatsApp (?t=): no se indexa. Diseño aprobado 25-sep-2026. -->
+<meta name="robots" content="noindex">
+<meta property="og:title" content="Cumplimos 6 años: cuéntanos de ti">
+<link rel="preload" href="pd-assets/nexa-slab-black.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="pd-assets/nexa-slab-bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="pd-assets/nexa-slab-regular.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* ─────────────────────────────────────────────────────────────────────────
+   CUÉNTANOS · encuesta a clientes Loopy: por qué cayó la venta.
+
+   Tono: invitación, no reclamo. Las preguntas van de lo general a lo
+   específico y el cupón aparece recién en la 4, como recuerdo neutral
+   (diseño revisado con el panel de asesores, 25-sep-2026).
+
+   Flujo: portada → 5 preguntas (una por pantalla, de tocar) → pantalla final.
+   La pantalla final ES lo que se muestra en caja: grande, morada, con el
+   nombre, un ✓ y la hora. No lleva código ni QR a propósito: el tope real
+   del Purple Day son los 50 bowls por tienda y la prenda morada.
+
+   Backend: api.oakberry-cupones.com (celebraContexto / celebraRegistrar),
+   tablas celebra_invitados / celebra_respuestas en Postgres oakberry_adq.
+   Sistema visual del kit gráfico (Nexa Slab, crema/morado/oro, sombra dura).
+   ───────────────────────────────────────────────────────────────────────── */
+@font-face{font-family:'Nexa Slab';src:url('pd-assets/nexa-slab-regular.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Nexa Slab';src:url('pd-assets/nexa-slab-bold.woff2') format('woff2');font-weight:600 700;font-display:swap}
+@font-face{font-family:'Nexa Slab';src:url('pd-assets/nexa-slab-black.woff2') format('woff2');font-weight:800 900;font-display:swap}
+:root{
+  --crema:#FBF6E9; --cielo:#F5EEE0; --hueso:#EAE1CC;
+  --tinta:#21152A; --tinta-suave:#5C4A66;
+  --morado:#4B1F60; --morado-hondo:#280532; --lila:#B79CC8; --oro:#F4B223;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%;background:var(--cielo)}
+body{font-family:'Nexa Slab',Rockwell,'Roboto Slab',Georgia,serif;background:var(--cielo);color:var(--tinta);
+     font-size:clamp(15px,4vw,17px);line-height:1.5;min-height:100dvh;overflow-x:hidden}
+.wrap{max-width:560px;margin:0 auto;padding:0 16px}
+.oculto{display:none!important}
+
+/* ══ PORTADA ═══════════════════════════════════════════════════════════ */
+#portada{min-height:100dvh;display:flex;flex-direction:column;text-align:center;position:relative;overflow:hidden}
+#portada::before{content:"";position:absolute;inset:0;z-index:0;
+  background:linear-gradient(to bottom,var(--cielo) 0,var(--cielo) 56%,rgba(245,238,224,0) 72%),
+             url('pd-assets/escena-rio.jpg') 30% 100%/auto 46% no-repeat,var(--morado)}
+#portada .wrap{position:relative;z-index:1;padding-top:32px;flex:1;display:flex;flex-direction:column}
+.marca{width:min(46vw,190px);height:auto;display:block;margin:0 auto 14px}
+.eyebrow{font-size:.74rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--tinta-suave)}
+h1{font-size:clamp(2.1rem,10vw,3.4rem);font-weight:900;line-height:.95;text-transform:uppercase;color:var(--morado);
+   margin:12px 0 12px;text-wrap:balance}
+.bajada{font-size:1.02rem;font-weight:600;max-width:30ch;margin:0 auto;text-wrap:balance}
+.chip{display:inline-block;background:var(--oro);color:var(--tinta);font-weight:800;text-transform:uppercase;
+      letter-spacing:.06em;font-size:.78rem;padding:10px 16px;border-radius:999px;box-shadow:0 4px 0 var(--tinta);margin-top:18px;align-self:center}
+.abajo{margin-top:auto;padding:24px 0 30px}
+.btn{display:block;width:100%;max-width:360px;margin:0 auto;border:0;cursor:pointer;font-family:inherit;
+     background:var(--crema);color:var(--morado);font-weight:900;font-size:1.05rem;text-transform:uppercase;letter-spacing:.04em;
+     padding:17px 20px;border-radius:999px;box-shadow:0 5px 0 var(--tinta);text-decoration:none;text-align:center}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 var(--tinta)}
+.btn.oro{background:var(--oro);color:var(--tinta)}
+.btn.morado{background:var(--morado);color:var(--crema)}
+.btn[disabled]{opacity:.5}
+.nota{font-size:.8rem;color:var(--crema);opacity:.85;margin-top:14px}
+
+/* ══ PREGUNTAS ═════════════════════════════════════════════════════════ */
+#preguntas{min-height:100dvh;padding:18px 0 30px}
+.barra{height:8px;background:var(--hueso);border-radius:99px;overflow:hidden;margin:6px 0 22px}
+.barra i{display:block;height:100%;background:var(--morado);border-radius:99px;transition:width .3s}
+.cab{display:flex;justify-content:space-between;align-items:center;font-size:.78rem;font-weight:700;color:var(--tinta-suave);
+     letter-spacing:.12em;text-transform:uppercase}
+.atras{background:none;border:0;font-family:inherit;font-weight:700;color:var(--morado);font-size:.9rem;cursor:pointer;padding:6px 0}
+.preg h2{font-size:clamp(1.35rem,6vw,1.75rem);font-weight:900;line-height:1.15;color:var(--morado);margin-bottom:6px;text-wrap:balance}
+.preg .ayuda{font-size:.88rem;color:var(--tinta-suave);margin-bottom:16px}
+.ops{display:flex;flex-direction:column;gap:10px}
+.op{display:flex;align-items:center;gap:12px;width:100%;text-align:left;font-family:inherit;font-size:1rem;font-weight:700;
+    color:var(--tinta);background:var(--crema);border:2px solid var(--hueso);border-radius:16px;padding:15px 16px;cursor:pointer;
+    box-shadow:0 3px 0 var(--hueso)}
+.op::before{content:"";flex:0 0 auto;width:20px;height:20px;border:2.5px solid var(--lila);border-radius:50%}
+.preg.multi .op::before{border-radius:6px}
+.op.sel{border-color:var(--morado);background:#F1E8F6}
+.op.sel::before{background:var(--morado);border-color:var(--morado);box-shadow:inset 0 0 0 3px #F1E8F6}
+.siguiente{margin-top:20px}
+.err{color:#B3261E;font-weight:700;font-size:.9rem;text-align:center;min-height:1.2em;margin-top:12px}
+
+/* ══ PANTALLA FINAL (la que se muestra en caja) ════════════════════════ */
+#final{min-height:100dvh;background:var(--morado-hondo);color:var(--crema);text-align:center;position:relative;overflow:hidden}
+#final::after{content:"";position:absolute;left:0;right:0;bottom:0;height:34%;pointer-events:none;
+  background:url('pd-assets/escena-oak.jpg') center/cover no-repeat;opacity:.35;
+  -webkit-mask-image:linear-gradient(to top,#000,transparent);mask-image:linear-gradient(to top,#000,transparent)}
+#final .wrap{position:relative;z-index:1;padding-top:30px;padding-bottom:34px}
+#final .marca{filter:brightness(0) invert(1);opacity:.95}
+.check{width:96px;height:96px;border-radius:50%;background:var(--oro);color:var(--tinta);display:grid;place-items:center;
+       font-size:3.2rem;font-weight:900;margin:8px auto 14px;box-shadow:0 6px 0 rgba(0,0,0,.35);
+       animation:late 1.6s ease-in-out infinite}
+@keyframes late{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.listo{font-size:.8rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--lila)}
+.nombre{font-size:clamp(2.3rem,12vw,3.6rem);font-weight:900;line-height:1;text-transform:uppercase;color:var(--oro);margin:8px 0 6px;
+        overflow-wrap:anywhere}
+.sello{display:inline-block;margin-top:6px;background:var(--crema);color:var(--morado);font-weight:900;text-transform:uppercase;
+       letter-spacing:.06em;font-size:.86rem;padding:10px 16px;border-radius:999px}
+.hora{font-size:.8rem;color:var(--lila);margin-top:10px}
+.pasos{list-style:none;text-align:left;background:rgba(251,246,233,.1);border-radius:18px;padding:16px 16px 6px;margin:22px 0 18px}
+.pasos li{display:flex;gap:12px;margin-bottom:12px;font-size:.95rem;line-height:1.4}
+.pasos b{flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:var(--oro);color:var(--tinta);display:grid;place-items:center;font-size:.85rem}
+.ojo{background:var(--oro);color:var(--tinta);border-radius:18px;padding:16px;margin:22px 0 0;text-align:left;box-shadow:0 5px 0 rgba(0,0,0,.35)}
+.ojo b{display:block;font-weight:900;text-transform:uppercase;font-size:.92rem;letter-spacing:.02em}
+.ojo span{display:block;font-size:.88rem;margin-top:4px}
+.ojo ul{list-style:none;margin-top:8px}
+.ojo li{font-size:.92rem;margin-top:4px}
+.nota strong{font-weight:900}
+.pantallazo{font-size:.82rem;color:var(--lila);margin:14px 0 0}
+.tyc{display:inline-block;margin-top:16px;color:var(--lila);font-size:.8rem}
+.web{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.h2b{font-size:clamp(1.1rem,5vw,1.35rem);font-weight:900;color:var(--morado);margin:22px 0 12px;line-height:1.2}
+.campo,textarea{width:100%;font-family:inherit;font-size:1rem;border:2px solid var(--hueso);border-radius:14px;padding:13px 14px;background:var(--crema);color:var(--tinta);margin-top:10px}
+textarea{resize:vertical;margin-top:4px}
+.campo:focus,textarea:focus{outline:none;border-color:var(--morado)}
+.promesa{background:rgba(251,246,233,.12);border-radius:14px;padding:12px 14px;margin-top:16px;font-size:.92rem;color:var(--crema)}
+</style>
+
+</head>
+<body>
+
+<!-- ══ PORTADA ══ -->
+<section id="portada">
+  <div class="wrap">
+    <img class="marca" src="pd-wordmark-oakberry.svg" alt="OAKBERRY" width="3600" height="472">
+    <p class="eyebrow">Cumplimos 6 años</p>
+    <h1 id="saludo">Cuéntanos de ti</h1>
+    <p class="bajada" id="entrada">Cumplimos 6 años y queremos celebrarlo contigo. Cuéntanos un poco de ti, son 90 segundos.</p>
+    <span class="chip">Responde antes del domingo 27 · 11 a.m.</span>
+    <div class="abajo">
+      <button class="btn" id="btnEmpezar">Empezar</button>
+      <p class="nota">Y el domingo, de 11 a.m. a 1 p.m., vístete con algo morado: tu bowl de 7 oz va por la casa. <strong>Responder no garantiza el bowl:</strong> son 50 por tienda, para los primeros que lleguen. Aplican TyC.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ PREGUNTAS ══ -->
+<section id="preguntas" class="oculto">
+  <div class="wrap">
+    <div class="cab"><button class="atras" id="btnAtras">← Atrás</button><span id="paso">1 de 7</span></div>
+    <div class="barra"><i id="progreso" style="width:14%"></i></div>
+    <div id="pregunta"></div>
+    <input class="web" id="web" name="web" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <p class="err" id="err"></p>
+  </div>
+</section>
+
+<!-- ══ PANTALLA FINAL ══ -->
+<section id="final" class="oculto">
+  <div class="wrap">
+    <img class="marca" src="pd-wordmark-oakberry.svg" alt="OAKBERRY" width="3600" height="472">
+    <div class="check">✓</div>
+    <p class="listo">Encuesta completa</p>
+    <p class="nombre" id="finNombre">¡Gracias!</p>
+    <span class="sello">Purple Day · 6 años</span>
+    <p class="hora" id="finHora"></p>
+    <p class="promesa oculto" id="promesa"></p>
+
+    <div class="ojo">
+      <b>Ojo: responder no garantiza tu bowl</b>
+      <span>Para recibirlo necesitas las 3 cosas:</span>
+      <ul>
+        <li>✓ Estar entre los <strong>50 primeros</strong> de la tienda</li>
+        <li>✓ Llegar <strong>entre las 11 a.m. y la 1 p.m.</strong></li>
+        <li>✓ Esta encuesta respondida y <strong>algo morado</strong> puesto</li>
+      </ul>
+    </div>
+
+    <ol class="pasos">
+      <li><b>1</b><span>Vístete con <strong>algo morado</strong>.</span></li>
+      <li><b>2</b><span>Ve a cualquier OAKBERRY el <strong>domingo 27, de 11 a.m. a 1 p.m.</strong></span></li>
+      <li><b>3</b><span>Haz la fila. Si estás entre los <strong>50 primeros</strong> de la tienda, muestra esta pantalla en caja. Cuando se acaban los 50 bowls, se acaba la promo en esa tienda.</span></li>
+    </ol>
+
+    <a class="btn oro" href="https://www.oakberry-cupones.com/tiendas" target="_blank" rel="noopener">¿Cuál me queda más cerca?</a>
+    <p class="pantallazo">Toma un pantallazo o vuelve a abrir este link el domingo.</p>
+    <a class="tyc" href="/purpleday-tyc" target="_blank" rel="noopener">Términos y condiciones</a>
+  </div>
+</section>
+
+<script>
+const API = 'https://api.oakberry-cupones.com/';
+const QS = new URLSearchParams(location.search);
+const T = (QS.get('t') || '').replace(/[^A-Za-z0-9]/g, '').slice(0, 12);
+const TEST = QS.get('test') === '1' ? '1' : '';
+const $ = id => document.getElementById(id);
+let NOMBRE = '', SEG = 'bajo';
+
+const ENTRADA = {
+  activo: 'Eres de los que más nos visitan y cumplimos 6 años: ayúdanos a decidir qué viene. Son 90 segundos.',
+  otro:   'Cumplimos 6 años y queremos celebrarlo contigo. Cuéntanos un poco de ti, son 90 segundos.'
+};
+const PROMESA = {
+  pequeno:  'un bowl más pequeño para el día a día',
+  proteina: 'tu bowl de siempre con más proteína',
+  combo:    'un combo de bowl + bebida a precio cerrado'
+};
+
+/* Preguntas aprobadas el 25-sep-2026. La P3 cambia según el segmento (Loopy).
+   La última opción de cada lista es la de escape y no se baraja. */
+const P3A = { k:'p3a', t:'La última vez que se te antojó OAKBERRY y no lo compraste, ¿qué pasó?', ops:[
+  ['plata','Me pareció mucha plata para ese momento'], ['otra_cosa','Compré otra cosa que me quedaba más fácil'],
+  ['tienda','La tienda estaba cerrada, lejos o con mucha fila'], ['domicilio','A domicilio salía muy caro'],
+  ['visto','Ya lo tenía muy visto, quería algo distinto'], ['olvido','No pasó nada puntual, simplemente dejé de pensar en OAKBERRY'] ] };
+const P3B = { k:'p3b', t:'¿Qué haría que vinieras más seguido?', ops:[
+  ['precio','Un precio más cómodo para ir seguido'], ['tamanos','Opciones más pequeñas o más completas'],
+  ['novedad','Cosas nuevas cada cierto tiempo'], ['recordar','Que me lo recuerden a mi hora'],
+  ['cerca','Tienda más cerca o domicilio más fácil'] ], sinEscape:true };
+const PREGS = [
+  { k:'p1', t:'¿Cómo le describirías OAKBERRY a un amigo?', ops:[
+      ['antojo','Un antojo o postre'], ['saludable','Algo saludable para cualquier día'], ['entreno','Algo para después de entrenar'],
+      ['comida_ligera','Un desayuno o almuerzo ligero'], ['gusto','Un gusto que me doy de vez en cuando'] ], sinEscape:true },
+  { k:'p2', t:'Después de comerte un OAKBERRY te sientes…', ops:[
+      ['energia','Con energía y liviano'], ['lleno','Lleno, como después de una comida'], ['gusto','Como si me hubiera dado un gusto'],
+      ['empalagado','Empalagado, fue muy dulce para mí'], ['hambre','Con hambre al rato'] ], sinEscape:true },
+  null,  /* P3: se decide por segmento */
+  { k:'p4', doble:true, t:'Cuando no compras OAKBERRY, ¿qué compras en su lugar?', ops:[
+      ['helado_yogurt','Helado o yogurt'], ['cafe_pastel','Café y pastel'], ['jugo_fruta','Jugo o fruta'],
+      ['acai_otra','Açaí de otra marca'], ['comida_rapida','Comida rápida'], ['nada','Nada'] ],
+    t2:'¿Y más o menos cuánto pagas por eso?', ops2:[
+      ['menos_10','Menos de $10.000'], ['10_15','$10.000 – 15.000'], ['15_20','$15.000 – 20.000'], ['mas_20','Más de $20.000'] ] },
+  { k:'p5', t:'Si hoy fueras a OAKBERRY, ¿cuál escogerías?', ops:[
+      ['pequeno','Un bowl más pequeño y más barato, para el día a día'], ['proteina','El de siempre con más proteína, pagando un poco más'],
+      ['combo','Un combo de bowl + bebida a precio cerrado'], ['igual','El de siempre, tal como está'] ] },
+  { k:'p6', t:'¿Sabías que lanzamos el topping de choco avellana?', fija:true, ops:[
+      ['probe','Sí, y lo probé'], ['sabia_no_probe','Sí, pero no lo he probado'], ['no_sabia','No sabía'] ] },
+  { k:'p7', abierta:true, t:'Si pudieras cambiar una sola cosa de OAKBERRY para venir más seguido, ¿cuál sería?', ayuda:'Opcional. Escríbelo como se lo dirías a un amigo.' },
+];
+function barajar(p){
+  if (!p || p.fija || !p.ops) return;
+  const esc = p.sinEscape ? [] : [p.ops[p.ops.length - 1]];
+  const resto = p.sinEscape ? p.ops.slice() : p.ops.slice(0, -1);
+  for (let i = resto.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [resto[i], resto[j]] = [resto[j], resto[i]]; }
+  p.ops = resto.concat(esc);
+}
+[P3A, P3B].concat(PREGS).forEach(barajar);
+
+const R = {};
+let idx = 0;
+function mostrar(sec){ ['portada','preguntas','final'].forEach(s => $(s).classList.toggle('oculto', s !== sec)); scrollTo(0, 0); }
+function opsHTML(ops, sel){ return '<div class="ops">' + ops.map(o => '<button class="op' + (sel === o[0] ? ' sel' : '') + '" data-v="' + o[0] + '">' + o[1] + '</button>').join('') + '</div>'; }
+
+function pintar(){
+  const p = PREGS[idx];
+  $('paso').textContent = (idx + 1) + ' de ' + PREGS.length;
+  $('progreso').style.width = ((idx + 1) / PREGS.length * 100) + '%';
+  $('err').textContent = '';
+  let h = '<div class="preg"><h2>' + p.t + '</h2><p class="ayuda">' + (p.ayuda || '&nbsp;') + '</p>';
+  if (p.abierta) {
+    h += '<textarea id="txt" maxlength="500" rows="4" placeholder="Escribe aquí…">' + (R.p7 || '') + '</textarea>';
+  } else {
+    h += '<div data-g="a">' + opsHTML(p.ops, R[p.k]) + '</div>';
+    if (p.doble) {
+      h += '<input id="marca" class="campo' + (R.p4 === 'acai_otra' ? '' : ' oculto') + '" maxlength="60" placeholder="¿Cuál marca? (opcional)" value="' + (R.p4m || '') + '">';
+      h += '<h2 class="h2b">' + p.t2 + '</h2><div data-g="b">' + opsHTML(p.ops2, R.p4p) + '</div>';
+    }
+  }
+  const ultima = idx === PREGS.length - 1;
+  if (p.doble || p.abierta) h += '<button class="btn morado siguiente" id="btnSig">' + (ultima ? 'Enviar' : 'Siguiente') + '</button>';
+  $('pregunta').innerHTML = h + '</div>';
+  document.querySelectorAll('[data-g] .op').forEach(b => b.onclick = () => elegir(p, b));
+  if ($('btnSig')) $('btnSig').onclick = avanzar;
+}
+
+function elegir(p, b){
+  const grupo = b.closest('[data-g]').dataset.g, v = b.dataset.v;
+  const k = grupo === 'b' ? 'p4p' : p.k;
+  R[k] = v;
+  b.closest('.ops').querySelectorAll('.op').forEach(x => x.classList.toggle('sel', x === b));
+  if (p.doble) { if (grupo === 'a') $('marca').classList.toggle('oculto', v !== 'acai_otra'); return; }
+  setTimeout(avanzar, 220);
+}
+
+function avanzar(){
+  const p = PREGS[idx];
+  if (p.abierta) { R.p7 = ($('txt').value || '').slice(0, 500); return enviar(); }
+  if (p.doble) {
+    R.p4m = ($('marca').value || '').slice(0, 60);
+    if (!R.p4 || !R.p4p) { $('err').textContent = 'Responde las dos partes'; return; }
+  } else if (!R[p.k]) { $('err').textContent = 'Escoge una opción'; return; }
+  idx++; pintar(); scrollTo(0, 0);
+}
+
+function llamar(params, ok, fallo){
+  const qs = Object.keys(params).map(k => k + '=' + encodeURIComponent(params[k])).join('&');
+  fetch(API + '?' + qs).then(r => r.json()).then(ok).catch(() => {  /* webview IG/FB: JSONP */
+    const cb = 'org_' + Date.now();
+    window[cb] = r => { delete window[cb]; ok(r); };
+    const s = document.createElement('script');
+    s.src = API + '?' + qs + '&callback=' + cb;
+    s.onerror = () => { delete window[cb]; fallo && fallo(); };
+    document.body.appendChild(s);
+    setTimeout(() => { if (window[cb]) { delete window[cb]; fallo && fallo(); } }, 12000);
+  });
+}
+function horaAhora(){
+  const d = new Date();
+  return d.toLocaleDateString('es-CO', { day:'2-digit', month:'2-digit', timeZone:'America/Bogota' }) + ' ' +
+         d.toLocaleTimeString('es-CO', { hour:'2-digit', minute:'2-digit', hour12:false, timeZone:'America/Bogota' });
+}
+function final(hora, p5){
+  $('finNombre').textContent = NOMBRE || '¡Gracias!';
+  $('finHora').textContent = 'Respondida el ' + hora;
+  if (PROMESA[p5]) { $('promesa').textContent = 'Anotamos que te gustaría ' + PROMESA[p5] + '. Te avisamos cuando exista.'; $('promesa').classList.remove('oculto'); }
+  mostrar('final');
+}
+function enviar(){
+  const b = $('btnSig'); b.disabled = true; b.textContent = 'Enviando…';
+  const q = Object.assign({ accion:'organicosRegistrar', t:T, test:TEST, web:$('web').value || '', userAgent:navigator.userAgent.slice(0, 200) }, R);
+  llamar(q, r => {
+    if (r && r.ok) {
+      const h = horaAhora();
+      try { localStorage.setItem('cuentanos_' + (T || 'x'), JSON.stringify({ h, p5: R.p5 })); } catch (e) {}
+      final(h, R.p5);
+    } else { b.disabled = false; b.textContent = 'Enviar'; $('err').textContent = (r && r.mensaje) || 'No pudimos guardar tu respuesta. Intenta de nuevo.'; }
+  }, () => { b.disabled = false; b.textContent = 'Enviar'; $('err').textContent = 'Sin conexión. Intenta de nuevo.'; });
+}
+
+function arrancar(seg){
+  SEG = seg;
+  PREGS[2] = (SEG === 'activo') ? P3B : P3A;
+  $('entrada').textContent = SEG === 'activo' ? ENTRADA.activo : ENTRADA.otro;
+}
+arrancar('bajo');
+$('btnEmpezar').onclick = () => { idx = 0; pintar(); mostrar('preguntas'); };
+$('btnAtras').onclick = () => { if (idx === 0) mostrar('portada'); else { idx--; pintar(); } };
+
+let guardada = null;
+try { guardada = JSON.parse(localStorage.getItem('cuentanos_' + (T || 'x')) || 'null'); } catch (e) {}
+if (T) {
+  llamar({ accion:'organicosContexto', t:T }, r => {
+    if (!r) return;
+    if (r.nombre) { NOMBRE = r.nombre; $('saludo').textContent = '¡Hola, ' + r.nombre + '!'; }
+    if (r.qa) {  /* whitelist QA: siempre desde cero; ?seg= para revisar cada rama */
+      try { localStorage.removeItem('cuentanos_' + T); } catch (e) {}
+      arrancar(QS.get('seg') || 'bajo'); return;
+    }
+    if (r.segmento) arrancar(r.segmento);
+    if (r.respondida) final(r.hora, r.p5);
+    else if (guardada) final(guardada.h, guardada.p5);
+  });
+} else if (guardada) final(guardada.h, guardada.p5);
+</script>
+</body>
+</html>
