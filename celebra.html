@@ -303,6 +303,7 @@ try { guardada = localStorage.getItem('celebra_' + (T || 'x')); } catch (e) {}
 if (T) {
   llamar({ accion:'celebraContexto', t:T }, r => {
     if (r && r.nombre) { NOMBRE = r.nombre; $('saludo').textContent = '¡Hola, ' + r.nombre + '! Queremos celebrarlo contigo'; }
+    if (r && r.qa) { try { localStorage.removeItem('celebra_' + T); } catch (e) {} return; }  /* whitelist QA: siempre desde cero */
     if (r && r.respondida) final(r.hora);
     else if (guardada) final(guardada);
   });
