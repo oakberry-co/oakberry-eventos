@@ -108,6 +108,12 @@ h1{font-size:clamp(2.1rem,10vw,3.4rem);font-weight:900;line-height:.95;text-tran
 .pasos{list-style:none;text-align:left;background:rgba(251,246,233,.1);border-radius:18px;padding:16px 16px 6px;margin:22px 0 18px}
 .pasos li{display:flex;gap:12px;margin-bottom:12px;font-size:.95rem;line-height:1.4}
 .pasos b{flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:var(--oro);color:var(--tinta);display:grid;place-items:center;font-size:.85rem}
+.ojo{background:var(--oro);color:var(--tinta);border-radius:18px;padding:16px;margin:22px 0 0;text-align:left;box-shadow:0 5px 0 rgba(0,0,0,.35)}
+.ojo b{display:block;font-weight:900;text-transform:uppercase;font-size:.92rem;letter-spacing:.02em}
+.ojo span{display:block;font-size:.88rem;margin-top:4px}
+.ojo ul{list-style:none;margin-top:8px}
+.ojo li{font-size:.92rem;margin-top:4px}
+.nota strong{font-weight:900}
 .pantallazo{font-size:.82rem;color:var(--lila);margin:14px 0 0}
 .tyc{display:inline-block;margin-top:16px;color:var(--lila);font-size:.8rem}
 .web{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
@@ -125,7 +131,7 @@ h1{font-size:clamp(2.1rem,10vw,3.4rem);font-weight:900;line-height:.95;text-tran
     <span class="chip">Domingo 27 · 11 a.m. a 1 p.m.</span>
     <div class="abajo">
       <button class="btn" id="btnEmpezar">Empezar</button>
-      <p class="nota">50 bowls por tienda · solo en tienda · aplican TyC</p>
+      <p class="nota"><strong>Responder no garantiza el bowl:</strong> son 50 por tienda, para los primeros que lleguen entre las 11 a.m. y la 1 p.m. con algo morado y la encuesta respondida. Aplican TyC.</p>
     </div>
   </div>
 </section>
@@ -151,10 +157,20 @@ h1{font-size:clamp(2.1rem,10vw,3.4rem);font-weight:900;line-height:.95;text-tran
     <span class="sello">Purple Day · 6 años</span>
     <p class="hora" id="finHora"></p>
 
+    <div class="ojo">
+      <b>Ojo: responder no garantiza tu bowl</b>
+      <span>Para recibirlo necesitas las 3 cosas:</span>
+      <ul>
+        <li>✓ Estar entre los <strong>50 primeros</strong> de la tienda</li>
+        <li>✓ Llegar <strong>entre las 11 a.m. y la 1 p.m.</strong></li>
+        <li>✓ Esta encuesta respondida y <strong>algo morado</strong> puesto</li>
+      </ul>
+    </div>
+
     <ol class="pasos">
       <li><b>1</b><span>Vístete con <strong>algo morado</strong>.</span></li>
       <li><b>2</b><span>Ve a cualquier OAKBERRY el <strong>domingo 27, de 11 a.m. a 1 p.m.</strong></span></li>
-      <li><b>3</b><span>Haz la fila. Si estás entre los <strong>50 primeros</strong> de la tienda, muestra esta pantalla en caja.</span></li>
+      <li><b>3</b><span>Haz la fila. Si estás entre los <strong>50 primeros</strong> de la tienda, muestra esta pantalla en caja. Cuando se acaban los 50 bowls, se acaba la promo en esa tienda.</span></li>
     </ol>
 
     <a class="btn oro" href="https://www.oakberry-cupones.com/tiendas" target="_blank" rel="noopener">¿Cuál me queda más cerca?</a>
