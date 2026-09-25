@@ -138,6 +138,21 @@ body{font-family:'Nexa Slab',Rockwell,'Roboto Slab',Georgia,serif;
          filter:brightness(0) invert(1) opacity(.96)}
 #pie p{font-size:.8rem;font-weight:600;color:var(--lila);line-height:1.7}
 
+/* Todo centrado (pedido 25-sep): las filas con número pasan a columna y
+   las listas pierden la viñeta, que centrada queda flotando. */
+#corto,#clausulas{text-align:center}
+.tarjeta-oro .tope{display:inline-block;margin-top:12px;background:var(--tinta);color:var(--oro);
+  font-weight:800;text-transform:uppercase;letter-spacing:.06em;font-size:.8rem;
+  padding:8px 14px;border-radius:999px}
+.peldano{flex-direction:column;justify-content:center;gap:6px;text-align:center}
+.fuera ul{align-items:center}
+.fuera li{display:block;white-space:nowrap;font-size:clamp(.82rem,3.9vw,.98rem)}
+.fuera li::before{display:inline-grid;vertical-align:middle;margin-right:10px;margin-top:-3px}
+.cl h2{display:block;text-wrap:balance}
+.cl h2 .n{margin-right:8px}
+.cl ul{list-style:none;padding-left:0}
+.cl li+li{border-top:1px solid var(--hueso);padding-top:8px;margin-top:8px}
+@media (max-width:340px){ .fuera li{white-space:normal} }
 @media (min-width:760px){ #portada{padding-top:52px} .respiro{height:280px} }
 @media (prefers-color-scheme:dark){ :root{color-scheme:light} }
 </style>
@@ -171,6 +186,7 @@ body{font-family:'Nexa Slab',Rockwell,'Roboto Slab',Georgia,serif;
     <div class="tarjeta-oro">
       <span class="num">Bowl 7 oz</span>
       <span class="que">armado a tu gusto · + 1 topping extra gratis</span>
+      <span class="tope">Máximo 3 toppings por bowl</span>
       <p class="fina">50 bowls por tienda, hasta agotar existencias. Solo en tienda física: no aplica a domicilios ni a Rappi.</p>
     </div>
 
@@ -180,12 +196,12 @@ body{font-family:'Nexa Slab',Rockwell,'Roboto Slab',Georgia,serif;
       <li class="peldano"><span class="n">02</span>
         <div><b>Responde la encuesta</b><p>Es corta y se responde en la tienda. Es la condición para recibir el bowl.</p></div></li>
       <li class="peldano"><span class="n">03</span>
-        <div><b>Arma tu bowl</b><p>Tu bowl de açaí de 7 oz, como te gusta, con hasta 1 topping extra sin costo.</p></div></li>
+        <div><b>Arma tu bowl</b><p>Tu bowl de açaí de 7 oz, como te gusta, con hasta 1 topping extra sin costo. Cada bowl lleva máximo 3 toppings en total.</p></div></li>
     </ol>
 
     <div class="fuera">
       <h3>No entran como topping de cortesía</h3>
-      <p>Puedes agregarlos a tu bowl pagándolos al precio de la tienda.</p>
+      <p>Puedes agregarlos a tu bowl pagándolos al precio de la tienda, dentro del máximo de 3 toppings.</p>
       <ul>
         <li>Mantequilla de pistacho</li>
         <li>Mantequilla de chocoavellanas</li>
@@ -211,10 +227,10 @@ body{font-family:'Nexa Slab',Rockwell,'Roboto Slab',Georgia,serif;
       <p>En las tiendas físicas OAKBERRY en Colombia abiertas ese día. El beneficio se entrega <strong>solo en tienda</strong>: no aplica en domicilios, Rappi ni otras plataformas de pedidos, ni en stands o eventos por fuera de las tiendas.</p></div>
 
     <div class="cl"><h2><span class="n">04</span>El beneficio</h2>
-      <p>Un (1) <strong>bowl de açaí de 7 oz</strong> de cortesía, <strong>armado al gusto</strong> del cliente, con <strong>hasta un (1) topping extra sin costo</strong>.</p>
+      <p>Un (1) <strong>bowl de açaí de 7 oz</strong> de cortesía, <strong>armado al gusto</strong> del cliente, con <strong>hasta un (1) topping extra sin costo</strong>. Cada bowl de 7 oz lleva <strong>hasta tres (3) toppings como máximo</strong>, incluido el topping extra de cortesía.</p>
       <ul>
-        <li>No aplican como topping de cortesía: <strong>mantequilla de pistacho, mantequilla de chocoavellanas y whey protein</strong>. Se pueden agregar pagando su precio vigente.</li>
-        <li>Los toppings adicionales al de cortesía, los cambios de tamaño y otros productos se cobran al precio vigente en la tienda.</li>
+        <li>No aplican como topping de cortesía: <strong>mantequilla de pistacho, mantequilla de chocoavellanas y whey protein</strong>. Se pueden agregar pagando su precio vigente, dentro del máximo de 3 toppings.</li>
+        <li>Los cambios de tamaño y otros productos se cobran al precio vigente en la tienda.</li>
         <li>El beneficio no es canjeable por dinero, no es transferible y no se acumula con otras promociones, cupones o descuentos.</li>
       </ul></div>
 
