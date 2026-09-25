@@ -120,6 +120,7 @@ h1{font-size:clamp(2.1rem,10vw,3.4rem);font-weight:900;line-height:.95;text-tran
 .campo,textarea{width:100%;font-family:inherit;font-size:1rem;border:2px solid var(--hueso);border-radius:14px;padding:13px 14px;background:var(--crema);color:var(--tinta);margin-top:10px}
 textarea{resize:vertical;margin-top:4px}
 .campo:focus,textarea:focus{outline:none;border-color:var(--morado)}
+.ayuda a{color:var(--morado);font-weight:700}
 .promesa{background:rgba(251,246,233,.12);border-radius:14px;padding:12px 14px;margin-top:16px;font-size:.92rem;color:var(--crema)}
 </style>
 
@@ -182,6 +183,7 @@ textarea{resize:vertical;margin-top:4px}
     <a class="btn oro" href="https://www.oakberry-cupones.com/tiendas" target="_blank" rel="noopener">¿Cuál me queda más cerca?</a>
     <p class="pantallazo">Toma un pantallazo o vuelve a abrir este link el domingo.</p>
     <a class="tyc" href="/purpleday-tyc" target="_blank" rel="noopener">Términos y condiciones</a>
+    <p><a class="tyc oculto" id="otraPersona" href="#">¿Otra persona va a responder desde este celular?</a></p>
   </div>
 </section>
 
@@ -192,6 +194,9 @@ const T = (QS.get('t') || '').replace(/[^A-Za-z0-9]/g, '').slice(0, 12);
 const TEST = QS.get('test') === '1' ? '1' : '';
 const $ = id => document.getElementById(id);
 let NOMBRE = '', SEG = 'bajo';
+/* Modo tienda: QR en la fila (?src=qr_tienda, o /encuesta). Sin link personal:
+   pide nombre + celular y va en versión corta (sin P3 ni abierta), ~60 s. */
+const TIENDA = !T && QS.get('src') === 'qr_tienda';
 
 const ENTRADA = {
   activo: 'Eres de los que más nos visitan y cumplimos 6 años: ayúdanos a decidir qué viene. Son 90 segundos.',
@@ -213,6 +218,7 @@ const P3B = { k:'p3b', t:'¿Qué haría que vinieras más seguido?', ops:[
   ['precio','Un precio más cómodo para ir seguido'], ['tamanos','Opciones más pequeñas o más completas'],
   ['novedad','Cosas nuevas cada cierto tiempo'], ['recordar','Que me lo recuerden a mi hora'],
   ['cerca','Tienda más cerca o domicilio más fácil'] ], sinEscape:true };
+const DATOS = { k:'datos', form:true, t:'Antes de empezar, ¿cómo te llamas?', ayuda:'Tu nombre aparece en la pantalla que muestras en caja.' };
 const PREGS = [
   { k:'p1', t:'¿Cómo le describirías OAKBERRY a un amigo?', ops:[
       ['antojo','Un antojo o postre'], ['saludable','Algo saludable para cualquier día'], ['entreno','Algo para después de entrenar'],
@@ -253,7 +259,11 @@ function pintar(){
   $('progreso').style.width = ((idx + 1) / PREGS.length * 100) + '%';
   $('err').textContent = '';
   let h = '<div class="preg"><h2>' + p.t + '</h2><p class="ayuda">' + (p.ayuda || '&nbsp;') + '</p>';
-  if (p.abierta) {
+  if (p.form) {
+    h += '<input id="fNombre" class="campo" maxlength="60" autocomplete="given-name" placeholder="Tu nombre" value="' + (R.nombre || '') + '">' +
+         '<input id="fCel" class="campo" inputmode="numeric" maxlength="10" autocomplete="tel-national" placeholder="Tu celular (10 dígitos)" value="' + (R.celular || '') + '">' +
+         '<p class="ayuda" style="margin-top:10px">Al continuar aceptas el tratamiento de tus datos según la Ley 1581 de 2012 y los <a href="/purpleday-tyc" target="_blank" rel="noopener">términos y condiciones</a>.</p>';
+  } else if (p.abierta) {
     h += '<textarea id="txt" maxlength="500" rows="4" placeholder="Escribe aquí…">' + (R.p7 || '') + '</textarea>';
   } else {
     h += '<div data-g="a">' + opsHTML(p.ops, R[p.k]) + '</div>';
@@ -263,7 +273,7 @@ function pintar(){
     }
   }
   const ultima = idx === PREGS.length - 1;
-  if (p.doble || p.abierta) h += '<button class="btn morado siguiente" id="btnSig">' + (ultima ? 'Enviar' : 'Siguiente') + '</button>';
+  if (p.doble || p.abierta || p.form || ultima) h += '<button class="btn morado siguiente" id="btnSig">' + (ultima ? 'Enviar' : 'Siguiente') + '</button>';
   $('pregunta').innerHTML = h + '</div>';
   document.querySelectorAll('[data-g] .op').forEach(b => b.onclick = () => elegir(p, b));
   if ($('btnSig')) $('btnSig').onclick = avanzar;
@@ -275,16 +285,25 @@ function elegir(p, b){
   R[k] = v;
   b.closest('.ops').querySelectorAll('.op').forEach(x => x.classList.toggle('sel', x === b));
   if (p.doble) { if (grupo === 'a') $('marca').classList.toggle('oculto', v !== 'acai_otra'); return; }
+  if (idx === PREGS.length - 1) return;  /* la última se envía con el botón */
   setTimeout(avanzar, 220);
 }
 
 function avanzar(){
   const p = PREGS[idx];
+  if (p.form) {
+    R.nombre = ($('fNombre').value || '').trim().slice(0, 60);
+    R.celular = ($('fCel').value || '').replace(/\D/g, '').slice(-10);
+    if (R.nombre.length < 2) { $('err').textContent = 'Cuéntanos tu nombre'; return; }
+    if (!/^3\d{9}$/.test(R.celular)) { $('err').textContent = 'Revisa el celular: son 10 dígitos y empieza por 3'; return; }
+    NOMBRE = R.nombre.split(' ')[0];
+  }
   if (p.abierta) { R.p7 = ($('txt').value || '').slice(0, 500); return enviar(); }
+  if (idx === PREGS.length - 1) { if (!R[p.k]) { $('err').textContent = 'Escoge una opción'; return; } return enviar(); }
   if (p.doble) {
     R.p4m = ($('marca').value || '').slice(0, 60);
     if (!R.p4 || !R.p4p) { $('err').textContent = 'Responde las dos partes'; return; }
-  } else if (!R[p.k]) { $('err').textContent = 'Escoge una opción'; return; }
+  } else if (!p.form && !R[p.k]) { $('err').textContent = 'Escoge una opción'; return; }
   idx++; pintar(); scrollTo(0, 0);
 }
 
@@ -313,7 +332,7 @@ function final(hora, p5){
 }
 function enviar(){
   const b = $('btnSig'); b.disabled = true; b.textContent = 'Enviando…';
-  const q = Object.assign({ accion:'organicosRegistrar', t:T, test:TEST, web:$('web').value || '', userAgent:navigator.userAgent.slice(0, 200) }, R);
+  const q = Object.assign({ accion:'organicosRegistrar', t:T, test:TEST, src:(TIENDA ? 'qr_tienda' : (QS.get('src') || '')), web:$('web').value || '', userAgent:navigator.userAgent.slice(0, 200) }, R);
   llamar(q, r => {
     if (r && r.ok) {
       const h = horaAhora();
@@ -329,6 +348,16 @@ function arrancar(seg){
   $('entrada').textContent = SEG === 'activo' ? ENTRADA.activo : ENTRADA.otro;
 }
 arrancar('bajo');
+if (TIENDA) {
+  PREGS.splice(0, PREGS.length, DATOS, PREGS[0], PREGS[1], PREGS[3], PREGS[4], PREGS[5]);
+  $('saludo').textContent = '¿Viniste de morado?';
+  $('entrada').textContent = 'Cumplimos 6 años. Responde esta encuesta de 1 minuto mientras haces la fila y muestra la pantalla final en caja.';
+  document.querySelector('#portada .chip').textContent = 'Domingo 27 · 11 a.m. a 1 p.m.';
+  document.querySelector('#portada .nota').innerHTML = '<strong>Responder no garantiza el bowl:</strong> son 50 por tienda, para los primeros que lleguen con algo morado y la encuesta respondida. Aplican TyC.';
+  $('otraPersona').classList.remove('oculto');
+  $('otraPersona').onclick = e => { e.preventDefault(); try { localStorage.removeItem('cuentanos_x'); } catch (x) {}
+    Object.keys(R).forEach(k => delete R[k]); NOMBRE = ''; idx = 0; mostrar('portada'); };
+}
 $('btnEmpezar').onclick = () => { idx = 0; pintar(); mostrar('preguntas'); };
 $('btnAtras').onclick = () => { if (idx === 0) mostrar('portada'); else { idx--; pintar(); } };
 
