@@ -85,6 +85,7 @@ h1{font-size:clamp(1.5rem,4.5vw,2.2rem);font-weight:900;text-transform:uppercase
   <div class="tabs" role="tablist">
     <button class="tab on" data-enc="cuentanos">Clientes Loopy · por qué cayó la venta</button>
     <button class="tab" data-enc="celebra">Cupones sin canjear</button>
+    <button class="tab" data-enc="tienda">En tienda (QR) · llegaron sin invitación</button>
   </div>
 
   <div id="vista"></div>
@@ -96,7 +97,7 @@ h1{font-size:clamp(1.5rem,4.5vw,2.2rem);font-weight:900;text-transform:uppercase
 const API = 'https://api.oakberry-cupones.com/';
 const K = new URLSearchParams(location.search).get('k') || '';
 const $ = id => document.getElementById(id);
-let D = null, ENC = 'cuentanos', SEG = 'todos', timer = null;
+let D = null, ENC = 'cuentanos', SEG = 'todos', TSEG = 'todos', timer = null;
 
 const SEGS = { todos:'Todos', activo:'Activos (≤30 d)', bajo:'Bajaron (31–90 d)', se_fue:'Se fueron (>90 d)', nuevo_tienda:'Tienda · nuevos (QR)' };
 
@@ -181,13 +182,33 @@ function pintar(){
     const mc = D.cuentanos.marcas || [];
     if (mc.length) h += tarjeta('Açaí de otra marca · ¿cuál?', Object.fromEntries(mc.map(m => [m.m, m.n])), Object.fromEntries(mc.map(m => [m.m, m.m])));
     h += porHora('cuentanos') + '</div>';
+  } else if (ENC === 'tienda') {
+    const t = D.tienda || { total:0, nuevos:0, loopy:0, preguntas:{} };
+    const horas = (D.por_hora || []).filter(r => r.enc === 'tienda');
+    const pico = horas.reduce((a, r) => r.n > (a ? a.n : -1) ? r : a, null);
+    h += `<div class="kpis">
+      <div class="kpi"><div class="l">Respondieron en tienda</div><div class="v">${fmt(t.total)}</div><div class="d">Escanearon el QR del hablador o afiche</div></div>
+      <div class="kpi"><div class="l">Nuevos</div><div class="v">${fmt(t.nuevos)}</div><div class="d">${pct(t.nuevos, t.total)}% · no estaban en la base de WhatsApp</div></div>
+      <div class="kpi"><div class="l">Clientes Loopy</div><div class="v">${fmt(t.loopy)}</div><div class="d">No habían respondido por WhatsApp</div></div>
+      <div class="kpi"><div class="l">Hora pico</div><div class="v">${pico ? pico.h.slice(-5) : '—'}</div><div class="d">${pico ? fmt(pico.n) + ' respuestas' : ''}</div></div>
+    </div>`;
+    const TS = { todos:'Todos', nuevo_tienda:'Nuevos', loopy:'Clientes Loopy' };
+    h += '<div class="filtro"><span>Quiénes:</span><div class="chips">' +
+      Object.entries(TS).map(([s, et]) => `<button class="chip tchip${TSEG === s ? ' on' : ''}" data-tseg="${s}">${et}</button>`).join('') + '</div></div>';
+    const suma = obj => { const out = {}; Object.entries(obj || {}).forEach(([sg, d]) => {
+      const ok = TSEG === 'todos' || (TSEG === 'nuevo_tienda' ? sg === 'nuevo_tienda' : sg !== 'nuevo_tienda');
+      if (ok) Object.entries(d).forEach(([v, n]) => out[v] = (out[v] || 0) + n); }); return out; };
+    const QT = Q.cuentanos.filter(([k]) => ['p1_describe','p2_siente','p4_sustituto','p4_precio','p5_oferta','p6_novedad'].includes(k));
+    h += '<div class="grid">' + QT.map(([k, tt, et, o]) => tarjeta(tt, suma(t.preguntas[k]), et, o)).join('');
+    h += porHora('tienda') + '</div>';
   } else {
     h += kpis(D.envios.celebra_6_anos, D.celebra.respondieron);
     h += '<div class="grid">' + Q.celebra.map(([k, t, et, o]) => tarjeta(t, (D.celebra.preguntas[k] || {}).todos || {}, et, o)).join('');
     h += porHora('celebra') + '</div>';
   }
   $('vista').innerHTML = h;
-  document.querySelectorAll('.chip').forEach(b => b.onclick = () => { SEG = b.dataset.seg; pintar(); });
+  document.querySelectorAll('.chip[data-seg]').forEach(b => b.onclick = () => { SEG = b.dataset.seg; pintar(); });
+  document.querySelectorAll('.chip[data-tseg]').forEach(b => b.onclick = () => { TSEG = b.dataset.tseg; pintar(); });
 }
 
 function estado(){
