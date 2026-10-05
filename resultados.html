@@ -66,12 +66,74 @@ h1{font-size:clamp(1.5rem,4.5vw,2.2rem);font-weight:900;text-transform:uppercase
 .horas .b{width:100%;max-width:28px;background:var(--morado);border-radius:4px 4px 0 0;min-height:2px}
 .horas .x{font-size:.6rem;color:var(--tinta-tenue);margin-top:4px;white-space:nowrap}
 .textos{list-style:none;max-height:360px;overflow:auto}
+.aviso-n{font-size:.82rem;color:var(--tinta-suave);background:var(--crema);border-left:3px solid var(--oro);padding:8px 12px;border-radius:0 8px 8px 0;margin:-4px 0 14px}
 .textos li{padding:8px 0;border-bottom:1px solid var(--hueso);font-size:.88rem}
 .textos li small{display:block;color:var(--tinta-tenue);font-size:.72rem;margin-top:2px}
 .ancho{grid-column:1 / -1}
 #tip{position:fixed;pointer-events:none;background:var(--tinta);color:var(--crema);font-size:.8rem;padding:6px 9px;border-radius:8px;opacity:0;transition:opacity .1s;z-index:9}
 .err{background:#fff;border:2px solid #B3261E;color:#B3261E;border-radius:12px;padding:14px;margin-top:20px;font-weight:700}
 .oculto{display:none!important}
+/* ── Summary ── */
+.sm-hero{background:var(--morado);color:var(--crema);border-radius:18px;padding:20px 20px 18px;margin-bottom:14px}
+.sm-hero h2{font-size:clamp(1.3rem,4vw,1.8rem);font-weight:900;text-transform:uppercase;line-height:1.05}
+.sm-hero p{margin-top:8px;font-size:.92rem;max-width:860px}
+.sm-hero .ctx{margin-top:10px;padding-top:10px;border-top:1px solid rgba(251,246,233,.25);font-size:.85rem;color:var(--lila-claro)}
+.sm-h{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--tinta-suave);font-weight:800;margin:20px 0 10px}
+.sm-cuenta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.sm-cuenta span{font-size:.8rem;font-weight:700;background:var(--crema);border-radius:999px;padding:5px 11px;box-shadow:0 2px 0 var(--hueso)}
+.ins{display:flex;flex-direction:column;gap:10px}
+.ins h3{font-size:1.02rem}
+.ins .top{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:6px}
+.tag{font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;font-weight:800;border-radius:999px;padding:3px 9px;background:var(--lila-claro);color:var(--morado)}
+.tag.id{background:var(--tinta);color:var(--crema)}
+.f-fuerte{background:#DCEFD9;color:#1E5B1A}.f-media{background:#FBEBC4;color:#7A5200}.f-debil{background:#F6DCD9;color:#8C2A20}
+.e-por_validar{background:var(--crema);border:1.5px solid var(--tinta-tenue);color:var(--tinta-suave)}
+.e-en_curso{background:var(--oro);color:var(--tinta)}.e-validado{background:#1E5B1A;color:#fff}.e-descartado{background:#8C2A20;color:#fff}
+.ins dl{display:grid;grid-template-columns:92px 1fr;gap:6px 12px;margin-top:8px;font-size:.87rem}
+.ins dt{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:var(--tinta-suave);padding-top:2px}
+.ins dd.val{background:var(--lila-claro);border-radius:8px;padding:6px 9px}
+.tbl{width:100%;border-collapse:collapse;font-size:.85rem;font-variant-numeric:tabular-nums}
+.tbl th,.tbl td{padding:7px 8px;text-align:right;border-bottom:1px solid var(--hueso)}
+.tbl th:first-child,.tbl td:first-child{text-align:left}
+.tbl th{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--tinta-suave)}
+.tbl td.hi{background:var(--morado);color:var(--crema);font-weight:800}
+.tbl-w{overflow-x:auto}
+.lista{padding-left:18px;font-size:.88rem}.lista li{margin:6px 0}
+.hito{display:grid;grid-template-columns:110px 1fr;gap:10px;padding:8px 0;border-bottom:1px solid var(--hueso);font-size:.88rem}
+.hito b{color:var(--morado)}
+/* En simple */
+.formula{background:var(--crema);border-radius:16px;padding:18px;box-shadow:0 3px 0 var(--hueso);display:flex;flex-direction:column;gap:12px;margin-bottom:12px}
+.formula h3{font-size:1rem;font-weight:900;color:var(--morado)}
+.formula .txt{max-width:64ch;font-size:.92rem}
+.ecua{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px}
+.ecua .op{font-weight:900;font-size:1.5rem;color:var(--tinta-tenue);align-self:center}
+.term{flex:1 1 150px;border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.term b{font-weight:900;font-size:1.05rem}
+.term span{font-size:.8rem;line-height:1.3}
+.term.venta{background:var(--morado);color:var(--crema);flex:0 1 110px;justify-content:center}
+.p-personas{background:#DDEBF5;color:#123C5A}.p-visitas{background:#FBE3CF;color:#6B2F05}.p-ticket{background:#E2F0DA;color:#244A12}.p-foco{background:var(--lila-claro);color:var(--morado)}
+.hoy{border-left:4px solid var(--oro);padding:4px 0 4px 12px;font-size:.9rem;font-weight:700}
+.simples{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:12px}
+.simples .sim:last-child:nth-child(odd){grid-column:1 / -1}
+.sim{background:var(--crema);border-radius:16px;padding:16px;box-shadow:0 3px 0 var(--hueso);display:flex;flex-direction:column;gap:10px;min-width:0}
+.sim .top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.avance{border-left:4px solid var(--oro);background:#FDF3D8;border-radius:0 10px 10px 0;padding:8px 10px;font-size:.86rem;display:flex;flex-direction:column;gap:2px}
+.sim .pie{margin-top:auto}
+.con-tip{position:relative}
+.tip-w{display:inline-block}
+.tip-b{border:0;cursor:help;font-family:inherit}
+.tip-b:focus-visible{outline:3px solid var(--oro);outline-offset:2px}
+.tip-t{position:absolute;left:0;top:calc(100% + 6px);z-index:5;width:min(360px,100%);background:var(--tinta);color:var(--crema);font-size:.82rem;line-height:1.45;font-weight:400;letter-spacing:0;text-transform:none;padding:10px 12px;border-radius:10px;box-shadow:0 6px 18px rgba(33,21,42,.25);opacity:0;visibility:hidden;transition:opacity .12s}
+.tip-w:hover .tip-t,.tip-b:focus-visible+.tip-t,.tip-w.abierto .tip-t{opacity:1;visibility:visible}
+.sim .cree{font-weight:800;font-size:1rem;line-height:1.3}
+.paso{display:flex;flex-direction:column;gap:2px;font-size:.88rem}
+.paso .lb{font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;font-weight:800;color:var(--tinta-suave)}
+.paso.venta-si{border-radius:10px;padding:8px 10px}
+.paso.venta-si .lb{color:inherit}
+.sim .ver{font-size:.78rem;color:var(--morado);font-weight:700;background:none;border:0;cursor:pointer;font-family:inherit;padding:0}
+.sim .ver:hover{text-decoration:underline}
+@media (max-width:520px){ .simples{grid-template-columns:1fr} }
+@media (max-width:520px){ .ins dl{grid-template-columns:1fr} .ins dt{padding-top:6px} .hito{grid-template-columns:1fr;gap:2px} }
 @media (max-width:520px){ .fila{grid-template-columns:minmax(96px,40%) 1fr 64px} .grid{grid-template-columns:1fr} }
 </style>
 </head>
@@ -83,7 +145,8 @@ h1{font-size:clamp(1.5rem,4.5vw,2.2rem);font-weight:900;text-transform:uppercase
   </header>
 
   <div class="tabs" role="tablist">
-    <button class="tab on" data-enc="cuentanos">Clientes Loopy · por qué cayó la venta</button>
+    <button class="tab on" data-enc="summary">Summary · qué aprendimos</button>
+    <button class="tab" data-enc="cuentanos">Clientes Loopy · por qué cayó la venta</button>
     <button class="tab" data-enc="celebra">Cupones sin canjear</button>
     <button class="tab" data-enc="tienda">En tienda (QR) · llegaron sin invitación</button>
   </div>
@@ -97,7 +160,7 @@ h1{font-size:clamp(1.5rem,4.5vw,2.2rem);font-weight:900;text-transform:uppercase
 const API = 'https://api.oakberry-cupones.com/';
 const K = new URLSearchParams(location.search).get('k') || '';
 const $ = id => document.getElementById(id);
-let D = null, ENC = 'cuentanos', SEG = 'todos', TSEG = 'todos', timer = null;
+let D = null, ENC = 'summary', SEG = 'todos', TSEG = 'todos', CIU = 'todas', timer = null;
 
 const SEGS = { todos:'Todos', activo:'Activos (≤30 d)', bajo:'Bajaron (31–90 d)', se_fue:'Se fueron (>90 d)', nuevo_tienda:'Tienda · nuevos (QR)' };
 
@@ -126,6 +189,29 @@ const fmt = n => (n || 0).toLocaleString('es-CO');
 const pct = (a, b) => b ? Math.round(a * 1000 / b) / 10 : 0;
 const hora = ts => new Date(ts * 1000).toLocaleString('es-CO', { weekday:'short', hour:'2-digit', minute:'2-digit', hour12:true, timeZone:'America/Bogota' });
 
+/* Filtro por ciudad (5-oct): con CIU = 'todas' se usan los agregados de siempre;
+   con una ciudad, se suman las filas [seg, ciudad, pregunta, valor, n] de D.por_ciudad. */
+function desdeFilas(enc, col){
+  const out = {}, F = ((D.por_ciudad || {})[enc] || {}).filas || [];
+  F.forEach(f => {
+    const [seg, c, q, v, n] = enc === 'cuentanos' ? f : ['todos', ...f];
+    if (q !== col || c !== CIU) return;
+    if (enc === 'cuentanos' && SEG !== 'todos' && seg !== SEG) return;
+    out[v] = (out[v] || 0) + n;
+  });
+  return out;
+}
+function chipsCiudad(enc){
+  const N = ((D.por_ciudad || {})[enc] || {}).n || {};
+  const orden = Object.entries(N).filter(([c]) => c !== 'Sin ciudad').sort((a, b) => b[1] - a[1]);
+  if (!orden.length) return '';
+  let h = '<div class="filtro"><span>Ciudad:</span><div class="chips">' +
+    `<button class="chip${CIU === 'todas' ? ' on' : ''}" data-ciu="todas">Todas</button>` +
+    orden.map(([c, n]) => `<button class="chip${CIU === c ? ' on' : ''}" data-ciu="${c}">${c} · ${fmt(n)}</button>`).join('') + '</div></div>';
+  if (CIU !== 'todas' && (N[CIU] || 0) < 50)
+    h += `<p class="aviso-n">${CIU}: ${fmt(N[CIU] || 0)} respuestas en total. Muestra chica: léela como tendencia, no como cifra exacta.</p>`;
+  return h;
+}
 function sumaSeg(obj){  /* {seg:{v:n}} → {v:n} filtrado por SEG */
   const out = {};
   Object.entries(obj || {}).forEach(([s, d]) => { if (SEG === 'todos' || s === SEG) Object.entries(d).forEach(([v, n]) => out[v] = (out[v] || 0) + n); });
@@ -165,23 +251,91 @@ function porHora(enc){
     `</div></section>`;
 }
 
+const esc = t => String(t == null ? '' : t).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+const FZ = { fuerte:'Evidencia fuerte', media:'Evidencia media', debil:'Evidencia débil', 'débil':'Evidencia débil' };
+const ES = { por_validar:'Por validar', en_curso:'En curso', validado:'Validado', descartado:'Descartado' };
+let STEMA = 'todos';
+
+function summary(){
+  const S = D.summary;
+  if (!S) return '<p class="vacio">El resumen no está disponible en este momento.</p>';
+  let h = `<section class="sm-hero"><p class="sub" style="color:var(--lila)">Actualizado ${esc(S.actualizado)}</p><h2>${esc(S.titulo)}</h2><p>${esc(S.bajada)}</p>` +
+    (S.contexto ? `<p class="ctx">${esc(S.contexto)}</p>` : '') + '</section>';
+  h += '<div class="kpis">' + (S.kpis || []).map(k => `<div class="kpi"><div class="l">${esc(k.l)}</div><div class="v">${esc(k.v)}</div><div class="d">${esc(k.d)}</div></div>`).join('') + '</div>';
+
+  const ins = S.insights || [];
+  const F = S.formula, PAL = {};
+  if (F) {
+    [...F.partes, F.extra].forEach(x => PAL[x.k] = x.t);
+    h += '<p class="sm-h">En simple: qué queremos probar</p>';
+    h += `<section class="formula"><h3>${esc(F.titulo)}</h3><p class="txt">${esc(F.texto)}</p>
+      <div class="ecua"><div class="term venta"><b>Venta</b></div><span class="op">=</span>` +
+      F.partes.map((x, n) => (n ? '<span class="op">×</span>' : '') + `<div class="term p-${x.k}"><b>${esc(x.t)}</b><span>${esc(x.d)}</span></div>`).join('') +
+      `</div><p class="txt con-tip" style="font-size:.84rem;color:var(--tinta-suave)">Hay una cuarta que no está en la cuenta pero importa: <span class="tip-w"><button type="button" class="tag p-foco tip-b" aria-expanded="false">${esc(F.extra.t)} · ¿qué es?</button><span class="tip-t" role="tooltip">${esc(F.extra.detalle || F.extra.d)}</span></span> ${esc(F.extra.d)}.</p>
+      <p class="hoy">${esc(F.hoy)}</p></section>`;
+    h += '<div class="simples">' + ins.filter(i => i.simple).map(i => { const s = i.simple; return `<article class="sim">
+      <div class="top"><span class="tag id">${esc(i.id)}</span><span class="tag p-${esc(s.palanca)}">Mueve: ${esc(PAL[s.palanca] || s.palanca)}</span></div>
+      <p class="cree">${esc(s.creemos)}</p>
+      <div class="paso"><span class="lb">Cómo lo probamos</span><span>${esc(s.probamos)}</span></div>
+      <div class="paso venta-si p-${esc(s.palanca)}"><span class="lb">${i.estado === 'validado' ? 'Ya es cierto; así se vuelve venta' : 'Si es cierto, así se vuelve venta'}</span><span>${esc(s.venta)}</span></div>
+      ${i.avance ? `<div class="avance"><span class="lb">Qué vemos hasta hoy</span><span>${esc(i.avance)}</span></div>` : ''}
+      <div class="top pie"><span class="tag e-${esc(i.estado)}">${ES[i.estado] || esc(i.estado)}</span><button type="button" class="ver" data-ir="${esc(i.id)}">Ver el dato →</button></div>
+    </article>`; }).join('') + '</div>';
+  }
+  const cuenta = {}; ins.forEach(i => cuenta[i.estado] = (cuenta[i.estado] || 0) + 1);
+  const temas = ['todos', ...new Set(ins.map(i => i.tema))];
+  h += '<p class="sm-h">Detalle técnico</p><div class="sm-cuenta">' +
+    Object.keys(ES).filter(e => cuenta[e]).map(e => `<span>${ES[e]}: ${cuenta[e]}</span>`).join('') + '</div>';
+  h += '<div class="filtro"><span>Tema:</span><div class="chips">' +
+    temas.map(t => `<button class="chip${STEMA === t ? ' on' : ''}" data-tema="${esc(t)}">${t === 'todos' ? 'Todos' : esc(t)}</button>`).join('') + '</div></div>';
+  h += '<div class="grid ins">' + ins.filter(i => STEMA === 'todos' || i.tema === STEMA).map(i => `<section class="card" id="ins-${esc(i.id)}">
+      <div class="top"><span class="tag id">${esc(i.id)}</span><span class="tag">${esc(i.tema)}</span>
+        <span class="tag f-${esc(i.fuerza).replace('é','e')}">${FZ[i.fuerza] || esc(i.fuerza)}</span>
+        <span class="tag e-${esc(i.estado)}">${ES[i.estado] || esc(i.estado)}</span></div>
+      <h3>${esc(i.titulo)}</h3>
+      <dl><dt>Dato</dt><dd>${esc(i.evidencia)}</dd><dt>Implica</dt><dd>${esc(i.implica)}</dd>
+      <dt>Cómo validar</dt><dd class="val">${esc(i.validar)}</dd>${i.avance ? `<dt>Hasta hoy</dt><dd class="avance">${esc(i.avance)}</dd>` : ''}</dl></section>`).join('') + '</div>';
+
+  const E = S.edad;
+  if (E) {
+    h += `<p class="sm-h">${esc(E.titulo)}</p><section class="card"><div class="tbl-w"><table class="tbl"><thead><tr><th></th>` +
+      E.columnas.map(c => `<th>${esc(c)}</th>`).join('') + '</tr></thead><tbody>' +
+      E.filas.map(([et, ...vs]) => { const mx = Math.max(...vs);
+        return `<tr><td>${esc(et)}</td>` + vs.map(v => `<td class="${v === mx ? 'hi' : ''}">${v}%</td>`).join('') + '</tr>'; }).join('') +
+      `</tbody></table></div><p class="n">${esc(E.nota)} El máximo de cada fila va resaltado.</p></section>`;
+  }
+  h += '<div class="grid" style="margin-top:12px">';
+  if ((S.evento || []).length) h += '<section class="card"><h3>Qué pasó con la venta del evento</h3><ul class="lista">' + S.evento.map(t => `<li>${esc(t)}</li>`).join('') + '</ul></section>';
+  if ((S.advertencias || []).length) h += '<section class="card"><h3>Cuidado al leerlo</h3><ul class="lista">' + S.advertencias.map(t => `<li>${esc(t)}</li>`).join('') + '</ul></section>';
+  if ((S.hitos || []).length) h += '<section class="card ancho"><h3>Próximas mediciones</h3>' + S.hitos.map(x => `<div class="hito"><b>${esc(x.fecha)}</b><span>${esc(x.que)}</span></div>`).join('') + '</section>';
+  return h + '</div>';
+}
+
 function pintar(){
   if (!D) return;
   document.querySelectorAll('.tab').forEach(b => b.classList.toggle('on', b.dataset.enc === ENC));
   let h = '';
-  if (ENC === 'cuentanos') {
+  if (ENC === 'summary') {
+    h = summary();
+  } else if (ENC === 'cuentanos') {
     const r = D.cuentanos.respondieron || {};
     const total = Object.entries(r).filter(([s]) => s !== 'qa').reduce((a, [, n]) => a + n, 0);
     h += kpis(D.envios.cuentanos_6_anos, total);
     h += '<div class="filtro"><span>Segmento (sale de Loopy):</span><div class="chips">' +
       Object.entries(SEGS).map(([s, et]) => `<button class="chip${SEG === s ? ' on' : ''}" data-seg="${s}">${et}${s === 'todos' ? '' : ' · ' + fmt(r[s] || 0)}</button>`).join('') + '</div></div>';
-    h += '<div class="grid">' + Q.cuentanos.map(([k, t, et, o]) => tarjeta(t, sumaSeg(D.cuentanos.preguntas[k]), et, o)).join('');
-    const tx = (D.cuentanos.textos || []).filter(x => SEG === 'todos' || x.seg === SEG);
+    h += chipsCiudad('cuentanos');
+    const cuenta = k => CIU === 'todas' ? sumaSeg(D.cuentanos.preguntas[k]) : desdeFilas('cuentanos', k);
+    h += '<div class="grid">' + Q.cuentanos.map(([k, t, et, o]) => tarjeta(t, cuenta(k), et, o)).join('');
+    const fuenteTx = CIU === 'todas' ? (D.cuentanos.textos || []) : (((D.por_ciudad || {}).cuentanos || {}).textos || []).filter(x => x.ciudad === CIU);
+    const tx = fuenteTx.filter(x => SEG === 'todos' || x.seg === SEG);
     h += `<section class="card"><h3>P7 · Si pudieras cambiar una sola cosa…</h3><p class="q">Últimas respuestas, en sus palabras</p>` +
       (tx.length ? '<ul class="textos">' + tx.map(x => `<li>${x.t.replace(/</g, '&lt;')}<small>${SEGS[x.seg] || x.seg} · ${x.h}</small></li>`).join('') + '</ul>' : '<p class="vacio">Sin respuestas todavía.</p>') + '</section>';
     const mc = D.cuentanos.marcas || [];
-    if (mc.length) h += tarjeta('Açaí de otra marca · ¿cuál?', Object.fromEntries(mc.map(m => [m.m, m.n])), Object.fromEntries(mc.map(m => [m.m, m.m])));
-    h += porHora('cuentanos') + '</div>';
+    if (CIU === 'todas') {  /* marcas y horas son nacionales: solo sin filtro de ciudad */
+      if (mc.length) h += tarjeta('Açaí de otra marca · ¿cuál?', Object.fromEntries(mc.map(m => [m.m, m.n])), Object.fromEntries(mc.map(m => [m.m, m.m])));
+      h += porHora('cuentanos');
+    }
+    h += '</div>';
   } else if (ENC === 'tienda') {
     const t = D.tienda || { total:0, nuevos:0, loopy:0, preguntas:{} };
     const horas = (D.por_hora || []).filter(r => r.enc === 'tienda');
@@ -203,12 +357,21 @@ function pintar(){
     h += porHora('tienda') + '</div>';
   } else {
     h += kpis(D.envios.celebra_6_anos, D.celebra.respondieron);
-    h += '<div class="grid">' + Q.celebra.map(([k, t, et, o]) => tarjeta(t, (D.celebra.preguntas[k] || {}).todos || {}, et, o)).join('');
-    h += porHora('celebra') + '</div>';
+    h += chipsCiudad('celebra');
+    const cuentaC = k => CIU === 'todas' ? ((D.celebra.preguntas[k] || {}).todos || {}) : desdeFilas('celebra', k);
+    h += '<div class="grid">' + Q.celebra.map(([k, t, et, o]) => tarjeta(t, cuentaC(k), et, o)).join('');
+    h += (CIU === 'todas' ? porHora('celebra') : '') + '</div>';
   }
   $('vista').innerHTML = h;
   document.querySelectorAll('.chip[data-seg]').forEach(b => b.onclick = () => { SEG = b.dataset.seg; pintar(); });
+  document.querySelectorAll('.tip-b').forEach(b => b.onclick = e => { e.stopPropagation();
+    const w = b.parentElement, on = !w.classList.contains('abierto'); w.classList.toggle('abierto', on); b.setAttribute('aria-expanded', on); });
+  document.querySelectorAll('.ver[data-ir]').forEach(b => b.onclick = () => {
+    if (!document.getElementById('ins-' + b.dataset.ir)) { STEMA = 'todos'; pintar(); }
+    const el = document.getElementById('ins-' + b.dataset.ir); if (el) el.scrollIntoView({ behavior:'smooth', block:'start' }); });
+  document.querySelectorAll('.chip[data-tema]').forEach(b => b.onclick = () => { STEMA = b.dataset.tema; pintar(); });
   document.querySelectorAll('.chip[data-tseg]').forEach(b => b.onclick = () => { TSEG = b.dataset.tseg; pintar(); });
+  document.querySelectorAll('.chip[data-ciu]').forEach(b => b.onclick = () => { CIU = b.dataset.ciu; pintar(); });
 }
 
 function estado(){
@@ -233,6 +396,7 @@ function cargar(){
   });
 }
 
+document.addEventListener('click', () => document.querySelectorAll('.tip-w.abierto').forEach(w => w.classList.remove('abierto')));
 document.querySelectorAll('.tab').forEach(b => b.onclick = () => { ENC = b.dataset.enc; SEG = 'todos'; pintar(); });
 /* Tooltip al pasar por cada barra (la cifra ya está escrita; esto es el detalle). */
 document.addEventListener('mousemove', e => {
