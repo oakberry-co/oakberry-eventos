@@ -132,6 +132,27 @@ h1{font-size:clamp(1.5rem,4.5vw,2.2rem);font-weight:900;text-transform:uppercase
 .paso.venta-si .lb{color:inherit}
 .sim .ver{font-size:.78rem;color:var(--morado);font-weight:700;background:none;border:0;cursor:pointer;font-family:inherit;padding:0}
 .sim .ver:hover{text-decoration:underline}
+
+/* Plan de acción */
+.pl-concl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.pl-c{background:var(--morado);color:#FBF6E9;border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.pl-c b{font-weight:900;font-size:1rem;line-height:1.25}
+.pl-c span{font-size:.84rem;color:#E4D6EC;line-height:1.4}
+.pl-grupo{display:flex;flex-direction:column;gap:10px}
+.pl-gt{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:#5C4A66;margin-top:6px}
+.pl-acc{background:#FBF6E9;border-radius:16px;padding:14px 16px;box-shadow:0 2px 0 #E6DCC5;display:flex;flex-direction:column;gap:8px;min-width:0}
+.pl-acc .top{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.pl-acc h4{margin:0;font-weight:900;font-size:1.02rem;color:#4B1F60;line-height:1.25}
+.pl-acc .q{font-size:.9rem;max-width:72ch}
+.pl-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.pl-meta div{display:flex;flex-direction:column;gap:1px;font-size:.84rem;min-width:0}
+.pl-k{font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;font-weight:800;color:#5C4A66}
+.pl-dec{background:#FDF3D8;border-left:4px solid #F4B223;border-radius:0 10px 10px 0;padding:8px 10px;font-size:.86rem;display:flex;flex-direction:column;gap:2px}
+.pl-no{background:#FBF6E9;border-radius:16px;padding:14px 16px;box-shadow:0 2px 0 #E6DCC5}
+.pl-no h4{margin:0 0 8px;font-weight:900;color:#8C2A20}
+.pl-no ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:.88rem}
+.pl-ins{font-size:.72rem;color:#857589}
+@media (max-width:640px){.pl-concl,.pl-meta{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:520px){ .simples{grid-template-columns:1fr} }
 @media (max-width:520px){ .ins dl{grid-template-columns:1fr} .ins dt{padding-top:6px} .hito{grid-template-columns:1fr;gap:2px} }
 @media (max-width:520px){ .fila{grid-template-columns:minmax(96px,40%) 1fr 64px} .grid{grid-template-columns:1fr} }
@@ -256,6 +277,27 @@ const FZ = { fuerte:'Evidencia fuerte', media:'Evidencia media', debil:'Evidenci
 const ES = { por_validar:'Por validar', en_curso:'En curso', validado:'Validado', descartado:'Descartado' };
 let STEMA = 'todos';
 
+
+function planHTML(S, PAL){
+  const P = S.plan; if (!P) return '';
+  const pal = k => (PAL && PAL[k]) || ({personas:'Personas',visitas:'Veces que vienen',ticket:'Lo que gastan',foco:'Foco'})[k] || k;
+  const orden = ['Ahora', 'Noviembre', 'Regla', 'Calendario'];
+  const nombres = { Ahora:'Arranca ahora (octubre)', Noviembre:'Noviembre', Regla:'Regla que queda', Calendario:'Mediciones con fecha' };
+  let h = `<p class="pl-ins" style="font-size:.9rem;color:#5C4A66;max-width:70ch">${esc(P.bajada)}</p>`;
+  h += '<div class="pl-concl">' + P.conclusiones.map(c => `<div class="pl-c"><b>${esc(c.t)}</b><span>${esc(c.d)}</span></div>`).join('') + '</div>';
+  orden.forEach(g => {
+    const as = P.acciones.filter(a => a.cuando === g); if (!as.length) return;
+    h += `<div class="pl-grupo"><p class="pl-gt">${nombres[g] || esc(g)}</p>` + as.map(a => `<article class="pl-acc">
+      <div class="top"><span class="tag id">${esc(a.id)}</span><span class="tag p-${esc(a.palanca)}">Mueve: ${esc(pal(a.palanca))}</span><span class="pl-ins">Prueba ${a.insights.map(esc).join(', ')}</span></div>
+      <h4>${esc(a.titulo)}</h4><p class="q">${esc(a.que)}</p>
+      <div class="pl-meta"><div><span class="pl-k">Dónde</span><span>${esc(a.donde)}</span></div><div><span class="pl-k">Quién</span><span>${esc(a.quien)}</span></div>
+      <div style="grid-column:1/-1"><span class="pl-k">Cómo sabemos si funcionó</span><span>${esc(a.mide)}</span></div></div>
+      <div class="pl-dec"><span class="pl-k">Qué decidimos con el resultado</span><span>${esc(a.decide)}</span></div></article>`).join('') + '</div>';
+  });
+  if ((P.no_hacer || []).length) h += '<div class="pl-no"><h4>Lo que NO vamos a hacer</h4><ul>' + P.no_hacer.map(t => `<li>${esc(t)}</li>`).join('') + '</ul></div>';
+  return h;
+}
+
 function summary(){
   const S = D.summary;
   if (!S) return '<p class="vacio">El resumen no está disponible en este momento.</p>';
@@ -265,6 +307,8 @@ function summary(){
 
   const ins = S.insights || [];
   const F = S.formula, PAL = {};
+  if (F) [...F.partes, F.extra].forEach(x => PAL[x.k] = x.t);
+  if (S.plan) h += `<p class="sm-h">${esc(S.plan.titulo)}</p><div style="display:flex;flex-direction:column;gap:12px">${planHTML(S, PAL)}</div>`;
   if (F) {
     [...F.partes, F.extra].forEach(x => PAL[x.k] = x.t);
     h += '<p class="sm-h">En simple: qué queremos probar</p>';

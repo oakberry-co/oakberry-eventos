@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#FBF6E9">
+<title>Tu invitación · OAKBERRY Santo Domingo</title>
+<meta name="description" content="Estás invitado a OAKBERRY en Santo Domingo. Ábrenos la puerta.">
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://www.oakberry-eventos.com/santodomingo/invitacion">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_DO">
+<meta property="og:site_name" content="OAKBERRY República Dominicana">
+<meta property="og:url" content="https://www.oakberry-eventos.com/santodomingo/invitacion">
+<meta property="og:title" content="Tu invitación · OAKBERRY Santo Domingo">
+<meta property="og:description" content="Ábrenos la puerta. Desde el 16 de septiembre en Plaza Andalucía.">
+<meta property="og:image" content="https://www.oakberry-eventos.com/og-sdq-invitacion.png">
+<meta property="og:image:alt" content="Fachada ilustrada de la tienda OAKBERRY en Plaza Andalucía, Santo Domingo">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.oakberry-eventos.com/og-sdq-invitacion.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Azeret Mono es la tipografía de la invitación impresa (la única fuente viva
+     embebida en el PDF del brand kit). El wordmark itálico, el loro y la
+     fachada entran como arte vectorial, no como tipografía. -->
+<link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="../sdq-local.png">
+<link rel="preload" as="image" href="../sdq-lockup-morado.svg">
+<link rel="preload" as="image" href="../sdq-puerta-izq.png">
+<link rel="preload" as="image" href="../sdq-puerta-der.png">
+<!-- SIN pixel de Meta, a propósito: esta landing no se pauta, el enlace se
+     reparte a mano. El pixel pesaba 241 KB — el 45% de la página — y era un
+     script de terceros que bloquea el primer pintado a cambio de nada. -->
+<style>
+/* ─────────────────────────────────────────────────────────────────────────
+   Sistema visual: la INVITACIÓN IMPRESA de la apertura (Invitación_OAKBERRY
+   7x7" del brand kit). Crema, tinta berenjena, Azeret Mono, línea a mano.
+   Es papel, no interfaz: sin sombras, sin degradados, sin esquinas de 20px.
+
+   La página son TRES escenas sobre el mismo lienzo:
+     1 · la fachada, con el botón sobre las puertas
+     2 · adentro (el reverso oscuro de la invitación): el premio y dos campos
+     3 · el cupón
+   La transición entre 1 y 2 abre las puertas y mete la cámara. Ver ANIMACIÓN.
+   ───────────────────────────────────────────────────────────────────────── */
+:root{
+  --crema:#FBF6E9;
+  --crema-hueso:#EAE1CC;
+  --tinta:#21152A;
+  --tinta-suave:#5C4A66;
+  /* Morado OFICIAL, muestreado del lockup del kit — no uno parecido.
+     #4B1F60 es el relleno del wordmark; #471C58 su sombra interior. */
+  --morado:#4B1F60;
+  --morado-hondo:#471C58;
+  --uva:rgba(251,246,233,.22);   /* filetes sobre morado */
+  --tap:52px;
+
+  /* Geometría del vano, medida sobre la ilustración (sdq-local.png, 1200x618).
+     Todo va en % para que las capas sigan calzadas a cualquier tamaño: si se
+     cambia el arte, se vuelven a medir estos seis números y nada más. */
+  --vano-x:29.2%;
+  --vano-y:3.0%;
+  --vano-w:37.8%;   /* 67.0 - 29.2 */
+  --vano-h:92.0%;   /* 95.0 - 3.0  */
+  --vano-cx:48.1%;  /* centro del vano, el punto al que entra la cámara */
+  --vano-cy:49.0%;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'Azeret Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  background:var(--crema);color:var(--tinta);
+  /* 400 y no 300: el texto crema sobre fondo oscuro se afina por halación,
+     y de paso es un archivo de fuente menos que descargar. */
+  font-weight:400;font-size:.94rem;line-height:1.62;
+  overflow-x:hidden;
+}
+.wrap{max-width:520px;margin:0 auto;padding:0 22px}
+
+/* ══ ESCENA 1 · LA FACHADA ══════════════════════════════════════════════ */
+#fachada{
+  min-height:100svh;min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:20px 0 26px;
+  /* Va POR ENCIMA del interior y con fondo propio: la escena 2 ya está pintada
+     debajo desde que arranca el viaje, así que la fachada al desvanecerse
+     revela el oscuro en vez de dejar un fotograma de crema vacío. */
+  position:relative;z-index:2;background:var(--crema);
+  /* Recorta el desbordamiento de la ilustración en móvil (abajo): sin esto la
+     página gana scroll horizontal. */
+  overflow:hidden;
+  /* La cámara entra hacia el vano. El origin es el centro de las puertas, no
+     el de la página: si no, el zoom se va al medio del cartel y no a la entrada. */
+  transform-origin:var(--vano-cx) var(--vano-cy);
+  /* La cámara dura más que las puertas y el fundido arranca DESPUÉS de que
+     abren: primero se ve entrar, después se cambia de escena. Si el fundido
+     pisa la apertura, el truco se pierde y queda un cross-fade cualquiera. */
+  transition:transform 2100ms cubic-bezier(.5,0,.5,1), opacity 620ms ease 1420ms;
+}
+body.entrando #fachada{transform:scale(3.1);opacity:0}
+/* Invisible pero encima: sin esto la fachada se sigue comiendo los toques y
+   el formulario de adentro no recibe ni un click. */
+body.dentro #fachada{pointer-events:none}
+
+.cabecera{text-align:center;padding:0 22px;margin-bottom:16px;
+          transition:opacity 420ms ease}
+body.entrando .cabecera{opacity:0}
+.wordmark{width:min(66vw,300px);height:auto;display:block;margin:0 auto 10px}
+.cejilla{font-size:.66rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+         color:var(--tinta-suave)}
+
+/* El lienzo mantiene la proporción del arte (1200x618) y se contiene entero:
+   en desktop la queja era justamente que se salía por abajo. */
+.lienzo{position:relative;width:100%;max-width:1100px;aspect-ratio:1200/618;
+        max-height:46svh;margin:0 auto}
+/* En un teléfono el dibujo es 1,94:1: a ancho de pantalla queda en una tira de
+   200px y las puertas —que son el botón— salen diminutas. Se agranda un 36% y
+   se deja desbordar: lo que se recorta son las columnas laterales, que son
+   decorativas, y lo que gana tamaño es la entrada. */
+@media (max-width:560px){
+  .lienzo{width:136%;max-width:none;margin-left:-18%}
+}
+.lienzo img.fondo{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;
+                  display:block}
+
+/* El vano: se posiciona sobre el hueco de las puertas del dibujo. Debajo va el
+   interior oscuro; encima, las dos hojas. Cerradas, tapan el oscuro y la
+   fachada se ve intacta — por eso ninguna capa necesita transparencia. */
+/* La perspectiva tiene que ir en proporción al tamaño del vano, no fija: con
+   900px sobre una hoja de 140px (un teléfono) el giro sale casi ortográfico y
+   las puertas parecen calcomanías girando, no puertas abriéndose. ~2,8× el
+   ancho de la hoja es lo que se lee como puerta. */
+.vano{position:absolute;left:var(--vano-x);top:var(--vano-y);
+      width:var(--vano-w);height:var(--vano-h);
+      perspective:400px;perspective-origin:50% 46%}
+@media (min-width:760px){ .vano{perspective:900px} }
+@media (min-width:1100px){ .vano{perspective:1200px} }
+.interior{position:absolute;inset:0;background:var(--morado)}
+/* Sin degradado adentro: el vano tiene que abrirse al MISMO morado plano al que
+   llega la escena 2, o se ve un salto de color en mitad de la transición. */
+
+.hoja{position:absolute;top:0;height:100%;width:50%;
+      background-size:100% 100%;background-repeat:no-repeat;
+      backface-visibility:hidden;
+      transition:transform 1450ms cubic-bezier(.62,.03,.3,1)}
+.hoja.izq{left:0;transform-origin:left center;background-image:url('../sdq-puerta-izq.png')}
+.hoja.der{right:0;transform-origin:right center;background-image:url('../sdq-puerta-der.png')}
+/* La sombra va como capa encima y NO como filter sobre la hoja: brightness()
+   lava el dibujo hasta dejarlo gris plano; una veladura de tinta lo oscurece
+   conservando el trazo, que es lo que hace la penumbra de verdad. */
+.hoja::after{content:"";position:absolute;inset:0;background:var(--tinta);opacity:0;
+             transition:opacity 1450ms ease}
+body.entrando .hoja::after{opacity:.72}
+/* Abren HACIA ADENTRO, que es como se entra a un local. */
+body.entrando .hoja.izq{transform:rotateY(-112deg)}
+body.entrando .hoja.der{transform:rotateY(112deg)}
+
+/* ── El botón, sobre las puertas ── */
+.entrar{
+  position:absolute;left:50%;top:58%;transform:translate(-50%,-50%);
+  min-width:min(60vw,210px);min-height:var(--tap);
+  background:var(--crema);color:var(--tinta);
+  border:1.5px solid var(--tinta);border-radius:99px;
+  font-family:inherit;font-size:.78rem;font-weight:500;letter-spacing:.14em;
+  text-transform:uppercase;cursor:pointer;padding:14px 22px;
+  transition:transform 220ms ease, opacity 300ms ease;
+  animation:latir 2.6s ease-in-out infinite;
+}
+.entrar:active{transform:translate(-50%,-50%) scale(.96)}
+body.entrando .entrar{opacity:0;transform:translate(-50%,-50%) scale(.82);animation:none}
+@keyframes latir{0%,100%{box-shadow:0 0 0 0 rgba(33,21,42,.22)}
+                 50%{box-shadow:0 0 0 12px rgba(33,21,42,0)}}
+/* El copy de la pieza impresa de la agencia, en el mismo orden y con la misma
+   jerarquía: dato de marca arriba, promesa, rótulo entre filetes, y la firma en
+   itálica. No dice el beneficio — eso vive detrás de la puerta. */
+.pie-fachada{margin-top:16px;text-align:center;transition:opacity 380ms ease;
+             padding:0 22px;max-width:520px}
+.pie-fachada .espera{font-size:.72rem;font-weight:500;letter-spacing:.2em;
+                     text-transform:uppercase;color:var(--tinta-suave)}
+.pie-fachada .best{font-size:1.02rem;font-weight:600;letter-spacing:.08em;
+                   text-transform:uppercase;margin-top:5px}
+.rotulo-crema{display:flex;align-items:center;gap:12px;margin:13px 0 12px}
+.rotulo-crema::before,.rotulo-crema::after{content:"";flex:1;height:1px;background:var(--tinta)}
+.rotulo-crema span{font-size:.74rem;font-weight:600;letter-spacing:.07em;
+                   text-transform:uppercase;white-space:nowrap}
+.pie-fachada .tagline{font-style:italic;font-size:.74rem;letter-spacing:.05em;
+                      color:var(--tinta-suave)}
+@media (max-width:400px){
+  .rotulo-crema span{font-size:.66rem;letter-spacing:.03em}
+  .rotulo-crema{gap:9px}
+  .pie-fachada .best{font-size:.94rem}
+}
+body.entrando .pie-fachada{opacity:0}
+
+/* ══ ESCENAS 2 y 3 · ADENTRO ════════════════════════════════════════════
+   El reverso oscuro de la invitación. Entra por encima cuando la cámara ya
+   cruzó el vano. */
+#adentro{
+  position:fixed;inset:0;z-index:1;background:var(--morado);color:var(--crema);
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
+  visibility:hidden;
+  /* dvh, no vh: en iOS el teclado encoge el viewport visual pero NO el vh, así
+     que con vh el botón de enviar queda debajo del teclado y es inalcanzable.
+     El padding de abajo es el colchón para que el último campo siempre suba. */
+  height:100dvh;
+  padding:40px 0 max(44px, env(safe-area-inset-bottom));
+}
+@supports not (height:100dvh){ #adentro{height:100%} }
+/* Morado del logo y nada más. Antes había una ilustración de OAKVILLE de fondo;
+   se quitó a propósito: sobre un color plano el premio y el nombre son lo único
+   que compite por la mirada, que es lo que hace que se vea limpio. */
+/* El contenido entra con su propio retardo: primero se ve el local vacío al
+   fondo del vano, y solo cuando la cámara ya cruzó aparece el texto. Si el
+   texto llega antes, se lee a través de las puertas y arruina el truco. */
+#adentro .wrap{position:relative;z-index:1;opacity:0;transition:opacity 560ms ease}
+body.entrando #adentro{visibility:visible}
+body.dentro #adentro .wrap{opacity:1}
+body.dentro{overflow:hidden}
+
+#adentro .loro{width:92px;height:auto;display:block;margin:0 auto 22px}
+.rotulo{display:flex;align-items:center;gap:14px;margin:0 0 12px}
+.rotulo::before,.rotulo::after{content:"";flex:1;height:1px;background:var(--uva)}
+.rotulo span{font-size:.74rem;font-weight:500;letter-spacing:.16em;
+             text-transform:uppercase;white-space:nowrap;color:var(--crema)}
+
+#adentro h1{font-size:1.16rem;font-weight:500;line-height:1.45;text-align:center;
+            margin:0 0 22px}
+/* Un filete de 1px sobre una foto se lee como wireframe, no como diseño. Lo
+   que pule es darle SUPERFICIE: una placa translúcida que capta la luz de la
+   sala, con el borde superior más claro (como si le diera la luz de arriba) y
+   sombra propia para que se despegue del fondo. Cero contorno duro. */
+.premio{
+  position:relative;padding:30px 22px 26px;text-align:center;margin:0 0 22px;
+  border-radius:20px;
+  background:rgba(251,246,233,.07);
+  box-shadow:inset 0 1px 0 rgba(251,246,233,.20),
+             inset 0 0 0 1px rgba(251,246,233,.09),
+             0 16px 36px rgba(40,15,54,.30);
+}
+.premio .dos{font-size:2.5rem;font-weight:600;line-height:1.02;letter-spacing:-.02em;display:block}
+.premio .pct{font-size:3.9rem;font-weight:600;line-height:.9;letter-spacing:-.04em;display:block}
+.premio .pct sup{font-size:.4em;font-weight:500;top:-.62em;position:relative;
+                 letter-spacing:0;margin-left:-.02em}
+.premio .qué{font-size:.8rem;font-weight:500;letter-spacing:.13em;text-transform:uppercase;
+             margin-top:12px;display:block}
+.premio .fina{font-size:.79rem;color:#C9B8D6;margin-top:9px}
+.premio .cuando{border-top:1px solid rgba(251,246,233,.14);margin-top:19px;padding-top:16px;
+                font-size:.79rem;font-weight:500;letter-spacing:.09em;text-transform:uppercase}
+.premio .cuando b{display:block;font-weight:600;font-size:1.05rem;letter-spacing:.04em;
+                  margin-top:7px;color:var(--crema)}
+.premio .cuando em{font-style:normal;display:block;font-weight:400;letter-spacing:0;
+                   text-transform:none;color:#C9B8D6;margin-top:9px;font-size:.88em}
+
+.paso{font-size:.72rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
+       color:#B9A6C7;text-align:center;margin:0 0 16px}
+
+/* ── Formulario: dos campos y nada más ── */
+label{display:block;font-size:.7rem;font-weight:500;letter-spacing:.13em;
+      text-transform:uppercase;margin:0 0 6px;color:#C9B8D6}
+/* El campo se rellena en vez de subrayarse: sobre un fondo con textura, una
+   línea sola no dice "aquí se escribe". Relleno translúcido + esquinas suaves,
+   sin borde blanco — el borde blanco es lo que lo volvería un formulario. */
+input[type=text],input[type=tel]{
+  width:100%;min-height:56px;color:var(--crema);
+  background:rgba(251,246,233,.07);
+  border:0;border-radius:14px;
+  box-shadow:inset 0 0 0 1px rgba(251,246,233,.10);
+  font-family:inherit;font-size:1rem;font-weight:400;padding:15px 16px;
+  -webkit-appearance:none;appearance:none;
+  transition:background .18s ease, box-shadow .18s ease;
+}
+input:focus{outline:none;background:rgba(251,246,233,.12);
+            box-shadow:inset 0 0 0 1.5px rgba(251,246,233,.42)}
+input::placeholder{color:#9E8BAC;font-weight:400}
+.campo{margin-bottom:14px}
+.tel{display:flex;align-items:stretch;gap:9px}
+.tel .ind{font-size:1rem;min-height:56px;padding:0 15px;border-radius:14px;
+          background:rgba(251,246,233,.07);
+          box-shadow:inset 0 0 0 1px rgba(251,246,233,.10);
+          display:flex;align-items:center;color:#C9B8D6}
+.tel input{flex:1}
+.tyc{display:flex;gap:13px;align-items:flex-start;margin:10px 0 20px;padding:14px 15px;
+     border-radius:14px;background:rgba(251,246,233,.04);
+     font-size:.76rem;line-height:1.55;color:#C9B8D6;cursor:pointer}
+/* 22px es el mínimo que un pulgar acierta; el <label> entero ya era el área
+   de toque, pero la casilla también tiene que VERSE tocable. */
+/* La casilla nativa se pinta como un cuadro blanco duro: es el último elemento
+   que delataba "formulario del navegador". Se rehace con la misma superficie
+   translúcida de los campos, y al marcarse se llena de crema con el palito en
+   tinta. `appearance:none` obliga a dibujar también el estado marcado. */
+.tyc input{
+  flex:0 0 22px;width:22px;height:22px;margin-top:1px;cursor:pointer;
+  -webkit-appearance:none;appearance:none;border:0;border-radius:7px;
+  background:rgba(251,246,233,.10);
+  box-shadow:inset 0 0 0 1.5px rgba(251,246,233,.34);
+  transition:background .16s ease, box-shadow .16s ease;
+  position:relative;
+}
+.tyc input:checked{background:var(--crema);box-shadow:inset 0 0 0 1.5px var(--crema)}
+.tyc input:checked::after{
+  content:"";position:absolute;left:7px;top:3px;width:6px;height:11px;
+  border:solid var(--tinta);border-width:0 2.5px 2.5px 0;transform:rotate(43deg);
+}
+.tyc input:focus-visible{outline:2px solid var(--crema);outline-offset:2px}
+.tyc a{color:var(--crema)}
+button.enviar{
+  width:100%;min-height:58px;background:var(--crema);color:var(--tinta);
+  border:0;border-radius:99px;font-family:inherit;font-size:.84rem;font-weight:600;
+  letter-spacing:.12em;text-transform:uppercase;cursor:pointer;
+  box-shadow:0 12px 28px rgba(40,15,54,.38);
+  transition:opacity .2s, transform .12s ease;
+}
+button.enviar:active{transform:translateY(1px)}
+button.enviar:disabled{opacity:.4;cursor:default}
+button.enviar:active{opacity:.82}
+.err{display:none;border-left:2px solid #E0736B;padding:9px 0 9px 12px;margin:0 0 16px;
+     font-size:.82rem;color:#E0736B;line-height:1.5}
+.err.show{display:block}
+
+/* ── Escena 3 · el cupón ── */
+#exito{display:none}
+#exito .msg{font-size:.88rem;color:#C9B8D6;text-align:center;margin-bottom:16px;line-height:1.6}
+#tarjetaImg{display:block;width:100%;height:auto;border-radius:14px;
+            box-shadow:0 20px 50px rgba(40,15,54,.44)}
+.btn-cta{width:100%;min-height:58px;background:var(--crema);color:var(--tinta);border:0;
+         border-radius:99px;font-family:inherit;font-size:.84rem;font-weight:600;
+         letter-spacing:.12em;text-transform:uppercase;cursor:pointer;
+         box-shadow:0 12px 28px rgba(40,15,54,.38)}
+.btn-cta:active{transform:translateY(1px)}
+/* El truco del pulsado largo solo aparece si NO hubo hoja de compartir:
+   decírselo a quien ya guardó la imagen es ruido. */
+.truco{display:none;font-size:.76rem;color:#B9A6C7;text-align:center;margin-top:14px;line-height:1.55}
+.truco.ver{display:block}
+.acciones{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+.btn-linea{display:block;text-align:center;min-height:var(--tap);line-height:var(--tap);
+           border:1px solid var(--tinta);color:var(--tinta);text-decoration:none;
+           font-size:.76rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;
+           background:transparent;font-family:inherit;cursor:pointer;border-radius:99px}
+
+.donde{margin-top:16px;text-align:center;font-size:.86rem;line-height:1.7;color:#C9B8D6}
+.donde .calle{display:block;color:var(--crema);font-size:1.02rem;font-weight:400;margin:2px 0 3px}
+.donde .horario{display:block;margin-top:12px;padding-top:12px;border-top:1px solid var(--uva);
+                font-size:.78rem;letter-spacing:.06em;color:#C9B8D6}
+.donde b{display:block;color:var(--crema);font-weight:500;letter-spacing:.06em;
+         text-transform:uppercase;font-size:.74rem;margin-bottom:5px}
+.mapa{display:inline-flex;align-items:center;justify-content:center;margin-top:16px;
+      min-height:48px;padding:0 22px;border-radius:99px;
+      background:rgba(251,246,233,.07);box-shadow:inset 0 0 0 1px rgba(251,246,233,.12);
+      color:var(--crema);font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;
+      text-decoration:none}
+.pie{text-align:center;font-size:.7rem;color:#A794B5;padding:26px 22px 0;line-height:1.8}
+.pie a{color:#C0AECD;display:inline-block;padding:10px 6px}
+/* Los enlaces de texto corrido también necesitan alto de toque: 13px de alto
+   es imposible de acertar con el pulgar. */
+.tyc a{display:inline-block;padding:3px 0}
+
+@media (max-width:400px){
+  #adentro h1{font-size:1.08rem}
+  .premio .dos{font-size:2.5rem;font-weight:600;line-height:1.02;letter-spacing:-.02em;display:block}
+.premio .pct{font-size:3.4rem}
+}
+/* La invitación es crema por diseño: se protege del filtro de iOS. */
+@media (prefers-color-scheme:dark){ :root{color-scheme:light} }
+
+/* ANIMACIÓN — quien pidió que no la haya, entra directo y sin viaje. No es
+   una cortesía: para alguien con trastorno vestibular un zoom de 3x a pantalla
+   completa produce náusea real. */
+@media (prefers-reduced-motion:reduce){
+  #fachada,.hoja,.entrar,.cabecera,.pie-fachada,#adentro{transition:none!important;
+    animation:none!important}
+  body.entrando #fachada{transform:none;opacity:0}
+}
+</style>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <script>try{new Image().src="https://api.oakberry-cupones.com/__visita?p=santodomingo-invitacion&t="+Date.now();}catch(e){}</script>
+</head>
+<body>
+
+<!-- ══ ESCENA 1 ══════════════════════════════════════════════════════════ -->
+<section id="fachada">
+  <div class="cabecera">
+    <img class="wordmark" src="../sdq-lockup-morado.svg" alt="OAKBERRY Açaí Bowls" width="511" height="123" fetchpriority="high" decoding="async">
+    <p class="cejilla">+1.000 puntos · +55 países</p>
+  </div>
+
+  <div class="lienzo">
+    <img class="fondo" src="../sdq-local.png" width="1200" height="618" fetchpriority="high" decoding="async"
+         alt="Fachada ilustrada de OAKBERRY en Plaza Andalucía">
+    <div class="vano">
+      <div class="interior"></div>
+      <div class="hoja izq"></div>
+      <div class="hoja der"></div>
+    </div>
+    <button class="entrar" id="entrar" aria-describedby="pieFachada">Toca para entrar</button>
+  </div>
+
+  <div class="pie-fachada" id="pieFachada">
+    <p class="espera">La espera terminó</p>
+    <p class="best">World's best açaí</p>
+    <div class="rotulo-crema"><span>Ahora en República Dominicana</span></div>
+    <p class="tagline">It's not just açaí. It's OAKBERRY.</p>
+  </div>
+</section>
+
+<!-- ══ ESCENAS 2 y 3 ═════════════════════════════════════════════════════ -->
+<section id="adentro" aria-hidden="true">
+  <div class="wrap">
+    <img class="loro" src="../sdq-loro.svg" alt="OAKBERRY" width="190" height="276" loading="lazy" decoding="async">
+
+    <div class="rotulo"><span>Estás dentro</span></div>
+
+    <section class="premio">
+      <span class="dos">Dos bowls</span>
+      <span class="qué">los que quieras de la carta</span>
+      <p class="fina">Cualquier tamaño, cualquier combinación. Van por nuestra cuenta.</p>
+      <p class="cuando">Desde el 16 de septiembre
+        <b>Tienes un mes para venir</b>
+        <em>Todos los días, de 8:00 am a 9:00 pm. Tu invitación vale hasta el 16 de octubre.</em></p>
+    </section>
+
+    <!-- ESCENA 3 · el cupón -->
+    <section id="exito">
+      <p class="msg" id="exitoMsg"></p>
+      <!-- Se muestra como <img> y no como canvas: el <img> es lo que habilita
+           el gesto de "mantener pulsado → Guardar en Fotos" cuando el navegador
+           no tiene hoja de compartir. -->
+      <img id="tarjetaImg" alt="Tu invitación a OAKBERRY Santo Domingo">
+      <div class="acciones">
+        <button class="btn-cta" id="guardar">Guardar mi tarjeta</button>
+        <a id="waLink" class="btn-linea" target="_blank" rel="noopener">Enviármela por WhatsApp</a>
+      </div>
+      <p class="truco" id="truco">¿No se guardó? Mantén pulsada la tarjeta y elige «Guardar en Fotos».</p>
+    </section>
+
+    <!-- FORMULARIO -->
+    <section id="formCard">
+      <p class="paso">Tu nombre y ya</p>
+
+      <div class="err" id="err"></div>
+
+      <div class="campo">
+        <label for="nombre">Tu nombre</label>
+        <input id="nombre" type="text" placeholder="Nombre y apellido" autocomplete="name" enterkeyhint="done">
+      </div>
+
+      <label class="tyc" for="tyc">
+        <input type="checkbox" id="tyc">
+        <span>Acepto los <a href="https://www.oakberry-cupones.com/tyc" target="_blank" rel="noopener">términos</a> de esta invitación.</span>
+      </label>
+
+      <button class="enviar" id="enviar">Quiero mi invitación</button>
+    </section>
+
+    <div class="rotulo" style="margin-top:34px"><span>Dónde queda</span></div>
+    <p class="donde">
+      <b>OAKBERRY Plaza Andalucía</b>
+      <span class="calle">Av. Abraham Lincoln 850</span>
+      Primer piso, local 55-A<br>Santo Domingo, RD
+      <span class="horario">Abierto todos los días<br>8:00 am – 9:00 pm</span>
+    </p>
+    <div style="text-align:center">
+      <a class="mapa" target="_blank" rel="noopener"
+         href="https://maps.google.com/?q=Plaza+Andaluc%C3%ADa+Av.+Abraham+Lincoln+850+Santo+Domingo">Abrir en Google Maps</a>
+    </div>
+
+    <p class="pie">
+      OAKBERRY República Dominicana<br>
+      <a href="https://www.instagram.com/oakberry_rd/" target="_blank" rel="noopener">@oakberry_rd</a>
+    </p>
+  </div>
+</section>
+
+<script>
+const CFG = { API: "https://api.oakberry-cupones.com/", EVENTO: "sdq-invitacion" };
+const $ = id => document.getElementById(id);
+
+/* ══ LA PUERTA ═════════════════════════════════════════════════════════
+   Un solo interruptor de clases en <body>; el CSS hace el resto. `entrando`
+   dispara puertas + cámara, `dentro` monta la escena 2. El cupo se pide en
+   cuanto se toca el botón, no al terminar la animación: mientras dura el
+   viaje la red ya está trabajando. */
+let abierto = false;
+function entrar(){
+  if(abierto) return;
+  abierto = true;
+  document.body.classList.add("entrando");
+  cargarCupos();
+  const lento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  setTimeout(()=>{
+    document.body.classList.add("dentro");
+    $("adentro").setAttribute("aria-hidden","false");
+    // El foco se lleva al primer campo: quien entra ya decidió, no hay que
+    // hacerlo buscar dónde escribir.
+    setTimeout(()=>{ try{ $("nombre").focus({preventScroll:true}); }catch(e){} }, 700);
+  }, lento ? 0 : 1520);
+}
+$("entrar").addEventListener("click", entrar);
+
+/* JSONP: la API vive en otro origen y no tiene CORS abierto. */
+function jsonp(params){
+  return new Promise((resolve, reject)=>{
+    const cb = "cb_" + Math.random().toString(36).slice(2);
+    const s  = document.createElement("script");
+    const q  = new URLSearchParams({...params, callback: cb}).toString();
+    let listo = false;
+    window[cb] = d => { listo = true; limpiar(); resolve(d); };
+    function limpiar(){ delete window[cb]; s.remove(); }
+    s.onerror = () => { if(!listo){ limpiar(); reject(new Error("red")); } };
+    s.src = CFG.API + "?" + q;
+    document.body.appendChild(s);
+    setTimeout(()=>{ if(!listo){ limpiar(); reject(new Error("timeout")); } }, 12000);
+  });
+}
+
+/* Tres intentos con espera creciente. Contra un reinicio de la VM no alcanza
+   ningún reintento, pero contra un script tag que se cae en 4G sí — y un solo
+   intento le devuelve error a alguien que sí tenía señal. */
+async function api(p){
+  const esperas = [600, 2000, 5000];
+  let ultimo;
+  for(let i = 0; i < esperas.length; i++){
+    try{ return await jsonp(p); }
+    catch(e){ ultimo = e; if(i < esperas.length-1) await new Promise(r=>setTimeout(r, esperas[i])); }
+  }
+  throw ultimo;
+}
+
+/* Lo escrito se guarda en el propio teléfono ANTES de salir a la red. */
+const BORRADOR = "oak_" + CFG.EVENTO;
+function guardarBorrador(d){ try{ localStorage.setItem(BORRADOR, JSON.stringify(d)); }catch(e){} }
+function limpiarBorrador(){ try{ localStorage.removeItem(BORRADOR); }catch(e){} }
+function restaurarBorrador(){
+  try{
+    const d = JSON.parse(localStorage.getItem(BORRADOR) || "null");
+    if(!d) return;
+    ["nombre"].forEach(k=>{ const el=$(k); if(el && d[k] && !el.value) el.value=d[k]; });
+  }catch(e){}
+}
+
+function fingerprint(){
+  try{
+    const c=document.createElement("canvas"), x=c.getContext("2d");
+    x.textBaseline="top"; x.font="14px Arial";
+    x.fillStyle="#f60"; x.fillRect(0,0,60,20);
+    x.fillStyle="#069"; x.fillText("oak-friends",2,2);
+    const d=c.toDataURL(); let h=0;
+    for(let i=0;i<d.length;i++){h=((h<<5)-h)+d.charCodeAt(i);h|=0;}
+    return "fp"+Math.abs(h).toString(36)+(screen.width||0)+"x"+(screen.height||0);
+  }catch(e){ return "fp-none"; }
+}
+
+function error(msg){ const e=$("err"); e.textContent=msg; e.classList.add("show"); }
+function limpiarError(){ $("err").classList.remove("show"); }
+
+let cuposPedidos = false;
+async function cargarCupos(){
+  if(cuposPedidos) return; cuposPedidos = true;
+  /* El contador ya no se muestra, pero la llamada se queda: es lo que apaga el
+     botón cuando se agota el cupo o cierra el registro. Sin esto, alguien
+     llenaría el formulario para recibir un "no hay" al final. */
+  try{
+    const r = await api({accion:"eventoConfig", evento: CFG.EVENTO});
+    if(!r.ok) return;
+    if(r.agotado || r.cerrado){
+      $("enviar").disabled = true;
+      $("enviar").textContent = r.agotado ? "Cupos agotados" : "Registro cerrado";
+    }
+  }catch(e){ /* que falle no puede bloquear el registro */ }
+}
+
+$("enviar").addEventListener("click", async ()=>{
+  limpiarError();
+  const nombre  = $("nombre").value.trim();
+  const celular = "";
+
+  if(!nombre)            return error("Escribe tu nombre.");
+  if(!$("tyc").checked)  return error("Necesitamos que aceptes los términos para enviarte tu invitación.");
+
+  guardarBorrador({nombre});
+
+  const btn = $("enviar");
+  const textoOriginal = btn.textContent;
+  btn.disabled = true; btn.textContent = "Un momento…";
+  let r;
+  try{
+    r = await api({
+      accion:"eventoRegistrar", evento: CFG.EVENTO,
+      nombre, celular, tyc:"true", optIn:"true", fingerprint: fingerprint(),
+    });
+  }catch(e){
+    btn.disabled = false; btn.textContent = textoOriginal;
+    return error("No pudimos completar tu registro en este momento. Lo que escribiste "
+               + "quedó guardado aquí — inténtalo de nuevo en un minuto.");
+  }
+
+  if(!r.ok){
+    btn.disabled = false; btn.textContent = textoOriginal;
+    if(r.agotado || r.cerrado){
+      btn.disabled = true;
+      btn.textContent = r.agotado ? "Cupones agotados" : "Registro cerrado";
+    }
+    return error(r.mensaje || "No pudimos registrarte.");
+  }
+
+  limpiarBorrador();
+  $("formCard").style.display = "none";
+  $("exitoMsg").textContent = r.repetido
+    ? "Ya te habíamos invitado — esta es tu tarjeta, la misma de antes."
+    : "Esta es tu invitación. Guárdala y muéstrala en la puerta.";
+  $("waLink").href = r.linkWA;
+  $("exito").style.display = "block";
+  $("exito").scrollIntoView({behavior:"smooth", block:"start"});
+  dibujarTarjeta(nombre, r.codigo);
+});
+
+
+/* ══ LA TARJETA ════════════════════════════════════════════════════════════
+   Se dibuja en un canvas 1080x1350 (formato post: sirve en el carrete, en el
+   feed y como historia con márgenes) y se entrega por la hoja de compartir
+   nativa del teléfono.
+
+   POR QUÉ NO UN <a download>: en iOS Safari el atributo `download` NO hace
+   nada. Es el camino obvio, funciona en escritorio, y deja sin tarjeta a medio
+   país. El orden real de preferencia es:
+     1) navigator.share con archivo  → Guardar en Fotos / mandar por WhatsApp
+     2) mantener pulsada la <img>    → el gesto que todo iPhone ya conoce
+     3) descarga clásica             → solo escritorio
+   Todos los assets son de nuestro dominio, así que el canvas no se contamina
+   y toBlob() puede exportar. */
+const CARTA = {W:1080, H:1350};
+let tarjetaBlob = null;
+
+function cargarImg(src){
+  return new Promise((ok, fail)=>{
+    const i = new Image();
+    i.onload = ()=>ok(i); i.onerror = fail;
+    i.src = src;
+  });
+}
+
+/* Envuelve texto a mano: canvas no hace saltos de línea. */
+function lineas(ctx, texto, ancho){
+  const ps = texto.split(" "); const out = []; let l = "";
+  for(const w of ps){
+    const t = l ? l+" "+w : w;
+    if(ctx.measureText(t).width > ancho && l){ out.push(l); l = w; }
+    else l = t;
+  }
+  if(l) out.push(l);
+  return out;
+}
+
+async function dibujarTarjeta(nombre, codigo){
+  const C = document.createElement("canvas");
+  C.width = CARTA.W; C.height = CARTA.H;
+  const x = C.getContext("2d");
+  const CREMA="#FBF6E9", TINTA="#21152A", SUAVE="#5C4A66", HUESO="#E2D8C2";
+
+  /* La fuente hay que esperarla explícitamente: si se dibuja antes de que
+     Azeret Mono esté lista, el canvas usa la del sistema y la tarjeta sale con
+     otra tipografía. En un teléfono lento eso pasa SIEMPRE. */
+  try{
+    await document.fonts.load('600 64px "Azeret Mono"');
+    await document.fonts.load('500 26px "Azeret Mono"');
+    await document.fonts.load('400 24px "Azeret Mono"');
+    await document.fonts.ready;
+  }catch(e){}
+
+  x.fillStyle = CREMA; x.fillRect(0,0,CARTA.W,CARTA.H);
+
+  let lockup=null, local=null;
+  try{ [lockup, local] = await Promise.all([
+        cargarImg("../sdq-lockup-morado.png"), cargarImg("../sdq-local.png")]); }catch(e){}
+
+  x.strokeStyle = HUESO; x.lineWidth = 2;
+  x.strokeRect(30,30,CARTA.W-60,CARTA.H-60);
+  x.textAlign = "center";
+
+  /* ── Cabecera ── */
+  if(lockup){
+    const w = 520, h = w*lockup.height/lockup.width;
+    x.drawImage(lockup, (CARTA.W-w)/2, 96, w, h);
+  }
+  x.fillStyle = SUAVE; x.font = '500 22px "Azeret Mono", monospace';
+  x.letterSpacing = "7px";
+  x.fillText("INVITACIÓN PERSONAL", CARTA.W/2, 288);
+  x.letterSpacing = "0px";
+
+  /* ── El nombre: el héroe de la tarjeta ──
+     Se encoge hasta caber en UNA línea. Partir un nombre propio en dos se ve
+     como error de maquetación, y a 30px todavía entran 48 caracteres. */
+  const nom = (nombre||"").trim();
+  let cuerpo = 78;
+  x.font = '600 ' + cuerpo + 'px "Azeret Mono", monospace';
+  while(x.measureText(nom).width > CARTA.W-190 && cuerpo > 30){
+    cuerpo -= 2; x.font = '600 ' + cuerpo + 'px "Azeret Mono", monospace';
+  }
+  x.fillStyle = TINTA;
+  x.fillText(nom, CARTA.W/2, 378);
+
+  x.strokeStyle = TINTA; x.lineWidth = 2;
+  x.beginPath(); x.moveTo(CARTA.W/2-80, 418); x.lineTo(CARTA.W/2+80, 418); x.stroke();
+
+  x.fillStyle = "#4B1F60"; x.font = '600 58px "Azeret Mono", monospace';
+  x.fillText("Dos bowls", CARTA.W/2, 494);
+  x.fillStyle = SUAVE; x.font = '400 25px "Azeret Mono", monospace';
+  x.fillText("los que quieras de la carta", CARTA.W/2, 536);
+
+  /* ── La ilustración vive en su propia banda ──
+     Antes ocupaba hasta el borde y el pie de la tarjeta le caía encima: el
+     trazo competía con las fechas y no se leía ninguna de las dos cosas. */
+  if(local){
+    const w = 960, h = w*local.height/local.width;   // 960 x 494
+    const yTop = 588;
+    x.drawImage(local, (CARTA.W-w)/2, yTop, w, h);
+    // Se desvanece por arriba y por abajo para que no quede recortada a filo.
+    const g = x.createLinearGradient(0, yTop-8, 0, yTop+h+8);
+    g.addColorStop(0,"rgba(251,246,233,1)");   g.addColorStop(.13,"rgba(251,246,233,.10)");
+    g.addColorStop(.80,"rgba(251,246,233,.10)"); g.addColorStop(1,"rgba(251,246,233,1)");
+    x.fillStyle = g; x.fillRect(0, yTop-8, CARTA.W, h+16);
+  }
+
+  /* ── Pie, sobre crema limpia ── */
+  x.fillStyle = TINTA; x.font = '500 27px "Azeret Mono", monospace';
+  x.letterSpacing = "3px";
+  x.fillText("DESDE EL 16 DE SEPTIEMBRE", CARTA.W/2, 1148);
+  x.letterSpacing = "0px";
+  x.font = '600 30px "Azeret Mono", monospace';
+  x.fillText("Válida hasta el 16 de octubre", CARTA.W/2, 1194);
+  x.fillStyle = SUAVE; x.font = '400 22px "Azeret Mono", monospace';
+  x.fillText("Todos los días · 8:00 am – 9:00 pm", CARTA.W/2, 1228);
+
+  x.font = '400 23px "Azeret Mono", monospace';
+  x.font = '400 19px "Azeret Mono", monospace';
+  x.fillText("OAKBERRY Plaza Andalucía · Av. Abraham Lincoln 850 · local 55-A", CARTA.W/2, 1272);
+
+  /* La referencia va discreta: la tarjeta habilita la entrada, este número solo
+     sirve para reconciliar después quién vino. */
+  if(codigo){
+    x.fillStyle = "#B3A697"; x.font = '400 17px "Azeret Mono", monospace';
+    x.letterSpacing = "4px";
+    x.fillText("REF " + codigo, CARTA.W/2, 1310);
+    x.letterSpacing = "0px";
+  }
+
+  const url = C.toDataURL("image/png");
+  $("tarjetaImg").src = url;
+  C.toBlob(b => { tarjetaBlob = b; }, "image/png");
+}
+
+$("guardar").addEventListener("click", async ()=>{
+  const btn = $("guardar");
+  const archivo = tarjetaBlob
+    ? new File([tarjetaBlob], "invitacion-oakberry.png", {type:"image/png"})
+    : null;
+
+  if(archivo && navigator.canShare && navigator.canShare({files:[archivo]})){
+    try{
+      await navigator.share({files:[archivo], title:"Tu invitación OAKBERRY"});
+      return;
+    }catch(e){
+      // Cancelar la hoja de compartir NO es un fallo: no se muestra rescate.
+      if(e && e.name === "AbortError") return;
+    }
+  }
+
+  // Escritorio: descarga clásica. En iOS esto no hace nada, por eso el rescate.
+  try{
+    const a = document.createElement("a");
+    a.href = $("tarjetaImg").src; a.download = "invitacion-oakberry.png";
+    document.body.appendChild(a); a.click(); a.remove();
+  }catch(e){}
+  $("truco").classList.add("ver");
+  btn.textContent = "Guardar mi tarjeta";
+});
+
+["nombre"].forEach(id=>$(id).addEventListener("input", limpiarError));
+
+/* En iOS el teclado tapa la mitad inferior y el navegador NO siempre desplaza
+   el campo enfocado — menos aún dentro de un contenedor fijo con scroll propio.
+   Se sube a mano, con el retardo justo para que el teclado ya esté montado. */
+["nombre"].forEach(id=>$(id).addEventListener("focus", ()=>{
+  setTimeout(()=>{ try{ $(id).scrollIntoView({behavior:"smooth", block:"center"}); }catch(e){} }, 320);
+}));
+$("nombre").addEventListener("keydown", e=>{ if(e.key==="Enter") $("enviar").click(); });
+restaurarBorrador();
+/* Si vuelve alguien que ya había escrito sus datos, la puerta ya no tiene
+   gracia: se le abre sola y va derecho al formulario. */
+try{ if(localStorage.getItem(BORRADOR)) entrar(); }catch(e){}
+</script>
+</body>
+</html>

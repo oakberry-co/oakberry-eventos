@@ -1,0 +1,16 @@
+# oakberry-eventos.com — ESTE SÍ se indexa.
+#
+# Es la única propiedad pública que compite por búsquedas reales: alguien que
+# googlea "carrito de açaí para evento empresarial Bogotá" o "franquicia açaí
+# República Dominicana" es exactamente el lead que hoy estamos PAGANDO por Meta
+# y LinkedIn. Acá el orgánico reemplaza pauta, no la acompaña.
+#
+# (En manelfoods.co y oakberry-cupones.com el criterio es el opuesto: ver el
+#  robots.txt de cada uno.)
+
+User-agent: *
+Allow: /
+
+# Host canónico = www (el apex responde 307 hacia allá). Si el sitemap se declara
+# en el apex, el crawler sigue un redirect de más en cada visita.
+Sitemap: https://www.oakberry-eventos.com/sitemap.xml

@@ -1,4 +1,101 @@
 {
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/Q4",
+      "destination": "/q4",
+      "permanent": false
+    },
+    {
+      "source": "/Purpleday",
+      "destination": "/purpleday",
+      "permanent": false
+    },
+    {
+      "source": "/PurpleDay",
+      "destination": "/purpleday",
+      "permanent": false
+    },
+    {
+      "source": "/PURPLEDAY",
+      "destination": "/purpleday",
+      "permanent": false
+    },
+    {
+      "source": "/purple-day",
+      "destination": "/purpleday",
+      "permanent": false
+    },
+    {
+      "source": "/Purple-Day",
+      "destination": "/purpleday",
+      "permanent": false
+    },
+    {
+      "source": "/purpleday-tyc.",
+      "destination": "/purpleday-tyc",
+      "permanent": false
+    },
+    {
+      "source": "/purpleday-tyc..",
+      "destination": "/purpleday-tyc",
+      "permanent": false
+    },
+    {
+      "source": "/purpleday-tyc,",
+      "destination": "/purpleday-tyc",
+      "permanent": false
+    },
+    {
+      "source": "/Purpleday-tyc",
+      "destination": "/purpleday-tyc",
+      "permanent": false
+    },
+    {
+      "source": "/PurpleDay-tyc",
+      "destination": "/purpleday-tyc",
+      "permanent": false
+    },
+    {
+      "source": "/PURPLEDAY-TYC",
+      "destination": "/purpleday-tyc",
+      "permanent": false
+    },
+    {
+      "source": "/purple-day-tyc",
+      "destination": "/purpleday-tyc",
+      "permanent": false
+    },
+    {
+      "source": "/purpledaytyc",
+      "destination": "/purpleday-tyc",
+      "permanent": false
+    },
+    {
+      "source": "/tyc-purpleday",
+      "destination": "/purpleday-tyc",
+      "permanent": false
+    },
+    {
+      "source": "/purpleday/tyc",
+      "destination": "/purpleday-tyc",
+      "permanent": false
+    },
+    {
+      "source": "/encuesta",
+      "destination": "/cuentanos?src=qr_tienda",
+      "permanent": false
+    },
+    {
+      "source": "/Encuesta",
+      "destination": "/cuentanos?src=qr_tienda",
+      "permanent": false
+    },
+    {
+      "source": "/ENCUESTA",
+      "destination": "/cuentanos?src=qr_tienda",
+      "permanent": false
+    }
+  ]
 }

@@ -6,7 +6,25 @@
 <meta name="theme-color" content="#5F4B8B">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Oakberry en tu Evento — Bogotá</title>
+<title>Oakberry en tu evento — açaí para eventos corporativos en Bogotá</title>
+<meta name="description" content="Lleva Oakberry a tu evento en Bogotá: açaí bowls para activaciones de marca, eventos corporativos, ferias y celebraciones. Cuéntanos tu idea y te contactamos en menos de 24 horas.">
+<link rel="canonical" href="https://www.oakberry-eventos.com/">
+
+<!-- Preview del link (WhatsApp, Instagram, Meta). Sin esto el link sale como una
+     URL gris, y por WhatsApp es por donde llega el grueso de las consultas B2B.
+     Tarjeta generada con `common/og_cards.py` del repo datawarehouse. -->
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_CO">
+<meta property="og:site_name" content="Oakberry Eventos">
+<meta property="og:url" content="https://www.oakberry-eventos.com/">
+<meta property="og:title" content="Oakberry en tu evento — Bogotá">
+<meta property="og:description" content="Açaí bowls para activaciones, eventos corporativos y ferias. Cuéntanos tu idea y te contactamos en menos de 24 horas.">
+<meta property="og:image" content="https://www.oakberry-eventos.com/og-eventos.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Oakberry en tu evento · Bogotá">
+<meta name="twitter:card" content="summary_large_image">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -353,9 +371,23 @@ input.err{border-color:var(--red);box-shadow:0 0 0 3px rgba(192,57,43,0.1);}
   font-size:11px;font-weight:900;color:var(--primary);
   text-transform:uppercase;letter-spacing:0.5px;margin-bottom:16px;
 }
+
+/* H1 accesible. La página no tenía NINGUNO: el título visual es el div .brand,
+   que se repite en los tres estados del formulario (form / enviado / error), así
+   que convertirlos daría tres h1. Este va oculto a la vista pero presente para
+   buscadores y lectores de pantalla. No se usa display:none ni visibility:hidden
+   porque eso también lo esconde del lector. */
+.a11y-title{
+  position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+  overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0;
+}
 </style>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <script>try{new Image().src="https://api.oakberry-cupones.com/__visita?p=index&t="+Date.now();}catch(e){}</script>
 </head>
 <body>
+
+<h1 class="a11y-title">Oakberry en tu evento — açaí para eventos corporativos en Bogotá</h1>
 
 <!-- ── FORMULARIO ─────────────────────────────────────────────── -->
 <div id="stateForm" class="state show">

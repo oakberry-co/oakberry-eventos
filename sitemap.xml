@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Sitemap de oakberry-eventos.com. Escrito a mano a propósito: son 3 páginas
+  estáticas, un generador sería más código que contenido.
+
+  URLs SIN .html porque vercel.json trae `cleanUrls: true`, y sobre el host www
+  porque el apex responde 307 hacia allá. Declarar la variante equivocada hace
+  que el crawler gaste un redirect por página.
+
+  Al agregar una landing nueva: agregarla acá. Si no está, existe pero no la
+  buscan.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://www.oakberry-eventos.com/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://www.oakberry-eventos.com/republicadominicana</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://www.oakberry-eventos.com/donaciones</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>

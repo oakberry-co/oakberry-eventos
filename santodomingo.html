@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#5F4B8B">
+<title>OAKBERRY llega a Santo Domingo — Preapertura</title>
+<meta name="description" content="OAKBERRY abre su primera tienda en Santo Domingo el 19 de septiembre. Los primeros 50 en registrarse y seguirnos prueban un bowl de 9 oz antes de la apertura.">
+<link rel="canonical" href="https://www.oakberry-eventos.com/santodomingo">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_DO">
+<meta property="og:site_name" content="OAKBERRY República Dominicana">
+<meta property="og:url" content="https://www.oakberry-eventos.com/santodomingo">
+<meta property="og:title" content="OAKBERRY llega a Santo Domingo">
+<meta property="og:description" content="Los primeros 50 en registrarse y seguirnos prueban un bowl de 9 oz antes de la apertura.">
+<meta property="og:image" content="https://www.oakberry-eventos.com/og-sdq.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="sdq-hero.jpg">
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','914682538016264');fbq('track','PageView');
+</script>
+<style>
+/* Sistema visual de OAKBERRY RD — el mismo de /republicadominicana, que es la
+   página que este público ya vio. Tema claro: la marca es fruta y luz. */
+:root{
+  --primary:#5F4B8B; --primary-dark:#4a3a6e; --primary-deep:#362b52;
+  --yellow:#F5C842; --yellow-deep:#d9a913;
+  --white:#fff; --off-white:#fdfcff; --border:#e8e3f4; --gray:#8a8398;
+  --gray-light:#f7f4ff; --ink:#2a2438; --red:#c0392b; --ok:#27ae60;
+  --tap:52px; --sombra:0 10px 34px rgba(95,75,139,.10);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{font-family:'Montserrat',system-ui,sans-serif;background:var(--off-white);
+     color:var(--ink);line-height:1.55;overflow-x:hidden}
+.wrap{max-width:540px;margin:0 auto;padding:0 20px}
+
+/* ── HERO ──────────────────────────────────────────────────────────────
+   Foto real + degradado de marca. SIN background-attachment:fixed: eso
+   ahoga el render en el webview de Instagram, que es de donde viene el
+   tráfico, y ya nos costó una caída de 25 a 3 cupones/día. */
+.hero{
+  position:relative;color:#fff;text-align:center;overflow:hidden;
+  padding:26px 20px 40px;
+  background:
+    linear-gradient(180deg, rgba(54,43,82,.46) 0%, rgba(54,43,82,.70) 52%, rgba(54,43,82,.96) 100%),
+    radial-gradient(120% 90% at 82% 4%, rgba(245,200,66,.26), transparent 58%),
+    url('sdq-hero.jpg') center 30%/cover no-repeat;
+  background-color:var(--primary-dark);
+}
+.hero .marca{width:168px;max-width:48%;margin:0 auto 18px;display:block;opacity:.97}
+.chip{display:inline-flex;align-items:center;gap:9px;background:rgba(255,255,255,.14);
+      border:1px solid rgba(255,255,255,.24);border-radius:99px;padding:7px 15px;
+      font-size:.74rem;font-weight:700;letter-spacing:.05em;margin-bottom:20px;
+      backdrop-filter:blur(6px)}
+.chip .dot{width:8px;height:8px;border-radius:50%;background:var(--yellow);
+           animation:blink 1.6s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+/* Tamaño calibrado para que el botón entre en la primera pantalla de un
+   teléfono de 844px de alto. Con 2.15rem el titular se iba a cuatro líneas y
+   el CTA quedaba bajo el pliegue — la gente no lo veía sin desplazar. */
+.hero h1{font-size:1.86rem;font-weight:900;line-height:1.14;letter-spacing:-.022em;
+         margin-bottom:12px;text-shadow:0 2px 24px rgba(0,0,0,.3)}
+.hero h1 em{font-style:normal;color:var(--yellow)}
+.hero p{font-size:.98rem;color:rgba(255,255,255,.93);max-width:380px;margin:0 auto 22px}
+.hero-cta{display:inline-block;background:var(--yellow);color:var(--primary-deep);
+          text-decoration:none;font-weight:900;font-size:1rem;border-radius:99px;
+          padding:15px 30px;box-shadow:0 10px 30px rgba(245,200,66,.34)}
+
+/* ── SECCIONES ─────────────────────────────────────────────────────── */
+main{padding:34px 0 56px}
+.card{background:var(--white);border:1px solid var(--border);border-radius:20px;
+      padding:24px 22px;margin-bottom:16px;box-shadow:var(--sombra)}
+.card.destacada{border:2px solid var(--yellow);
+  background:linear-gradient(165deg,#fffdf5 0%,var(--white) 62%)}
+/* Tarjeta ilustrada: rompe la sucesión de tarjetas blancas, que era lo que
+   hacía ver la página plana. El arte es de la campaña OAKVILLE, recortado
+   para quitarle ese wordmark; lo que queda (el camión con el loro, el
+   atardecer) funciona como metáfora literal de la llegada al país.
+   El degradado encima NO es decorativo: sin él el texto blanco se pierde
+   sobre el naranja del cielo. */
+.card.morada{border:0;color:#fff;position:relative;overflow:hidden;
+  background:
+    linear-gradient(155deg, rgba(54,43,82,.94) 0%, rgba(74,58,110,.84) 46%, rgba(95,75,139,.62) 100%),
+    url('sdq-llegada.jpg') center 42%/cover no-repeat;
+  background-color:var(--primary-deep)}
+.card.morada .lead{color:var(--yellow)}
+.card.morada p{color:rgba(255,255,255,.9)}
+.etiqueta{display:inline-block;font-size:.68rem;font-weight:800;letter-spacing:.16em;
+          text-transform:uppercase;color:var(--primary);background:var(--gray-light);
+          border-radius:99px;padding:5px 12px;margin-bottom:13px}
+.card.morada .etiqueta{color:var(--primary-deep);background:var(--yellow)}
+.lead{font-size:1.68rem;font-weight:900;line-height:1.12;letter-spacing:-.015em;
+      color:var(--primary);margin-bottom:9px}
+.card p{font-size:.95rem;color:#5c5470}
+.card.destacada .lead{color:var(--primary)}
+
+/* Contador de cupos */
+.cupos{display:flex;align-items:flex-end;gap:11px;margin-top:18px}
+.cupos .n{font-size:2.6rem;font-weight:900;line-height:.92;color:var(--primary)}
+.cupos .t{font-size:.85rem;color:var(--gray);font-weight:600;padding-bottom:4px}
+.barra{height:9px;border-radius:99px;background:var(--gray-light);margin-top:11px;
+       overflow:hidden;border:1px solid var(--border)}
+.barra i{display:block;height:100%;width:0;border-radius:99px;
+         background:linear-gradient(90deg,var(--yellow),var(--yellow-deep));
+         transition:width .7s cubic-bezier(.2,.8,.3,1)}
+
+/* Datos de la tienda */
+.dato{display:flex;gap:13px;align-items:flex-start;margin-bottom:14px}
+.dato .ic{flex:0 0 38px;height:38px;border-radius:50%;background:var(--gray-light);
+          display:flex;align-items:center;justify-content:center;font-size:1.05rem}
+.dato b{display:block;font-weight:800;font-size:.95rem;margin-bottom:2px}
+.dato span{font-size:.9rem;color:#5c5470}
+
+/* ── FORMULARIO ────────────────────────────────────────────────────── */
+label{display:block;font-size:.74rem;font-weight:800;letter-spacing:.07em;
+      text-transform:uppercase;color:var(--gray);margin:17px 0 7px}
+label .op{text-transform:none;font-weight:500;letter-spacing:0}
+input[type=text],input[type=tel],input[type=email]{
+  width:100%;min-height:var(--tap);padding:13px 15px;border-radius:13px;
+  border:1.5px solid var(--border);background:var(--white);color:var(--ink);
+  font-family:inherit;font-size:1rem;transition:border-color .15s,box-shadow .15s}
+input:focus{outline:none;border-color:var(--primary);
+            box-shadow:0 0 0 4px rgba(95,75,139,.11)}
+input::placeholder{color:#bdb6cc}
+.hint{font-size:.78rem;color:var(--gray);margin-top:6px}
+/* Las casillas SON <label>, así que heredaban el uppercase+800 de los rótulos
+   del formulario y se leían como gritos ("YA SIGO A @OAKBERRY_RD"). Se
+   reponen a texto corrido: es una frase que la persona lee, no un rótulo. */
+.check{display:flex;gap:12px;align-items:flex-start;margin:16px 0 0;
+       font-size:.88rem;font-weight:500;letter-spacing:normal;text-transform:none;
+       color:#5c5470;line-height:1.5;cursor:pointer}
+.check input{flex:0 0 22px;width:22px;height:22px;margin-top:1px;accent-color:var(--primary)}
+.check a{color:var(--primary);font-weight:600}
+.btn{display:block;width:100%;min-height:56px;margin-top:20px;border:0;border-radius:14px;
+     background:var(--primary);color:#fff;font-family:inherit;font-size:1.02rem;
+     font-weight:800;cursor:pointer;text-align:center;line-height:56px;
+     text-decoration:none;transition:transform .12s,box-shadow .12s}
+.btn:active{transform:translateY(1px)}
+.btn.oro{background:var(--yellow);color:var(--primary-deep);
+         box-shadow:0 8px 26px rgba(245,200,66,.36)}
+.btn.linea{background:transparent;color:var(--primary);
+           border:1.6px solid var(--primary);line-height:53px}
+.btn:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+.err{display:none;background:#fdecea;border:1px solid #f1b5ae;color:#a5291b;
+     border-radius:12px;padding:12px 14px;font-size:.88rem;margin-top:15px;font-weight:600}
+.err.show{display:block}
+
+/* ── ÉXITO ─────────────────────────────────────────────────────────── */
+#exito{display:none;text-align:center}
+.codigo{font-family:'Courier New',monospace;font-size:2.5rem;font-weight:700;
+        letter-spacing:.16em;color:var(--primary-deep);background:var(--yellow);
+        border-radius:16px;padding:20px 10px;margin:14px 0 16px;word-break:break-all;
+        box-shadow:0 8px 28px rgba(245,200,66,.34)}
+#exitoDet{font-size:.92rem;color:#5c5470;margin-bottom:18px}
+
+.pie{text-align:center;font-size:.8rem;color:var(--gray);padding:8px 0 40px;line-height:1.9}
+.pie a{color:var(--primary);font-weight:600;text-decoration:none}
+@media(min-width:560px){.hero h1{font-size:2.4rem}.hero{padding:44px 20px 66px}}
+</style>
+  <script defer src="/_vercel/insights/script.js"></script>
+  <script>try{new Image().src="https://api.oakberry-cupones.com/__visita?p=santodomingo&t="+Date.now();}catch(e){}</script>
+</head>
+<body>
+
+<header class="hero">
+  <img class="marca" src="oakberry-logo-cream.png" alt="OAKBERRY" width="186" height="30">
+  <div class="chip"><span class="dot"></span>🇩🇴 Santo Domingo · 19 de septiembre</div>
+  <h1>El açaí que el mundo come <em>llega a República Dominicana</em></h1>
+  <p>Abrimos nuestra primera tienda en Plaza Andalucía. Y queremos que lo pruebes antes que nadie.</p>
+  <a class="hero-cta" href="#registro">Quiero mi bowl 🫐</a>
+</header>
+
+<main class="wrap">
+
+  <!-- ── OFERTA 1: los 50 de la preapertura ── -->
+  <section class="card destacada" id="ofertaCard">
+    <span class="etiqueta">Solo 50 personas</span>
+    <div class="lead">Un bowl de 9 oz,<br>por nuestra cuenta</div>
+    <p>Los <strong>primeros 50</strong> en registrarse aquí y seguirnos en Instagram lo prueban antes de que abramos oficialmente. Válido del <strong>12 al 18 de septiembre</strong>.</p>
+    <div class="cupos">
+      <div class="n" id="cuposN">—</div>
+      <div class="t" id="cuposT">cargando cupos…</div>
+    </div>
+    <div class="barra"><i id="cuposBar"></i></div>
+  </section>
+
+  <!-- ── OFERTA 2: los madrugadores del 19 ── -->
+  <section class="card morada">
+    <span class="etiqueta">El día de la apertura</span>
+    <div class="lead">50 bowls para<br>los primeros 50</div>
+    <p>El <strong>sábado 19 de septiembre</strong>, las primeras 50 personas en llegar a la tienda se llevan un bowl de 9 oz de cortesía. Sin registro y sin cupón: llega temprano y ya.</p>
+  </section>
+
+  <!-- ── FORMULARIO ── -->
+  <section class="card" id="formCard">
+    <a name="registro" id="registro"></a>
+    <span class="etiqueta">Tu registro</span>
+    <div class="lead" style="font-size:1.3rem">Aparta tu bowl</div>
+
+    <label for="nombre">Tu nombre</label>
+    <input id="nombre" type="text" placeholder="Nombre y apellido" autocomplete="name">
+
+    <label for="celular">WhatsApp</label>
+    <input id="celular" type="tel" inputmode="numeric" placeholder="809 123 4567" autocomplete="tel">
+    <div class="hint">Ahí te mandamos tu cupón para que no lo pierdas.</div>
+
+    <label for="email">Correo <span class="op">(opcional)</span></label>
+    <input id="email" type="email" placeholder="tu@correo.com" autocomplete="email">
+
+    <label for="instagram">Tu Instagram</label>
+    <input id="instagram" type="text" placeholder="tuusuario" autocomplete="off">
+    <div class="hint">Sin la @. Lo usamos para confirmar que nos sigues.</div>
+
+    <a class="btn linea" id="btnSeguir" href="https://www.instagram.com/oakberry_rd/"
+       target="_blank" rel="noopener" style="margin-top:18px">Seguir a @oakberry_rd ↗</a>
+
+    <label class="check" for="sigue">
+      <input type="checkbox" id="sigue">
+      <span>Ya sigo a <strong>@oakberry_rd</strong> en Instagram.</span>
+    </label>
+    <label class="check" for="tyc">
+      <input type="checkbox" id="tyc">
+      <span>Acepto los <a href="https://www.oakberry-cupones.com/tyc" target="_blank" rel="noopener">términos y condiciones</a> y el tratamiento de mis datos.</span>
+    </label>
+    <label class="check" for="optIn">
+      <input type="checkbox" id="optIn" checked>
+      <span>Quiero enterarme de novedades y promociones de OAKBERRY RD.</span>
+    </label>
+
+    <button class="btn oro" id="enviar">Quiero mi bowl 🫐</button>
+    <div class="err" id="err"></div>
+  </section>
+
+  <!-- ── ÉXITO ── -->
+  <section class="card destacada" id="exito">
+    <span class="etiqueta">Tu cupón</span>
+    <div class="lead" style="font-size:1.4rem">🎉 ¡Listo!</div>
+    <p id="exitoMsg">Este es tu cupón. Muéstralo en caja.</p>
+    <div class="codigo" id="codigoBox">——————</div>
+    <p id="exitoDet"></p>
+    <a id="waLink" class="btn oro" target="_blank" rel="noopener">📲 Guardarlo en mi WhatsApp</a>
+    <button class="btn linea" id="copiar">📋 Copiar código</button>
+  </section>
+
+  <!-- ── DÓNDE ── -->
+  <section class="card">
+    <span class="etiqueta">Dónde estamos</span>
+    <div class="dato"><div class="ic">🏬</div><div><b>OAKBERRY Plaza Andalucía</b>
+      <span>Av. Abraham Lincoln 850, Plaza Andalucía<br>Primer piso, local 55-A · Santo Domingo</span></div></div>
+    <div class="dato"><div class="ic">🗓️</div><div><b>Apertura oficial</b>
+      <span>Sábado 19 de septiembre</span></div></div>
+    <a class="btn linea" target="_blank" rel="noopener"
+       href="https://maps.google.com/?q=Plaza+Andaluc%C3%ADa+Av.+Abraham+Lincoln+850+Santo+Domingo">Abrir en Google Maps</a>
+  </section>
+
+  <div class="pie">
+    OAKBERRY República Dominicana<br>
+    <a href="https://www.instagram.com/oakberry_rd/" target="_blank" rel="noopener">@oakberry_rd</a> ·
+    <a href="https://www.oakberry-cupones.com/tyc" target="_blank" rel="noopener">Términos y condiciones</a>
+  </div>
+</main>
+
+<script>
+/* ══════════════════════════════════════════════════════════
+   PANEL DE CONTROL — lo único que se toca para operar la campaña.
+   ══════════════════════════════════════════════════════════ */
+const CFG = {
+  API:    "https://api.oakberry-cupones.com",
+  EVENTO: "sdq-preapertura",   // fila en la tabla `eventos`
+};
+/* El cupo REAL lo manda el backend (`eventos.cupo`), no esta página: el
+   contador de acá es informativo y se llena con lo que responde el servidor.
+   Si alguien edita el HTML, no se lleva un cupón de más. */
+/* ═══════════════════════════════════════════════════════ */
+
+const $ = id => document.getElementById(id);
+
+function jsonp(params){
+  return new Promise((resolve,reject)=>{
+    const cb = "cb_" + Math.random().toString(36).slice(2);
+    const s = document.createElement("script");
+    let done = false;
+    const clean = ()=>{done=true;clearTimeout(t);delete window[cb];if(s.parentNode)s.parentNode.removeChild(s);};
+    window[cb] = d => {if(done)return;clean();resolve(d);};
+    s.onerror = ()=>{if(done)return;clean();reject(new Error("red"));};
+    s.src = CFG.API + "?" + new URLSearchParams({...params, callback: cb});
+    document.body.appendChild(s);
+    const t = setTimeout(()=>{if(!done){clean();reject(new Error("timeout"));}}, 12000);
+  });
+}
+/* TRES intentos con espera creciente (~8s en el peor caso).
+   El 7-sep la VM se reinició por mantenimiento y la API estuvo fuera 2
+   minutos: contra eso ningún reintento alcanza. Pero contra lo que pasa a
+   diario —un script tag que se cae en 4G, un despliegue de 20 segundos— un
+   solo reintento de 600ms se queda corto y le devuelve un error a alguien
+   que sí tenía señal. */
+async function api(p){
+  const esperas = [600, 2000, 5000];
+  let ultimo;
+  for(let i = 0; i < esperas.length; i++){
+    try{ return await jsonp(p); }
+    catch(e){
+      ultimo = e;
+      if(i < esperas.length - 1) await new Promise(r => setTimeout(r, esperas[i]));
+    }
+  }
+  throw ultimo;
+}
+
+/* El formulario se guarda en el propio teléfono al enviarlo. Si la API está
+   caída, la persona no pierde lo que escribió: vuelve más tarde y lo tiene
+   ahí. Sin esto, un corte de dos minutos nos cuesta el lead entero. */
+const BORRADOR = "oak_sdq_" + CFG.EVENTO;
+function guardarBorrador(d){
+  try{ localStorage.setItem(BORRADOR, JSON.stringify(d)); }catch(e){}
+}
+function limpiarBorrador(){
+  try{ localStorage.removeItem(BORRADOR); }catch(e){}
+}
+function restaurarBorrador(){
+  try{
+    const d = JSON.parse(localStorage.getItem(BORRADOR) || "null");
+    if(!d) return;
+    ["nombre","celular","email","instagram","tiktok"].forEach(k=>{
+      const el = $(k);
+      if(el && d[k] && !el.value) el.value = d[k];
+    });
+  }catch(e){}
+}
+
+function fingerprint(){
+  try{
+    const c=document.createElement("canvas"), x=c.getContext("2d");
+    x.textBaseline="top"; x.font="14px Arial";
+    x.fillStyle="#f60"; x.fillRect(0,0,60,20);
+    x.fillStyle="#069"; x.fillText("oak-sdq",2,2);
+    const d=c.toDataURL(); let h=0;
+    for(let i=0;i<d.length;i++){h=((h<<5)-h)+d.charCodeAt(i);h|=0;}
+    return "fp"+Math.abs(h).toString(36)+(screen.width||0)+"x"+(screen.height||0);
+  }catch(e){ return "fp-none"; }
+}
+
+function error(msg){ const e=$("err"); e.textContent=msg; e.classList.add("show"); }
+function limpiarError(){ $("err").classList.remove("show"); }
+
+async function cargarCupos(){
+  try{
+    const r = await api({accion:"eventoConfig", evento: CFG.EVENTO});
+    if(!r.ok) return;
+    $("cuposN").textContent = r.restantes;
+    $("cuposT").textContent = (r.restantes === 1 ? "cupo disponible" : "cupos disponibles") + " de " + r.cupo;
+    const pct = r.cupo ? Math.round(100 * r.emitidos / r.cupo) : 0;
+    $("cuposBar").style.width = pct + "%";
+    if(r.agotado || r.cerrado){
+      $("enviar").disabled = true;
+      $("enviar").textContent = r.agotado ? "Cupos agotados" : "Registro cerrado";
+      $("cuposT").textContent = r.agotado
+        ? "se agotaron — igual te esperamos el 19"
+        : "el registro ya cerró";
+    }
+  }catch(e){ /* el contador es adorno: que falle no debe bloquear el registro */ }
+}
+
+$("enviar").addEventListener("click", async ()=>{
+  limpiarError();
+  const nombre    = $("nombre").value.trim();
+  const celular   = $("celular").value.replace(/\D/g,"");
+  const email     = $("email").value.trim();
+  const instagram = $("instagram").value.trim().replace(/^@+/,"");
+
+  if(!nombre)                 return error("Escribe tu nombre.");
+  if(celular.length < 7)      return error("Escribe tu número de WhatsApp.");
+  if(!instagram)              return error("Déjanos tu usuario de Instagram.");
+  if(!$("sigue").checked)     return error("Este beneficio es para quienes nos siguen — marca la casilla cuando ya lo hayas hecho.");
+  if(!$("tyc").checked)       return error("Necesitamos que aceptes los términos para darte tu cupón.");
+
+  // Se guarda ANTES de salir a la red: si el envío falla, lo escrito no se pierde.
+  guardarBorrador({nombre, celular, email, instagram});
+
+  const btn = $("enviar");
+  btn.disabled = true; btn.textContent = "Un momento…";
+  let r;
+  try{
+    r = await api({
+      accion:"eventoRegistrar", evento: CFG.EVENTO,
+      nombre, celular, email, instagram,
+      tyc:"true", sigue:"true",
+      optIn: $("optIn").checked ? "true" : "false",
+      fingerprint: fingerprint(),
+    });
+  }catch(e){
+    btn.disabled = false; btn.textContent = "Quiero mi bowl 🫐";
+    return error("No pudimos completar tu registro en este momento. Tus datos "
+               + "quedaron guardados aquí — inténtalo de nuevo en un minuto.");
+  }
+
+  if(!r.ok){
+    btn.disabled = false; btn.textContent = "Quiero mi bowl 🫐";
+    if(r.agotado || r.cerrado){
+      btn.disabled = true;
+      btn.textContent = r.agotado ? "Cupos agotados" : "Registro cerrado";
+    }
+    return error(r.mensaje || "No pudimos registrarte.");
+  }
+
+  if(window.fbq) fbq('track','Lead',{content_name:'preapertura-sdq'});
+  limpiarBorrador();
+  $("formCard").style.display = "none";
+  $("ofertaCard").style.display = "none";
+  $("codigoBox").textContent = r.codigo;
+  $("exitoMsg").textContent = r.repetido
+    ? "Ya te habías registrado — este es tu cupón, el mismo de antes."
+    : "Este es tu cupón. Muéstralo en caja.";
+  $("exitoDet").innerHTML = "<strong>" + r.beneficio + "</strong><br>" +
+    r.tienda + " · " + r.ciudad +
+    (r.abreHumano ? "<br>Válido del " + r.abreHumano + " al " + r.venceHumano : "");
+  $("waLink").href = r.linkWA;
+  $("exito").style.display = "block";
+  $("exito").scrollIntoView({behavior:"smooth", block:"center"});
+});
+
+$("copiar").addEventListener("click", ()=>{
+  const cod = $("codigoBox").textContent;
+  navigator.clipboard.writeText(cod).then(
+    ()=>{ $("copiar").textContent = "✓ Copiado"; setTimeout(()=>$("copiar").textContent="📋 Copiar código",1800); },
+    ()=>{}
+  );
+});
+
+/* Si la persona tocó "Seguir", al volver a la pestaña le dejamos la casilla
+   marcada: ya hizo el gesto. Sigue siendo una declaración suya —el follow no
+   se puede verificar por API— pero no la castigamos con un paso extra. */
+let fueASeguir = false;
+$("btnSeguir").addEventListener("click", ()=>{ fueASeguir = true; });
+document.addEventListener("visibilitychange", ()=>{
+  if(!document.hidden && fueASeguir && !$("sigue").checked){
+    $("sigue").checked = true;
+    limpiarError();
+  }
+});
+
+["nombre","celular","instagram"].forEach(id=>$(id).addEventListener("input", limpiarError));
+restaurarBorrador();
+cargarCupos();
+</script>
+</body>
+</html>

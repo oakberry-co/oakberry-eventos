@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="es" class="vertical">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FBF6E9">
+<title>Encuesta Purple Day · OAKBERRY</title>
+<meta name="description" content="Estamos celebrando el Purple Day 💜 6 preguntas, 2 minutos: lo que viene en Oakberry lo eliges tú.">
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://www.oakberry-eventos.com/q4">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_CO">
+<meta property="og:site_name" content="OAKBERRY Colombia">
+<meta property="og:url" content="https://www.oakberry-eventos.com/q4">
+<meta property="og:title" content="Encuesta Purple Day · OAKBERRY">
+<meta property="og:description" content="Estamos de celebración 💜 6 preguntas, 2 minutos: lo que viene en Oakberry lo eliges tú.">
+<meta property="og:image" content="https://www.oakberry-eventos.com/og-purpleday.png">
+<meta property="og:image:width" content="1080"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.oakberry-eventos.com/og-purpleday.png">
+<link rel="preload" href="pd-assets/nexa-slab-black.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="pd-assets/nexa-slab-bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="pd-assets/nexa-slab-regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" as="image" href="pd-assets/escena-rio.jpg">
+<!--
+  ENCUESTA PURPLE DAY (/q4) — sistema visual de los juegos OAKBERRY RD
+  (ver /home/daniel/proyectos/oakberry-cupon/SISTEMA-VISUAL.md): Nexa Slab,
+  paleta crema/tinta/morado, escenas del kit (aquí desde pd-assets/), botones
+  píldora con sombra sólida, TODO en cqmin, y en monitor horizontal la misma
+  pantalla centrada en un marco 9:16.
+
+  Dos desvíos deliberados respecto de los juegos, porque esto corre en el
+  CELULAR del cliente (QR → esta página), no en un tótem:
+   1. El registro usa <input> nativos (el teclado del teléfono), no el teclado
+      en pantalla de EXACTO.
+   2. El body permite scroll vertical DENTRO de un paso (overflow-y:auto):
+      con el teclado abierto o en pantallas cortas un formulario fijo se come
+      campos. Cada paso igual se diseña para caber sin scroll en 390×844.
+
+  La lógica es la misma encuesta de siempre: q4Registrar → Postgres (backend
+  cupones), dedup y cruce con Loopy por correo, honeypot, ?src= para el canal
+  del QR. Las preguntas están escritas en el informe "Dónde está el hueco".
+-->
+<style>
+/* Nexa Slab COMPLETAS (las "FREE" de Drive son demos y dibujan : % - · ¡ ¿
+   como sello). No traen ✓: la palomita va dibujada con CSS (.check.on::after). */
+@font-face{font-family:'Nexa Slab';src:url('pd-assets/nexa-slab-regular.woff2') format('woff2');font-weight:400;font-display:block}
+@font-face{font-family:'Nexa Slab';src:url('pd-assets/nexa-slab-bold.woff2') format('woff2');font-weight:600 700;font-display:block}
+@font-face{font-family:'Nexa Slab';src:url('pd-assets/nexa-slab-black.woff2') format('woff2');font-weight:800 900;font-display:block}
+:root{
+  --crema:#FBF6E9; --crema-cielo:#F5EEE0; --hueso:#EAE1CC; --tinta:#21152A; --tinta-suave:#5C4A66;
+  --morado:#4B1F60; --lila:#B79CC8; --oro:#F4B223; --coral:#E04850; --rojo:#B3261E; --verde:#2F6B3A;
+  --fondo:var(--crema-cielo); --texto:var(--tinta); --panel:rgba(251,246,233,.9); --acento:var(--morado);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{background:var(--tinta);height:100%}
+body{container-type:size;height:100%;overflow-y:auto;overflow-x:hidden;overscroll-behavior:none;
+  font-family:'Nexa Slab',Rockwell,'Roboto Slab',Georgia,serif;background:var(--fondo);
+  color:var(--texto);font-size:3.2cqmin;line-height:1.35;position:relative}
+[hidden]{display:none!important}
+button{font-family:inherit;border:none;cursor:pointer;color:inherit;background:none;
+  -webkit-user-select:none;user-select:none}
+input,select,textarea{font-family:inherit}
+
+html.rot90 body,html.rot270 body{position:fixed;top:0;left:0;width:100vh;height:100vw;transform-origin:top left}
+html.rot90 body{transform:rotate(90deg) translateY(-100%)}
+html.rot270 body{transform:rotate(-90deg) translateX(-100%)}
+
+.escena{position:fixed;inset:0;z-index:0;background-color:var(--fondo);background-size:cover;
+  background-position:center bottom;transition:background-image .4s}
+.pantalla{position:relative;z-index:1;min-height:100cqh;display:none;flex-direction:column;align-items:center;
+  justify-content:space-between;gap:2.4cqmin;padding:6cqmin 6cqmin 7cqmin;text-align:center}
+.pantalla.on{display:flex}
+.bloque{display:flex;flex-direction:column;align-items:center;gap:2cqmin;width:100%}
+.panel{background:var(--panel);border-radius:3cqmin;padding:3cqmin 4cqmin}
+.eyebrow{font-size:2.8cqmin;font-weight:600;letter-spacing:.2em;text-transform:uppercase;opacity:.8}
+
+.btn{background:var(--boton,var(--morado));color:var(--boton-texto,var(--crema));font-weight:800;letter-spacing:.05em;
+  text-transform:uppercase;font-size:5.4cqmin;padding:3.4cqmin 4cqmin;border-radius:999px;
+  box-shadow:0 1.1cqmin 0 var(--tinta);width:88cqmin;max-width:100%;line-height:1.15;white-space:nowrap}
+.btn:active{transform:translateY(.8cqmin);box-shadow:0 .3cqmin 0 var(--tinta)}
+.btn:disabled{opacity:.45;animation:none}
+.btn-sec{border:.4cqmin solid currentColor;border-radius:999px;font-weight:700;font-size:3.4cqmin;
+  padding:2.4cqmin 5cqmin;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;opacity:.8}
+.latido{animation:latido 1.8s ease-in-out infinite}
+@keyframes latido{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+@media (prefers-reduced-motion:reduce){.latido{animation:none}}
+.error{color:var(--rojo);font-weight:700;min-height:1.4em;font-size:3.4cqmin}
+
+/* ── PORTADA ─────────────────────────────────────────────────────────── */
+/* El panel arranca debajo de la avioneta de escena-rio: el cielo (con la
+   valla OAKBERRY que arrastra) queda libre arriba. */
+#portada{padding-top:46cqmin}
+#portada .wordmark{width:56cqmin;max-width:70%;height:auto;display:block;margin:0 auto}
+#portada h1{font-size:12.5cqmin;font-weight:900;line-height:.98;letter-spacing:-.01em;
+  color:var(--acento);text-transform:uppercase;text-wrap:balance;max-width:88cqmin}
+#portada .bajada{font-size:4.4cqmin;font-weight:600;max-width:30ch;text-wrap:balance}
+
+/* ── PROGRESO (puntos, como en el reto) ──────────────────────────────── */
+.progreso{display:flex;gap:1.8cqmin;justify-content:center}
+.progreso i{width:3cqmin;height:3cqmin;border-radius:50%;border:.5cqmin solid var(--morado);display:block}
+.progreso i.ok{background:var(--morado)}
+
+/* ── REGISTRO (inputs nativos: esto corre en el celular del cliente) ── */
+.campos{display:grid;gap:2cqmin;width:100%;text-align:left}
+.campo{border:.5cqmin solid var(--hueso);border-radius:2cqmin;padding:1.8cqmin 3cqmin;background:#fff;color:var(--tinta)}
+.campo label{display:block;font-size:2.4cqmin;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--tinta-suave)}
+.campo input,.campo select{width:100%;border:none;outline:none;background:none;color:var(--tinta);
+  font-size:4.6cqmin;font-weight:600;min-height:1.5em;-webkit-user-select:text;user-select:text}
+.campo select{appearance:none;-webkit-appearance:none;
+  background:url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%234B1F60' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right center}
+.campo:focus-within{border-color:var(--morado);box-shadow:0 0 0 .8cqmin rgba(75,31,96,.16)}
+.tyc{display:flex;align-items:center;gap:2.6cqmin;text-align:left;font-size:2.9cqmin;font-weight:600;width:100%;
+  padding:2cqmin 3cqmin;background:rgba(245,238,224,.86);border-radius:2cqmin;cursor:pointer;
+  -webkit-user-select:none;user-select:none}
+.tyc a{color:var(--morado)}
+.check{flex:0 0 auto;width:8.4cqmin;height:8.4cqmin;border:.6cqmin solid var(--morado);border-radius:1.4cqmin;position:relative;background:#fff}
+.check.on{background:var(--morado)}
+/* La palomita va dibujada: Nexa Slab no trae el glifo ✓. */
+.check.on::after{content:"";position:absolute;left:2.4cqmin;top:.8cqmin;width:2.2cqmin;height:4.2cqmin;
+  border:solid var(--crema);border-width:0 .9cqmin .9cqmin 0;transform:rotate(45deg)}
+
+/* ── PREGUNTAS ───────────────────────────────────────────────────────── */
+.qtexto{font-size:6.2cqmin;font-weight:900;line-height:1.12;text-wrap:balance;color:var(--tinta)}
+.hint{font-size:3cqmin;font-weight:600;color:var(--tinta-suave)}
+.opciones{display:flex;flex-direction:column;gap:2.2cqmin;width:100%;align-items:center}
+/* Píldoras como las del reto, pero con derecho a 2 líneas: las respuestas de
+   una encuesta son largas ("La verdad lo veo más como postre que como comida")
+   y recortarlas cambia lo que la persona cree que marcó. */
+.opcion{width:92cqmin;max-width:100%;background:#fff;color:var(--tinta);border-radius:999px;font-weight:700;
+  font-size:3.9cqmin;padding:2.9cqmin 5cqmin;box-shadow:0 1.1cqmin 0 var(--tinta);line-height:1.18;
+  text-wrap:balance;position:relative}
+.opcion small{display:block;font-weight:600;font-size:.72em;color:var(--tinta-suave)}
+.opcion:active{transform:translateY(.8cqmin);box-shadow:0 .3cqmin 0 var(--tinta)}
+.opcion.sel{background:var(--morado);color:var(--crema)}
+.opcion.sel small{color:var(--lila)}
+.opcion.sel::after{content:"";position:absolute;right:3.4cqmin;top:50%;width:1.6cqmin;height:3.2cqmin;
+  margin-top:-2cqmin;border:solid var(--oro);border-width:0 .8cqmin .8cqmin 0;transform:rotate(45deg)}
+.opciones.llenas .opcion:not(.sel){opacity:.45}
+textarea{width:100%;min-height:30cqmin;border:.5cqmin solid var(--hueso);border-radius:2cqmin;
+  padding:2.6cqmin 3cqmin;font-size:4cqmin;font-weight:600;color:var(--tinta);background:#fff;outline:none;
+  resize:none;-webkit-user-select:text;user-select:text}
+textarea:focus{border-color:var(--morado);box-shadow:0 0 0 .8cqmin rgba(75,31,96,.16)}
+
+/* ── GRACIAS ─────────────────────────────────────────────────────────── */
+#gracias h2{font-size:12.5cqmin;font-weight:900;line-height:.95;color:var(--acento);text-transform:uppercase;text-wrap:balance}
+#gracias .sub{font-size:4.4cqmin;font-weight:600;max-width:28ch;text-wrap:balance}
+.confeti{position:fixed;top:-4%;width:2cqmin;height:3cqmin;pointer-events:none;animation:cae linear forwards;z-index:40}
+@keyframes cae{to{transform:translateY(var(--caida,1200px)) rotate(720deg)}}
+
+.hp{position:absolute;left:-9999px;top:-9999px}
+.pie{font-size:2.2cqmin;font-weight:600;letter-spacing:.08em;color:var(--tinta-suave);text-transform:uppercase}
+/* sobre las escenas (portada y gracias) el pie va en píldora para leerse */
+.pie-escena{background:rgba(33,21,42,.45);color:var(--crema);padding:1cqmin 3cqmin;border-radius:999px}
+
+/* ── HORIZONTAL (un computador): la MISMA pantalla centrada en 9:16 ──── */
+html.horizontal body{width:min(100vw, calc(100vh * 9 / 16));height:100vh;margin:0 auto;
+  box-shadow:0 0 0 100vmax var(--tinta)}
+html.horizontal .escena{width:min(100vw, calc(100vh * 9 / 16));left:50%;transform:translateX(-50%)}
+</style>
+</head>
+<body>
+<div class="escena" id="escena"></div>
+
+<!-- ═══ 0 · PORTADA ═══ -->
+<section id="portada" class="pantalla on" data-paso="0">
+  <div class="bloque panel">
+    <img class="wordmark" src="pd-wordmark-oakberry.svg" alt="OAKBERRY">
+    <p class="eyebrow">Estamos de celebración</p>
+    <h1>Purple Day</h1>
+    <p class="bajada">6 preguntas, 2 minutos: lo que viene en OAKBERRY lo eliges tú. Nuevos sabores incluidos.</p>
+  </div>
+  <div class="bloque">
+    <button class="btn latido" onclick="ir(1)">Toca para empezar</button>
+    <p class="pie pie-escena">OAKBERRY Colombia · operado por Manel Foods S.A.S.</p>
+  </div>
+</section>
+
+<!-- ═══ 1 · DATOS ═══ -->
+<section class="pantalla" data-paso="1" style="justify-content:flex-start">
+  <div class="bloque">
+    <div class="progreso" data-dots></div>
+    <h2 class="qtexto">Cuéntanos quién eres</h2>
+  </div>
+  <div class="campos">
+    <div class="campo"><label for="nombre">Tu nombre</label>
+      <input type="text" id="nombre" autocomplete="name" placeholder="¿Cómo te llamas?"></div>
+    <div class="campo"><label for="correo">Tu correo</label>
+      <input type="email" id="correo" autocomplete="email" inputmode="email" placeholder="tucorreo@ejemplo.com"></div>
+    <div class="campo"><label for="celular">Tu celular (opcional)</label>
+      <input type="tel" id="celular" autocomplete="tel" inputmode="numeric" placeholder="300 123 4567"></div>
+    <input class="hp" type="text" id="web" name="web" tabindex="-1" autocomplete="off">
+    <div class="tyc" id="tyc"><span class="check" id="okdatos"></span>
+      <span>Autorizo a Manel Foods S.A.S. el tratamiento de mis datos para contactarme con información de OAKBERRY (<a href="https://www.oakberry-cupones.com/tyc.html" target="_blank" rel="noopener" onclick="event.stopPropagation()">política de datos</a>).</span></div>
+  </div>
+  <div class="bloque">
+    <p class="error" id="err1"></p>
+    <button class="btn" onclick="paso1()">Celebrar respondiendo</button>
+  </div>
+</section>
+
+<!-- ═══ 2 · CIUDAD + TIENDA ═══ -->
+<section class="pantalla" data-paso="2" style="justify-content:flex-start">
+  <div class="bloque">
+    <div class="progreso" data-dots></div>
+    <h2 class="qtexto">¿Cuál es tu OAKBERRY más cercano o habitual?</h2>
+  </div>
+  <div class="campos">
+    <div class="campo"><label for="ciudad">Ciudad</label>
+      <select id="ciudad" onchange="fillTiendas()"><option value="">Elige tu ciudad</option></select></div>
+    <div class="campo"><label for="tienda">Tienda</label>
+      <select id="tienda" disabled><option value="">Primero elige la ciudad</option></select></div>
+  </div>
+  <div class="bloque">
+    <p class="error" id="err2"></p>
+    <button class="btn" onclick="paso2()">Siguiente</button>
+  </div>
+</section>
+
+<!-- ═══ 3 · P1 ═══ -->
+<section class="pantalla" data-paso="3">
+  <div class="bloque panel">
+    <div class="progreso" data-dots></div>
+    <h2 class="qtexto">¿Cuál te describe mejor con OAKBERRY?</h2>
+  </div>
+  <div class="opciones" id="p1"></div>
+</section>
+
+<!-- ═══ 4 · P2 ═══ -->
+<section class="pantalla" data-paso="4">
+  <div class="bloque panel">
+    <div class="progreso" data-dots></div>
+    <h2 class="qtexto">Para ti, un bowl de OAKBERRY debería costar parecido a…</h2>
+  </div>
+  <div class="opciones" id="p2"></div>
+</section>
+
+<!-- ═══ 5 · P3 (abierta) ═══ -->
+<section class="pantalla" data-paso="5" style="justify-content:flex-start">
+  <div class="bloque panel">
+    <div class="progreso" data-dots></div>
+    <h2 class="qtexto">Además de OAKBERRY, ¿qué otras opciones te gustan cuando quieres algo rico y saludable?</h2>
+    <p class="hint">Marcas o lugares — los que se te vengan a la cabeza.</p>
+  </div>
+  <textarea id="p3" maxlength="500" placeholder="Escríbelos aquí…"></textarea>
+  <div class="bloque">
+    <button class="btn" onclick="ir(6)">Siguiente</button>
+    <button class="btn-sec" onclick="ir(6)">Prefiero no responder</button>
+  </div>
+</section>
+
+<!-- ═══ 6 · P4 ═══ -->
+<section class="pantalla" data-paso="6">
+  <div class="bloque panel">
+    <div class="progreso" data-dots></div>
+    <h2 class="qtexto">¿En qué momentos te funcionaría un açaí de OAKBERRY?</h2>
+    <p class="hint">Marca todos los que apliquen</p>
+  </div>
+  <div class="opciones" id="p4"></div>
+  <div class="bloque"><button class="btn" onclick="ir(7)">Siguiente</button></div>
+</section>
+
+<!-- ═══ 7 · P5 ═══ -->
+<section class="pantalla" data-paso="7">
+  <div class="bloque panel">
+    <div class="progreso" data-dots></div>
+    <h2 class="qtexto">¿Qué te haría venir (o volver) una vez más por semana?</h2>
+    <p class="hint">Elige máximo 2</p>
+  </div>
+  <div class="opciones" id="p5"></div>
+  <div class="bloque"><button class="btn" onclick="ir(8)">Siguiente</button></div>
+</section>
+
+<!-- ═══ 8 · P6 ═══ -->
+<section class="pantalla" data-paso="8">
+  <div class="bloque panel">
+    <div class="progreso" data-dots></div>
+    <h2 class="qtexto">Estamos pensando en novedades… ¿cuál te antojaría probar?</h2>
+    <p class="hint">Elige máximo 2</p>
+  </div>
+  <div class="opciones" id="p6"></div>
+  <div class="bloque">
+    <p class="error" id="err8"></p>
+    <button class="btn" id="btnEnviar" onclick="enviar()">Enviar</button>
+  </div>
+</section>
+
+<!-- ═══ 9 · GRACIAS ═══ -->
+<section class="pantalla" data-paso="9">
+  <div class="bloque panel">
+    <p class="eyebrow">Respuesta guardada</p>
+    <h2>¡Feliz Purple Day!</h2>
+    <p class="sub">Lo que viene en OAKBERRY lo acabas de definir tú. Nos vemos en tienda. 💜</p>
+  </div>
+  <div class="bloque"><p class="pie pie-escena">OAKBERRY Colombia · operado por Manel Foods S.A.S.</p></div>
+</section>
+
+<script>
+"use strict";
+const API = 'https://api.oakberry-cupones.com/';
+const QS = new URLSearchParams(location.search);
+const SRC = (QS.get('src') || '').slice(0, 60);
+const $ = id => document.getElementById(id);
+
+/* Orientación: vertical de nacimiento (celular); en un monitor horizontal la
+   misma pantalla se centra en un marco 9:16. ?rotar=90|270 y ?vertical=0|1
+   mandan sobre la detección, como en los juegos. */
+function orientar(){
+  const r = QS.get('rotar');
+  document.documentElement.classList.toggle('rot90', r === '90');
+  document.documentElement.classList.toggle('rot270', r === '270');
+  let horizontal = window.innerWidth > window.innerHeight;
+  if (QS.get('vertical') === '1') horizontal = false;
+  if (QS.get('vertical') === '0') horizontal = true;
+  document.documentElement.classList.toggle('horizontal', horizontal && !r);
+  document.documentElement.classList.toggle('vertical', !horizontal && !r);
+}
+orientar();
+addEventListener('resize', orientar);
+
+/* ── Datos de la encuesta (los mismos del informe "Dónde está el hueco") ── */
+const TIENDAS = {
+ "Bogotá":[["BOG_TP_Andino","Andino"],["BOG_TP_Calle109","Calle 109"],["BOG_TP_ZonaG","Chapinero (Zona G)"],["BOG_TP_Colina","Colina"],["BOG_FR_GranEstacion","Gran Estación"],["BOG_TP_Maloka","Maloka"],["BOG_TP_PlazaClaro","Plaza Claro"],["BOG_FR_Salvio93","Salvio 93"],["BOG_TP_TitanPlaza","Titán Plaza"],["BOG_TP_Unicentro","Unicentro"],["BOG_TP_ZonaT","Zona T"]],
+ "Medellín":[["MED_FR_ElTesoro","El Tesoro"],["MED_FR_JMC","JMC"],["MED_FR_Laureles","Laureles"],["MED_FR_Llanogrande","Llanogrande"],["MED_FR_Oviedo","CC Oviedo"],["MED_FR_VivaEnvigado","Viva Envigado"]],
+ "Cali":[["CAL_FR_Chipichape","Chipichape"],["CAL_FR_CiudadJardin","Ciudad Jardín"],["CAL_FR_Granada","Granada"],["CAL_FR_Jamundi","Jamundí"],["CAL_FR_JardinPlaza","Jardín Plaza"]],
+ "Barranquilla":[["BAQ_TP_Baq76","Calle 76"],["BAQ_FR_PlazaParque","Plaza del Parque"]],
+ "Bucaramanga":[["BGA_FR_BGA","Cacique (BGA)"],["BGA_FR_Canaveral","Cañaveral"]],
+ "Cartagena":[["CTG_FR_Bocagrande","Bocagrande"]],
+ "Cúcuta":[["CUC_FR_LosCaobos","Los Caobos"]],
+ "Montería":[["MON_FR_Monteria","Montería"]],
+ "Pereira":[["PER_FR_Pereira","Pereira"]],
+ "Santa Marta":[["STM_FR_SantaMarta","Santa Marta"]],
+ "Valledupar":[["VAL_FR_Valledupar","Valledupar"]]
+};
+const P1=[["nunca","Nunca lo he probado"],["probe_1_2","Lo probé una o dos veces"],["iba_ya_no","Iba seguido pero ya casi no voy"],["de_vez_en_cuando","Voy de vez en cuando"],["frecuente","Voy seguido"]];
+const P2=[["cafe","Un café con algo","$12.000 – 15.000"],["merienda","Un desayuno o una merienda","$15.000 – 20.000"],["almuerzo","Un almuerzo","$20.000 – 28.000"],["plan_especial","Un plan especial de vez en cuando","más de $28.000"]];
+const P4=[["desayuno","Desayuno"],["media_manana","Media mañana"],["almuerzo","Almuerzo o reemplazo de una comida"],["antojo_tarde","Antojo de tarde"],["post_entreno","Después de entrenar"],["noche","Noche"],["postre","La verdad lo veo más como postre que como comida"]];
+const P5=[["combo_economico","Un combo o tamaño más económico"],["mas_proteina","Opciones con más proteína"],["domicilio_directo","Domicilio directo más barato"],["novedades","Que me cuenten las novedades"],["tienda_cerca","Una tienda más cerca"],["mejor_atencion","Mejor y más rápida atención"],["voy_suficiente","Nada, voy lo suficiente"]];
+const P6=[["yogurt_griego","Yogurt griego"],["granola_proteica","Granola proteica"],["smoothie_proteico","Smoothie proteico"],["crumble_galleta","Crumble de galleta"],["arequipe_sin_azucar","Arequipe sin azúcar"],["crema_mango","Crema de mango"],["frutos_rojos","Frutos rojos"],["coco_tostado","Coco tostado"]];
+
+const R = {};
+const ESCENAS = {0:"url('pd-assets/escena-rio.jpg')", 9:"url('pd-assets/escena-palmas.jpg')"};
+const PASOS = 10;
+
+function ir(n){
+  document.querySelectorAll('.pantalla').forEach(s => s.classList.remove('on'));
+  document.querySelector('[data-paso="' + n + '"]').classList.add('on');
+  $('escena').style.backgroundImage = ESCENAS[n] || 'none';
+  /* puntos de progreso: 8 pasos con contenido (1..8) */
+  document.querySelectorAll('[data-dots]').forEach(d => {
+    d.innerHTML = '';
+    for (let i = 1; i <= 8; i++){
+      const p = document.createElement('i');
+      if (i <= n) p.classList.add('ok');
+      d.appendChild(p);
+    }
+  });
+  window.scrollTo({top: 0});
+}
+
+function radios(cont, items, key, siguiente){
+  const c = $(cont);
+  items.forEach(it => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'opcion';
+    b.innerHTML = it[1] + (it[2] ? '<small>' + it[2] + '</small>' : '');
+    b.onclick = () => {
+      c.querySelectorAll('.opcion').forEach(o => o.classList.remove('sel'));
+      b.classList.add('sel'); R[key] = it[0];
+      setTimeout(() => ir(siguiente), 280);
+    };
+    c.appendChild(b);
+  });
+}
+function checks(cont, items, key, max){
+  const c = $(cont);
+  items.forEach(it => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'opcion'; b.dataset.v = it[0];
+    b.textContent = it[1];
+    b.onclick = () => {
+      b.classList.toggle('sel');
+      let sel = [...c.querySelectorAll('.opcion.sel')].map(o => o.dataset.v);
+      if (max && sel.length > max){ b.classList.remove('sel'); return; }
+      R[key] = sel.join('|');
+      if (max) c.classList.toggle('llenas', sel.length >= max);
+    };
+    c.appendChild(b);
+  });
+}
+const shuffle = a => { for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+radios('p1', P1, 'p1', 4);
+radios('p2', P2, 'p2', 5);
+checks('p4', P4, 'p4', 0);
+checks('p5', P5, 'p5', 2);
+checks('p6', shuffle(P6.slice()), 'p6', 2);
+
+/* ciudad → tienda desde el maestro */
+const selC = $('ciudad');
+Object.keys(TIENDAS).forEach(c => selC.append(new Option(c, c)));
+selC.append(new Option('Otra ciudad', 'OTRA'));
+selC.append(new Option('Ninguno, soy cliente nuevo', 'NINGUNO'));
+function fillTiendas(){
+  const t = $('tienda');
+  t.innerHTML = ''; t.disabled = false;
+  const lista = TIENDAS[selC.value] || [];
+  t.append(new Option(lista.length ? 'Elige la tienda' : '—', ''));
+  lista.forEach(x => t.append(new Option('OAKBERRY ' + x[1], x[0])));
+  t.append(new Option('No tengo / no conozco ninguno', 'NO_TIENE'));
+  if (!lista.length) t.value = 'NO_TIENE';
+}
+
+let okdatos = false;
+$('tyc').onclick = () => { okdatos = !okdatos; $('okdatos').classList.toggle('on', okdatos); };
+
+function paso1(){
+  const e = $('err1'); e.textContent = '';
+  const nombre = $('nombre').value.trim(), correo = $('correo').value.trim();
+  if (nombre.length < 2) { e.textContent = 'Cuéntanos tu nombre 🙂'; return; }
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(correo)) { e.textContent = 'Revisa el correo, parece incompleto'; return; }
+  if (!okdatos) { e.textContent = 'Necesitamos tu autorización de datos para continuar'; return; }
+  R.nombre = nombre; R.correo = correo; R.celular = $('celular').value;
+  ir(2);
+}
+function paso2(){
+  const e = $('err2'); e.textContent = '';
+  if (!selC.value) { e.textContent = 'Elige tu ciudad'; return; }
+  const t = $('tienda').value;
+  if (!t) { e.textContent = 'Elige la tienda (o "No tengo / no conozco")'; return; }
+  R.ciudad = selC.value; R.tienda = t;
+  ir(3);
+}
+
+function confeti(){
+  const colores = ['#4B1F60', '#F4B223', '#E04850', '#B79CC8', '#2F6B3A'];
+  for (let i = 0; i < 60; i++){
+    const c = document.createElement('i');
+    c.className = 'confeti';
+    c.style.left = Math.random() * 100 + 'vw';
+    c.style.background = colores[i % colores.length];
+    c.style.setProperty('--caida', (innerHeight * 1.2) + 'px');
+    c.style.animationDuration = (2.2 + Math.random() * 2.4) + 's';
+    c.style.animationDelay = (Math.random() * .8) + 's';
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 6000);
+  }
+}
+
+function enviar(){
+  const btn = $('btnEnviar'), e = $('err8'); e.textContent = '';
+  btn.disabled = true; btn.textContent = 'Enviando…';
+  R.p3 = ($('p3').value || '').slice(0, 500);
+  const q = { accion:'q4Registrar', src:SRC, ciudad:R.ciudad||'', tienda:R.tienda||'',
+              nombre:R.nombre, correo:R.correo, celular:R.celular||'',
+              p1:R.p1||'', p2:R.p2||'', p3:R.p3||'', p4:R.p4||'', p5:R.p5||'', p6:R.p6||'',
+              web:$('web').value||'' };
+  const qs = Object.keys(q).map(k => k + '=' + encodeURIComponent(q[k])).join('&');
+  const ok = r => { if (r && r.ok) { ir(9); confeti(); } else fallo(r && r.mensaje); };
+  function fallo(msg){
+    btn.disabled = false; btn.textContent = 'Enviar';
+    e.textContent = msg || 'No pudimos guardar tu respuesta. Intenta de nuevo.';
+  }
+  fetch(API + '?' + qs).then(r => r.json()).then(ok)
+  .catch(() => {  /* webview IG/FB: fallback JSONP, igual que la landing de cupones */
+    const cb = 'q4cb_' + Date.now();
+    window[cb] = r => { delete window[cb]; ok(r); };
+    const s = document.createElement('script');
+    s.src = API + '?' + qs + '&callback=' + cb;
+    s.onerror = () => { delete window[cb]; fallo(); };
+    document.body.appendChild(s);
+    setTimeout(() => { if (window[cb]) { delete window[cb]; fallo(); } }, 12000);
+  });
+}
+
+ir(0);
+</script>
+</body>
+</html>
