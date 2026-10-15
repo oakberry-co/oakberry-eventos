@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#280532">
+<title>Menú · OAKBERRY Colombia</title>
+<meta name="description" content="El menú de OAKBERRY: arma tu bowl o smoothie, toppings, bowls favoritos y OAK en casa.">
+<meta property="og:title" content="Menú OAKBERRY Colombia">
+<meta property="og:image" content="https://www.oakberry-eventos.com/menu-assets/menu-es-1.webp">
+<link rel="preload" href="pd-assets/nexa-slab-black.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* ─────────────────────────────────────────────────────────────────────────
+   MENÚ · las dos caras del menú general (ES/EN) del Drive de RODA ("Menu general lau", ago-2026),
+   unidas por idioma. María (/ayuda) manda este link cuando preguntan por el menú.
+   Precios = los del menú general; en el aeropuerto pueden cambiar (nota visible).
+   Para actualizar: reemplazar menu-assets/menu-{es,en}-{1,2}.webp y los PDF unidos.
+   ───────────────────────────────────────────────────────────────────────── */
+@font-face{font-family:'Nexa Slab';src:url('pd-assets/nexa-slab-bold.woff2') format('woff2');font-weight:600 700;font-display:swap}
+@font-face{font-family:'Nexa Slab';src:url('pd-assets/nexa-slab-black.woff2') format('woff2');font-weight:800 900;font-display:swap}
+:root{--crema:#FBF6E9;--tinta:#21152A;--morado:#4B1F60;--morado-hondo:#280532;--lila:#B79CC8;--oro:#F4B223}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--morado-hondo);color:var(--crema);font-family:'Nexa Slab',Rockwell,Georgia,serif}
+.wrap{max-width:560px;margin:0 auto;padding:18px 12px 40px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+.top img{width:130px;height:auto;filter:brightness(0) invert(.96) sepia(.15)}
+.idioma{display:flex;border:2px solid var(--crema);border-radius:999px;overflow:hidden}
+.idioma button{background:none;border:none;color:var(--crema);font:inherit;font-weight:800;padding:8px 14px;cursor:pointer}
+.idioma button.sel{background:var(--oro);color:var(--tinta)}
+.cara{display:block;width:100%;height:auto;border-radius:16px;margin-bottom:14px;box-shadow:0 6px 0 rgba(0,0,0,.35)}
+.nota{font-size:.82rem;color:var(--lila);text-align:center;margin:4px 0 16px;font-weight:600}
+.acciones{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{display:block;text-align:center;text-decoration:none;font-weight:900;text-transform:uppercase;letter-spacing:.04em;
+  font-size:.86rem;padding:14px 10px;border-radius:999px;border:2px solid var(--tinta);box-shadow:0 5px 0 #000}
+.btn.oro{background:var(--oro);color:var(--tinta)}.btn.crema{background:var(--crema);color:var(--morado)}
+.oculto{display:none}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="top">
+    <img src="pd-wordmark-oakberry.svg" alt="OAKBERRY" width="3600" height="472">
+    <div class="idioma" role="group" aria-label="Idioma">
+      <button type="button" class="sel" data-l="es">ES</button><button type="button" data-l="en">EN</button>
+    </div>
+  </div>
+  <div data-idioma="es">
+    <img class="cara" src="menu-assets/menu-es-1.webp" alt="Menú OAKBERRY: crea tu bowl, toppings ilimitados y premium, bowls favoritos" width="935" height="1445">
+    <img class="cara" src="menu-assets/menu-es-2.webp" alt="Menú OAKBERRY: crea tu smoothie, OAK en casa y bebidas" width="935" height="1445" loading="lazy">
+    <p class="nota">Precios en pesos colombianos. En la tienda del aeropuerto pueden variar.</p>
+    <div class="acciones">
+      <a class="btn oro" href="ayuda?src=menu">Pregúntale a María</a>
+      <a class="btn crema" href="menu-assets/Menu_OAKBERRY_ES.pdf" download>Descargar PDF</a>
+    </div>
+  </div>
+  <div data-idioma="en" class="oculto">
+    <img class="cara" src="menu-assets/menu-en-1.webp" alt="OAKBERRY menu: build your bowl, toppings and favorite bowls" width="935" height="1445" loading="lazy">
+    <img class="cara" src="menu-assets/menu-en-2.webp" alt="OAKBERRY menu: build your smoothie, OAK at home and drinks" width="935" height="1445" loading="lazy">
+    <p class="nota">Prices in Colombian pesos. Airport store prices may vary.</p>
+    <div class="acciones">
+      <a class="btn oro" href="ayuda?src=menu">Ask María</a>
+      <a class="btn crema" href="menu-assets/Menu_OAKBERRY_EN.pdf" download>Download PDF</a>
+    </div>
+  </div>
+</main>
+<script>
+const qs = new URLSearchParams(location.search);
+function idioma(l) {
+  document.querySelectorAll('[data-idioma]').forEach(d => d.classList.toggle('oculto', d.dataset.idioma !== l));
+  document.querySelectorAll('.idioma button').forEach(b => b.classList.toggle('sel', b.dataset.l === l));
+  document.documentElement.lang = l;
+}
+document.querySelector('.idioma').addEventListener('click', e => { const b = e.target.closest('button'); if (b) idioma(b.dataset.l); });
+idioma(qs.get('lang') === 'en' || (!qs.get('lang') && (navigator.language || '').startsWith('en')) ? 'en' : 'es');
+</script>
+</body>
+</html>

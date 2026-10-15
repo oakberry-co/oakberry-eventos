@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F5EEE0">
+<title>OAKBERRY Colombia</title>
+<meta name="description" content="Menú, tiendas, domicilios, tarjeta de fidelidad y María, la asistente de OAKBERRY.">
+<meta property="og:title" content="OAKBERRY Colombia">
+<meta property="og:description" content="Menú, tiendas, pide a domicilio y habla con María.">
+<meta property="og:image" content="https://www.oakberry-eventos.com/menu-assets/menu-es-1.webp">
+<link rel="preload" href="pd-assets/nexa-slab-black.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="pd-assets/nexa-slab-bold.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* ─────────────────────────────────────────────────────────────────────────
+   LINKS · el "link tree" de la bio de Instagram (@oakberrycol). Decisión de Daniel 16-oct-2026.
+   Cada botón lleva ?src=bio (o utm) para saber de dónde llegó la gente. Sistema visual del kit gráfico:
+   cielo crema con el loro volando y el río; botones píldora con sombra dura de tinta.
+   Para cambiar un link: editar el array LINKS abajo (no el HTML).
+   ───────────────────────────────────────────────────────────────────────── */
+@font-face{font-family:'Nexa Slab';src:url('pd-assets/nexa-slab-regular.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Nexa Slab';src:url('pd-assets/nexa-slab-bold.woff2') format('woff2');font-weight:600 700;font-display:swap}
+@font-face{font-family:'Nexa Slab';src:url('pd-assets/nexa-slab-black.woff2') format('woff2');font-weight:800 900;font-display:swap}
+:root{--crema:#FBF6E9;--cielo:#F5EEE0;--hueso:#EAE1CC;--tinta:#21152A;--tinta-suave:#5C4A66;
+  --morado:#4B1F60;--lila:#B79CC8;--oro:#F4B223}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{background:var(--cielo)}
+body{font-family:'Nexa Slab',Rockwell,Georgia,serif;color:var(--tinta);min-height:100dvh;
+  background:url('pd-assets/escena-rio.jpg') center bottom/min(100vw,560px) auto no-repeat fixed,var(--cielo)}
+main{max-width:560px;margin:0 auto;padding:26px 18px 60px;position:relative;overflow:hidden}
+.sol{position:absolute;top:-30px;right:-36px;width:130px;z-index:0}
+.loro{position:absolute;top:8px;right:20%;width:92px;z-index:1;animation:vuela 4.5s ease-in-out infinite}
+.pajaros{position:absolute;top:30px;left:10px;width:96px;opacity:.7;z-index:0}
+@keyframes vuela{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-10px) rotate(3deg)}}
+.marca{position:relative;z-index:2;width:min(42vw,170px);height:auto;display:block;margin:64px auto 0}
+.hola{position:relative;z-index:2;text-align:center;margin:34px auto 22px;max-width:30ch}
+.hola h1{font-size:clamp(1.6rem,8vw,2.2rem);font-weight:900;text-transform:uppercase;color:var(--morado);line-height:.95}
+.hola p{font-weight:600;margin-top:8px;color:var(--tinta-suave)}
+.lista{position:relative;z-index:2;display:flex;flex-direction:column;gap:14px}
+.link{display:flex;align-items:center;gap:14px;text-decoration:none;color:var(--tinta);background:#fff;border:3px solid var(--tinta);
+  border-radius:20px;padding:14px 16px;box-shadow:0 6px 0 var(--tinta);transition:transform .08s}
+.link:active{transform:translateY(4px);box-shadow:0 2px 0 var(--tinta)}
+.link .ico{flex:none;width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:1.6rem;border:2px solid var(--tinta)}
+.link b{display:block;font-size:1.05rem;font-weight:900;text-transform:uppercase;letter-spacing:.02em}
+.link small{display:block;font-size:.84rem;font-weight:600;color:var(--tinta-suave);margin-top:2px}
+.link .flecha{margin-left:auto;flex:none;width:22px;height:22px}
+.link.destacado{background:var(--morado);color:var(--crema)}
+.link.destacado small{color:var(--lila)}
+.c-oro{background:var(--oro)}.c-lila{background:var(--lila)}.c-crema{background:var(--crema)}.c-coral{background:#F7C8C3}
+.grupo{font-size:.74rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--tinta-suave);margin:8px 4px -4px}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.dos .link{flex-direction:column;align-items:flex-start;gap:10px}
+.dos .link .flecha{display:none}
+.pie{position:relative;z-index:2;text-align:center;font-size:.78rem;color:var(--crema);margin-top:28px;font-weight:600}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<main>
+  <img class="sol" src="pd-assets/sol-loro.png" alt="" aria-hidden="true">
+  <img class="pajaros" src="pd-assets/pajaros.png" alt="" aria-hidden="true">
+  <img class="loro" src="pd-assets/loro-vuela.png" alt="" aria-hidden="true">
+  <img class="marca" src="pd-wordmark-oakberry.svg" alt="OAKBERRY" width="3600" height="472">
+  <div class="hola">
+    <h1>¿Qué se te antoja?</h1>
+    <p>Todo OAKBERRY Colombia en un solo lugar.</p>
+  </div>
+  <nav class="lista" id="lista"></nav>
+  <p class="pie">@oakberrycol · 34 tiendas en 11 ciudades</p>
+</main>
+<script>
+// ── los links: editar aquí ──
+const SRC = new URLSearchParams(location.search).get('src') || 'bio';
+const LINKS = [
+  {grupo: null, destacado: true, ico: '💬', color: 'c-oro', t: 'Pregúntale a María', s: 'Nuestra asistente responde al instante', url: `ayuda?src=${SRC}`},
+  {grupo: null, ico: '🍇', color: 'c-lila', t: 'Ver el menú', s: 'Bowls, smoothies, toppings y precios', url: `menu?src=${SRC}`},
+  {grupo: null, ico: '📍', color: 'c-crema', t: 'Nuestras tiendas', s: 'Encuentra la más cercana', url: `https://www.oakberry-cupones.com/tiendas?src=${SRC}`},
+  {grupo: 'Pide a domicilio', par: [
+    {ico: '🛵', color: 'c-coral', t: 'Rappi', s: 'En todas nuestras ciudades', url: 'https://www.rappi.com.co/'},
+    {ico: '🏠', color: 'c-oro', t: 'Domicilio OAKBERRY', s: 'Zonas de Bogotá y Barranquilla', url: `https://menupp.co/oakberry?utm_source=instagram&utm_medium=bio&utm_campaign=${SRC}`},
+  ]},
+  {grupo: null, ico: '💜', color: 'c-lila', t: 'Tarjeta de fidelidad', s: 'Gratis en tu celular: suma sellos y gana', url: 'https://loyalty.is/p32b1k'},
+];
+const FLECHA = '<svg class="flecha" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>';
+const esc = t => { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; };
+const a = l => `<a class="link${l.destacado ? ' destacado' : ''}" href="${l.url}"${l.url.startsWith('http') ? ' target="_blank" rel="noopener"' : ''}>
+  <span class="ico ${l.color}">${l.ico}</span><span><b>${esc(l.t)}</b><small>${esc(l.s)}</small></span>${FLECHA}</a>`;
+document.getElementById('lista').innerHTML = LINKS.map(l => l.par
+  ? `<p class="grupo">${esc(l.grupo)}</p><div class="dos">${l.par.map(a).join('')}</div>` : a(l)).join('');
+</script>
+</body>
+</html>
