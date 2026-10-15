@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F5EEE0">
+<title>Hablar con un asesor · OAKBERRY Colombia</title>
+<meta name="description" content="Cuéntanos qué pasó y una persona del equipo OAKBERRY te responde.">
+<meta name="robots" content="noindex">
+<link rel="preload" href="pd-assets/nexa-slab-black.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="pd-assets/nexa-slab-bold.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* ─────────────────────────────────────────────────────────────────────────
+   AYUDA · "Hablar con un asesor" (link del menú de Instagram / bio / QR).
+   Fuera de Meta y fuera del sitio de cupones a propósito (decisión de Daniel 15-oct-2026).
+   Un caso = una fila en BigQuery crm.pqr_casos con radicado; el aviso a quien valida sale de la VM
+   (crm/ayuda/alertas.py, cada 5 min). Backend: Cloud Run oakberry-ayuda (crm/ayuda/main.py).
+   Sistema visual del kit (Nexa Slab, crema/morado/oro, sombra dura). Una sola pantalla con scroll:
+   corre en el navegador de Instagram con teclado móvil.
+   ───────────────────────────────────────────────────────────────────────── */
+@font-face{font-family:'Nexa Slab';src:url('pd-assets/nexa-slab-regular.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Nexa Slab';src:url('pd-assets/nexa-slab-bold.woff2') format('woff2');font-weight:600 700;font-display:swap}
+@font-face{font-family:'Nexa Slab';src:url('pd-assets/nexa-slab-black.woff2') format('woff2');font-weight:800 900;font-display:swap}
+:root{--crema:#FBF6E9;--cielo:#F5EEE0;--hueso:#EAE1CC;--tinta:#21152A;--tinta-suave:#5C4A66;
+  --morado:#4B1F60;--lila:#B79CC8;--oro:#F4B223;--rojo:#B3261E}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%;background:var(--cielo)}
+body{font-family:'Nexa Slab',Rockwell,'Roboto Slab',Georgia,serif;background:var(--cielo);color:var(--tinta);
+  font-size:16px;line-height:1.45;min-height:100dvh;overflow-x:hidden}
+.wrap{max-width:560px;margin:0 auto;padding:28px 16px 48px}
+.oculto{display:none!important}
+.marca{width:min(44vw,170px);height:auto;display:block;margin:0 auto 18px}
+.eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--tinta-suave);text-align:center}
+h1{font-size:clamp(1.9rem,9vw,2.8rem);font-weight:900;line-height:.98;text-transform:uppercase;color:var(--morado);
+  margin:10px 0 10px;text-align:center;text-wrap:balance}
+.bajada{font-weight:600;text-align:center;max-width:32ch;margin:0 auto 24px;text-wrap:balance}
+.bloque{background:#fff;border-radius:18px;padding:18px 16px;margin-bottom:14px;box-shadow:0 4px 0 var(--hueso)}
+.bloque h2{font-size:.78rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--morado);margin-bottom:12px}
+label.l{display:block;font-size:.82rem;font-weight:700;color:var(--tinta-suave);margin:12px 0 4px}
+label.l:first-of-type{margin-top:0}
+input[type=text],input[type=tel],input[type=email],input[type=date],select,textarea{width:100%;font:inherit;font-weight:600;
+  color:var(--tinta);background:var(--crema);border:2px solid var(--hueso);border-radius:12px;padding:12px 14px;outline:none;
+  font-size:16px;-webkit-appearance:none;appearance:none}
+input:focus,select:focus,textarea:focus{border-color:var(--morado)}
+select{background-image:linear-gradient(45deg,transparent 50%,var(--morado) 50%),linear-gradient(135deg,var(--morado) 50%,transparent 50%);
+  background-position:calc(100% - 20px) 50%,calc(100% - 14px) 50%;background-size:6px 6px;background-repeat:no-repeat;padding-right:36px}
+textarea{min-height:130px;resize:vertical}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{border:2px solid var(--tinta);background:#fff;color:var(--tinta);border-radius:999px;padding:9px 14px;font:inherit;
+  font-weight:700;font-size:.9rem;cursor:pointer}
+.pill.sel{background:var(--morado);border-color:var(--morado);color:var(--crema)}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:380px){.dos{grid-template-columns:1fr}}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:.85rem;color:var(--tinta-suave)}
+.check input{width:22px;height:22px;flex:none;margin-top:2px;accent-color:var(--morado)}
+.btn{display:block;width:100%;background:var(--morado);color:var(--crema);font:inherit;font-weight:800;letter-spacing:.06em;
+  text-transform:uppercase;border:none;border-radius:999px;padding:16px;font-size:1rem;box-shadow:0 5px 0 var(--tinta);cursor:pointer;margin-top:8px}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 var(--tinta)}
+.btn:disabled{opacity:.5}
+.error{color:var(--rojo);font-weight:700;font-size:.9rem;margin-top:10px;text-align:center}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+#listo{text-align:center;padding-top:20px}
+.radicado{display:inline-block;background:var(--oro);color:var(--tinta);font-weight:900;font-size:1.5rem;letter-spacing:.06em;
+  padding:12px 20px;border-radius:14px;box-shadow:0 5px 0 var(--tinta);margin:18px 0}
+.nota{font-size:.85rem;color:var(--tinta-suave);margin-top:18px}
+.nota a{color:var(--morado);font-weight:700}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <img class="marca" src="pd-wordmark-oakberry.svg" alt="OAKBERRY" width="3600" height="472">
+
+  <section id="form">
+    <p class="eyebrow">Hablar con un asesor</p>
+    <h1>Cuéntanos qué pasó</h1>
+    <p class="bajada">Una persona del equipo lee tu caso y te escribe. Mientras más detalle nos des, más rápido lo resolvemos.</p>
+
+    <div class="bloque">
+      <h2>¿Qué quieres contarnos?</h2>
+      <div class="pills" data-campo="tipo">
+        <button type="button" class="pill sel" data-v="queja">Una queja</button>
+        <button type="button" class="pill" data-v="reclamo">Un reclamo</button>
+        <button type="button" class="pill" data-v="peticion">Una pregunta</button>
+        <button type="button" class="pill" data-v="sugerencia">Una sugerencia</button>
+        <button type="button" class="pill" data-v="felicitacion">Una felicitación</button>
+      </div>
+    </div>
+
+    <div class="bloque">
+      <h2>¿Dónde fue?</h2>
+      <div class="pills" data-campo="canal">
+        <button type="button" class="pill sel" data-v="tienda">En una tienda</button>
+        <button type="button" class="pill" data-v="rappi">Por Rappi</button>
+        <button type="button" class="pill" data-v="domicilio_web">Domicilio por la web</button>
+        <button type="button" class="pill" data-v="otro">Otro</button>
+      </div>
+      <div class="dos" style="margin-top:14px">
+        <div><label class="l" for="ciudad">Ciudad</label>
+          <select id="ciudad"><option value="">Escoge…</option></select></div>
+        <div><label class="l" for="tienda">Tienda</label>
+          <select id="tienda" disabled><option value="">Escoge la ciudad</option></select></div>
+      </div>
+      <label class="l" for="fecha">¿Cuándo pasó?</label>
+      <input type="date" id="fecha">
+    </div>
+
+    <div class="bloque">
+      <h2>Cuéntanos</h2>
+      <label class="l" for="descripcion">Qué pasó (con detalle: qué pediste, a qué hora, qué salió mal)</label>
+      <textarea id="descripcion" maxlength="3000" placeholder="Escribe aquí…"></textarea>
+    </div>
+
+    <div class="bloque">
+      <h2>¿Cómo te contactamos?</h2>
+      <label class="l" for="nombre">Nombre</label>
+      <input type="text" id="nombre" autocomplete="name" maxlength="80">
+      <label class="l" for="celular">Celular (WhatsApp)</label>
+      <input type="tel" id="celular" autocomplete="tel" inputmode="tel" maxlength="15" placeholder="300 123 4567">
+      <label class="l" for="correo">Correo (opcional)</label>
+      <input type="email" id="correo" autocomplete="email" maxlength="120">
+      <div class="hp" aria-hidden="true"><input type="text" id="web" tabindex="-1" autocomplete="off"></div>
+    </div>
+
+    <label class="check"><input type="checkbox" id="consentimiento">
+      <span>Autorizo a MANEL FOODS S.A.S. a usar mis datos solo para atender este caso (Ley 1581 de 2012).
+      Puedo pedir que los corrijan o borren escribiendo a contacto@oakberry.com.co.</span></label>
+
+    <button class="btn" id="enviar" type="button">Enviar mi caso</button>
+    <p class="error oculto" id="error"></p>
+  </section>
+
+  <section id="listo" class="oculto">
+    <p class="eyebrow">Recibimos tu caso</p>
+    <h1>¡Gracias, <span id="nombre-ok"></span>!</h1>
+    <p class="bajada">Una persona del equipo te va a escribir. Guarda este número por si necesitas preguntar por tu caso:</p>
+    <div class="radicado" id="radicado"></div>
+    <p class="nota">¿Algo urgente? Escríbenos a <a href="mailto:contacto@oakberry.com.co">contacto@oakberry.com.co</a> citando tu número.</p>
+  </section>
+</main>
+<script>
+const API = 'https://oakberry-ayuda-664413392517.us-central1.run.app/caso';
+const TIENDAS = {"Bogotá": [["BOG_TP_Andino", "Andino"], ["BOG_TP_Calle109", "Calle 109"], ["BOG_TP_Calle140", "Calle 140 (Cedritos)"], ["BOG_TP_Chapinero", "Chapinero"], ["BOG_TP_Colina", "Colina"], ["BOG_FR_GranEstacion", "Gran Estación"], ["BOG_TP_Maloka", "Maloka"], ["BOG_TP_PlazaClaro", "Plaza Claro"], ["BOG_FR_Salvio93", "Salvio 93"], ["BOG_TP_TitanPlaza", "Titán Plaza"], ["BOG_TP_Unicentro", "Unicentro"], ["BOG_TP_ZonaT", "Zona T"]], "Medellín": [["MED_FR_Oviedo", "Oviedo"], ["MED_FR_ElTesoro", "El Tesoro"], ["MED_FR_JMC", "JMC"], ["MED_FR_Laureles", "Laureles"], ["MED_FR_Llanogrande", "Llanogrande"], ["MED_FR_VivaEnvigado", "Viva Envigado"]], "Cali": [["CAL_FR_Chipichape", "Chipichape"], ["CAL_FR_CiudadJardin", "Ciudad Jardín"], ["CAL_FR_Granada", "Granada"], ["CAL_FR_Jamundi", "Jamundí"], ["CAL_FR_JardinPlaza", "Jardín Plaza"]], "Barranquilla": [["BAQ_TP_Baq76", "Calle 76"], ["BAQ_FR_PlazaParque", "Plaza del Parque"]], "Bucaramanga": [["BGA_FR_BGA", "Bucaramanga"], ["BGA_FR_Canaveral", "Cañaveral"]], "Cartagena": [["CTG_FR_Bocagrande", "Bocagrande"]], "Cúcuta": [["CUC_FR_LosCaobos", "Los Caobos"]], "Montería": [["MON_FR_Monteria", "Montería"]], "Pereira": [["PER_FR_Pereira", "Pereira"]], "Santa Marta": [["STM_FR_SantaMarta", "Santa Marta"]], "Valledupar": [["VAL_FR_Valledupar", "Valledupar"]]};
+const qs = new URLSearchParams(location.search);
+const $ = id => document.getElementById(id);
+const sel = {tipo: 'queja', canal: 'tienda'};
+
+document.querySelectorAll('.pills').forEach(g => g.addEventListener('click', e => {
+  const b = e.target.closest('.pill'); if (!b) return;
+  g.querySelectorAll('.pill').forEach(x => x.classList.toggle('sel', x === b));
+  sel[g.dataset.campo] = b.dataset.v;
+}));
+
+const ciudad = $('ciudad'), tienda = $('tienda');
+Object.keys(TIENDAS).forEach(c => ciudad.add(new Option(c, c)));
+ciudad.addEventListener('change', () => {
+  tienda.innerHTML = '';
+  const lista = TIENDAS[ciudad.value] || [];
+  tienda.add(new Option(lista.length ? 'Escoge…' : 'Escoge la ciudad', ''));
+  lista.forEach(([k, n]) => tienda.add(new Option(n, k)));
+  if (lista.length) tienda.add(new Option('No sé / otra', 'otra'));
+  tienda.disabled = !lista.length;
+});
+const hoy = new Date(Date.now() - 5 * 3600e3).toISOString().slice(0, 10);
+$('fecha').value = hoy; $('fecha').max = hoy;
+
+function error(t) { const e = $('error'); e.textContent = t; e.classList.toggle('oculto', !t); }
+
+$('enviar').addEventListener('click', async () => {
+  error('');
+  const d = {
+    tipo: sel.tipo, canal: sel.canal, ciudad: ciudad.value, tienda: tienda.value, fecha: $('fecha').value,
+    descripcion: $('descripcion').value.trim(), nombre: $('nombre').value.trim(),
+    celular: $('celular').value.replace(/\D/g, ''), correo: $('correo').value.trim(),
+    consentimiento: $('consentimiento').checked, web: $('web').value,
+    src: qs.get('src') || 'directo', test: qs.get('test') === '1',
+  };
+  if (d.descripcion.length < 10) return error('Cuéntanos un poco más de lo que pasó.');
+  if (!d.nombre) return error('Escribe tu nombre.');
+  if (d.celular.length < 7) return error('Escribe un celular válido para poder contactarte.');
+  if (!d.consentimiento) return error('Necesitamos tu autorización para usar tus datos y atender el caso.');
+  const b = $('enviar'); b.disabled = true; b.textContent = 'Enviando…';
+  try {
+    const r = await fetch(API, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(d)});
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.error || 'No pudimos enviar tu caso.');
+    $('radicado').textContent = j.radicado;
+    $('nombre-ok').textContent = d.nombre.split(' ')[0];
+    $('form').classList.add('oculto'); $('listo').classList.remove('oculto');
+    window.scrollTo(0, 0);
+  } catch (e) {
+    error(e.message + ' Si sigue fallando, escríbenos a contacto@oakberry.com.co');
+    b.disabled = false; b.textContent = 'Enviar mi caso';
+  }
+});
+</script>
+</body>
+</html>
