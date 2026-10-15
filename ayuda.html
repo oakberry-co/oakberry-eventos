@@ -64,14 +64,46 @@ textarea{min-height:130px;resize:vertical}
   padding:12px 20px;border-radius:14px;box-shadow:0 5px 0 var(--tinta);margin:18px 0}
 .nota{font-size:.85rem;color:var(--tinta-suave);margin-top:18px}
 .nota a{color:var(--morado);font-weight:700}
+/* ── chat ── */
+#chat{display:flex;flex-direction:column;gap:10px;margin-bottom:14px}
+.msg{max-width:86%;padding:11px 14px;border-radius:16px;font-size:.95rem;line-height:1.4;white-space:pre-wrap;word-wrap:break-word}
+.msg a{color:inherit;font-weight:800;word-break:break-all}
+.msg.bot{background:#fff;align-self:flex-start;border-bottom-left-radius:4px;box-shadow:0 3px 0 var(--hueso)}
+.msg.yo{background:var(--morado);color:var(--crema);align-self:flex-end;border-bottom-right-radius:4px}
+.msg.escribiendo{color:var(--tinta-suave);font-style:italic}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 6px}
+.entrada{display:flex;gap:8px;position:sticky;bottom:0;background:var(--cielo);padding:10px 0 14px}
+.entrada input{flex:1}
+.entrada button{flex:none;width:auto;margin:0;padding:12px 18px;font-size:.9rem}
+.persona{display:block;margin:6px auto 0;background:none;border:none;color:var(--morado);font:inherit;font-weight:800;
+  text-decoration:underline;cursor:pointer;font-size:.9rem}
+.aviso-caso{background:var(--oro);border-radius:14px;padding:12px 14px;font-weight:700;margin-bottom:14px;box-shadow:0 4px 0 var(--tinta)}
 </style>
 </head>
 <body>
 <main class="wrap">
   <img class="marca" src="pd-wordmark-oakberry.svg" alt="OAKBERRY" width="3600" height="472">
 
-  <section id="form">
+  <section id="asistente">
     <p class="eyebrow">Hablar con un asesor</p>
+    <h1>¿En qué te ayudamos?</h1>
+    <p class="bajada">Pregúntanos lo que quieras. Si es algo que debe revisar una persona del equipo, te ayudamos a dejar tu caso.</p>
+    <div id="chat"></div>
+    <div class="chips" id="sugerencias">
+      <button type="button" class="pill" data-q="¿Dónde quedan y a qué hora abren?">Tiendas y horarios</button>
+      <button type="button" class="pill" data-q="¿Hacen domicilios?">Domicilios</button>
+      <button type="button" class="pill" data-q="¿Cómo funciona la tarjeta de fidelidad?">Tarjeta de fidelidad</button>
+      <button type="button" class="pill" data-q="Tuve un problema con mi compra">Tuve un problema</button>
+    </div>
+    <div class="entrada">
+      <input type="text" id="pregunta" maxlength="800" placeholder="Escribe tu pregunta…" autocomplete="off" enterkeyhint="send">
+      <button class="btn" id="preguntar" type="button">Enviar</button>
+    </div>
+    <button class="persona" id="ir-caso" type="button">Prefiero dejar mi caso a una persona</button>
+  </section>
+
+  <section id="form" class="oculto">
+    <p class="eyebrow">Dejar un caso</p>
     <h1>Cuéntanos qué pasó</h1>
     <p class="bajada">Una persona del equipo lee tu caso y te escribe. Mientras más detalle nos des, más rápido lo resolvemos.</p>
 
@@ -138,7 +170,8 @@ textarea{min-height:130px;resize:vertical}
   </section>
 </main>
 <script>
-const API = 'https://oakberry-ayuda-664413392517.us-central1.run.app/caso';
+const BASE = 'https://oakberry-ayuda-664413392517.us-central1.run.app';
+const API = BASE + '/caso';
 const TIENDAS = {"Bogotá": [["BOG_TP_Andino", "Andino"], ["BOG_TP_Calle109", "Calle 109"], ["BOG_TP_Calle140", "Calle 140 (Cedritos)"], ["BOG_TP_Chapinero", "Chapinero"], ["BOG_TP_Colina", "Colina"], ["BOG_FR_GranEstacion", "Gran Estación"], ["BOG_TP_Maloka", "Maloka"], ["BOG_TP_PlazaClaro", "Plaza Claro"], ["BOG_FR_Salvio93", "Salvio 93"], ["BOG_TP_TitanPlaza", "Titán Plaza"], ["BOG_TP_Unicentro", "Unicentro"], ["BOG_TP_ZonaT", "Zona T"]], "Medellín": [["MED_FR_Oviedo", "Oviedo"], ["MED_FR_ElTesoro", "El Tesoro"], ["MED_FR_JMC", "JMC"], ["MED_FR_Laureles", "Laureles"], ["MED_FR_Llanogrande", "Llanogrande"], ["MED_FR_VivaEnvigado", "Viva Envigado"]], "Cali": [["CAL_FR_Chipichape", "Chipichape"], ["CAL_FR_CiudadJardin", "Ciudad Jardín"], ["CAL_FR_Granada", "Granada"], ["CAL_FR_Jamundi", "Jamundí"], ["CAL_FR_JardinPlaza", "Jardín Plaza"], ["CAL_Campestre", "Club Campestre"]], "Barranquilla": [["BAQ_TP_Baq76", "Calle 76"], ["BAQ_FR_PlazaParque", "Plaza del Parque"]], "Bucaramanga": [["BGA_FR_BGA", "Bucaramanga"], ["BGA_FR_Canaveral", "Cañaveral"]], "Cartagena": [["CTG_FR_Bocagrande", "Bocagrande"]], "Cúcuta": [["CUC_FR_LosCaobos", "Los Caobos"]], "Montería": [["MON_FR_Monteria", "Montería"]], "Pereira": [["PER_FR_Pereira", "Pereira"]], "Santa Marta": [["STM_FR_SantaMarta", "Santa Marta"]], "Valledupar": [["VAL_FR_Valledupar", "Valledupar"]]};
 const qs = new URLSearchParams(location.search);
 const $ = id => document.getElementById(id);
@@ -164,6 +197,47 @@ const hoy = new Date(Date.now() - 5 * 3600e3).toISOString().slice(0, 10);
 $('fecha').value = hoy; $('fecha').max = hoy;
 
 function error(t) { const e = $('error'); e.textContent = t; e.classList.toggle('oculto', !t); }
+
+// ── asistente ──
+const chat = $('chat'), hist = [];
+const sesion = (crypto.randomUUID ? crypto.randomUUID() : String(Math.random())).slice(0, 36);
+function burbuja(texto, quien) {
+  const d = document.createElement('div'); d.className = 'msg ' + quien;
+  const t = document.createElement('div'); t.textContent = texto;  // texto plano: nunca HTML del modelo
+  d.innerHTML = t.innerHTML.replace(/(https?:\/\/[^\s)]+)/g, u => `<a href="${u}" target="_blank" rel="noopener">${u}</a>`);
+  chat.appendChild(d); d.scrollIntoView({block: 'end', behavior: 'smooth'}); return d;
+}
+burbuja('¡Hola! 💜 Soy el asistente de OAKBERRY. Pregúntame por tiendas, horarios, domicilios, la tarjeta de fidelidad o nuestro açaí.', 'bot');
+function abrirCaso(resumen, tipo) {
+  if (resumen) $('descripcion').value = resumen;
+  if (tipo) { const b = document.querySelector(`[data-campo=tipo] [data-v="${tipo}"]`); if (b) b.click(); }
+  $('asistente').classList.add('oculto'); $('form').classList.remove('oculto'); window.scrollTo(0, 0);
+}
+async function preguntar(q) {
+  q = (q || '').trim(); if (!q) return;
+  $('sugerencias').classList.add('oculto'); $('pregunta').value = '';
+  burbuja(q, 'yo'); hist.push({role: 'user', content: q});
+  const esp = burbuja('Escribiendo…', 'bot escribiendo'); $('preguntar').disabled = true;
+  try {
+    const r = await fetch(BASE + '/chat', {method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({sesion, src: qs.get('src') || 'directo', mensajes: hist})});
+    const j = await r.json(); esp.remove();
+    const resp = j.respuesta || 'Déjanos tu caso y una persona del equipo te escribe 💜';
+    burbuja(resp, 'bot'); hist.push({role: 'assistant', content: resp});
+    if (j.accion === 'abrir_caso') {
+      const b = document.createElement('button'); b.className = 'btn'; b.type = 'button';
+      b.textContent = 'Dejar mi caso (1 minuto)'; b.onclick = () => abrirCaso(j.resumen, j.tipo);
+      chat.appendChild(b); b.scrollIntoView({block: 'end', behavior: 'smooth'});
+    }
+  } catch (e) {
+    esp.remove(); burbuja('No pude responderte ahora. Puedes dejar tu caso y una persona te escribe 💜', 'bot');
+  }
+  $('preguntar').disabled = false; $('pregunta').focus();
+}
+$('preguntar').addEventListener('click', () => preguntar($('pregunta').value));
+$('pregunta').addEventListener('keydown', e => { if (e.key === 'Enter') preguntar($('pregunta').value); });
+$('sugerencias').addEventListener('click', e => { const b = e.target.closest('.pill'); if (b) preguntar(b.dataset.q); });
+$('ir-caso').addEventListener('click', () => abrirCaso('', null));
 
 $('enviar').addEventListener('click', async () => {
   error('');
