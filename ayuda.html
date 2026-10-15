@@ -207,7 +207,7 @@ function burbuja(texto, quien) {
   d.innerHTML = t.innerHTML.replace(/(https?:\/\/[^\s)]+)/g, u => `<a href="${u}" target="_blank" rel="noopener">${u}</a>`);
   chat.appendChild(d); d.scrollIntoView({block: 'end', behavior: 'smooth'}); return d;
 }
-burbuja('¡Hola! 💜 Soy el asistente de OAKBERRY. Pregúntame por tiendas, horarios, domicilios, la tarjeta de fidelidad o nuestro açaí.', 'bot');
+burbuja('¡Hola! Soy María 💜, la asistente virtual de OAKBERRY. Conozco nuestras 34 tiendas en 11 ciudades, el menú, los domicilios y la tarjeta de fidelidad, y respondo al instante. Si tu caso necesita a una persona del equipo, te ayudo a dejarlo en un minuto.', 'bot');
 function abrirCaso(resumen, tipo) {
   if (resumen) $('descripcion').value = resumen;
   if (tipo) { const b = document.querySelector(`[data-campo=tipo] [data-v="${tipo}"]`); if (b) b.click(); }
