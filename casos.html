@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#F5EEE0">
+<title>Casos · OAKBERRY</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="preload" href="pd-assets/nexa-slab-black.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="pd-assets/nexa-slab-bold.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* ─────────────────────────────────────────────────────────────────────────
+   CASOS · tablero interno de quien valida (Ana María) los casos que abre Oaky (/ayuda).
+   Datos: Cloud Run oakberry-ayuda /panel/* (crm/ayuda/panel.py) sobre crm.pqr_casos + crm.pqr_casos_estado.
+   Acceso con código (PANEL_CODIGO en Cloud Run) → sesión de 12 h guardada en este navegador.
+   Estado append-only: cada cambio deja una fila con nota y quién; el vigente es el último.
+   ───────────────────────────────────────────────────────────────────────── */
+@font-face{font-family:'Nexa Slab';src:url('pd-assets/nexa-slab-regular.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Nexa Slab';src:url('pd-assets/nexa-slab-bold.woff2') format('woff2');font-weight:600 700;font-display:swap}
+@font-face{font-family:'Nexa Slab';src:url('pd-assets/nexa-slab-black.woff2') format('woff2');font-weight:800 900;font-display:swap}
+:root{--crema:#FBF6E9;--cielo:#F5EEE0;--hueso:#EAE1CC;--tinta:#21152A;--tinta-suave:#5C4A66;
+  --morado:#4B1F60;--lila:#B79CC8;--oro:#F4B223;--coral:#E04850;--rojo:#B3261E;--verde:#2F6B3A}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--cielo);color:var(--tinta);font-family:'Nexa Slab',Rockwell,Georgia,serif}
+.oculto{display:none!important}
+main{max-width:1100px;margin:0 auto;padding:20px 16px 60px}
+button{font:inherit;cursor:pointer}
+
+/* acceso */
+#acceso{min-height:100dvh;display:grid;place-items:center;padding:20px;
+  background:url('pd-assets/escena-rio.jpg') center bottom/min(100vw,700px) auto no-repeat,var(--cielo)}
+.caja{background:#fff;border:3px solid var(--tinta);border-radius:24px;box-shadow:0 7px 0 var(--tinta);padding:26px 22px;width:min(380px,100%);text-align:center}
+.caja img.loro{width:110px;margin:-70px auto 6px;display:block}
+.caja h1{font-size:1.7rem;font-weight:900;text-transform:uppercase;color:var(--morado);line-height:1}
+.caja p{color:var(--tinta-suave);font-weight:600;margin:8px 0 16px;font-size:.92rem}
+input,select,textarea{font:inherit;font-size:16px;font-weight:600;color:var(--tinta);background:var(--crema);border:2px solid var(--hueso);
+  border-radius:12px;padding:11px 13px;outline:none;width:100%}
+input:focus,select:focus,textarea:focus{border-color:var(--morado)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:2px solid var(--tinta);border-radius:999px;padding:11px 18px;
+  font-weight:900;text-transform:uppercase;letter-spacing:.04em;font-size:.82rem;box-shadow:0 4px 0 var(--tinta);background:var(--oro);color:var(--tinta);text-decoration:none}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--tinta)}
+.btn.morado{background:var(--morado);color:var(--crema)}.btn.blanco{background:#fff}.btn.verde{background:#25D366;color:#fff}
+.err{color:var(--rojo);font-weight:700;font-size:.86rem;margin-top:10px;min-height:1.2em}
+
+/* encabezado */
+.top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+.top img{width:56px}
+.top h1{font-size:1.8rem;font-weight:900;text-transform:uppercase;color:var(--morado);line-height:1}
+.top small{display:block;color:var(--tinta-suave);font-weight:600;font-size:.85rem;margin-top:3px}
+.top .der{margin-left:auto;display:flex;gap:8px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
+.kpi{background:#fff;border:2px solid var(--tinta);border-radius:18px;box-shadow:0 4px 0 var(--tinta);padding:14px}
+.kpi b{display:block;font-size:2rem;font-weight:900;line-height:1;color:var(--morado)}
+.kpi span{display:block;font-size:.76rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--tinta-suave);margin-top:6px}
+.kpi.alerta{background:#FDE3E1}.kpi.alerta b{color:var(--rojo)}
+.kpi.oro{background:var(--oro)}.kpi.oro b{color:var(--tinta)}
+
+/* filtros */
+.filtros{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px}
+.chip{border:2px solid var(--tinta);background:#fff;border-radius:999px;padding:8px 14px;font-weight:800;font-size:.84rem;box-shadow:0 3px 0 var(--tinta)}
+.chip.sel{background:var(--morado);color:var(--crema)}
+.filtros select,.filtros input{width:auto;min-width:150px;padding:8px 12px;border-radius:999px;font-size:.88rem}
+.filtros input{flex:1;min-width:180px}
+
+/* lista */
+.lista{display:flex;flex-direction:column;gap:12px}
+.caso{background:#fff;border:2px solid var(--tinta);border-radius:18px;box-shadow:0 5px 0 var(--tinta);padding:14px 16px;cursor:pointer}
+.caso.vencido{border-left:10px solid var(--rojo)}
+.caso .fila{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.b{font-size:.7rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px;border:2px solid var(--tinta);background:var(--crema)}
+.b.queja,.b.reclamo{background:#F7C8C3}.b.alianza{background:var(--lila)}.b.felicitacion{background:#CDEBD3}.b.peticion,.b.sugerencia{background:#fff}
+.b.nuevo{background:var(--oro)}.b.en_revision{background:var(--lila)}.b.resuelto{background:#CDEBD3}.b.descartado{background:var(--hueso)}
+.b.rad{background:var(--tinta);color:var(--crema)}
+.edad{margin-left:auto;font-size:.8rem;font-weight:700;color:var(--tinta-suave)}
+.caso h3{font-size:1.02rem;font-weight:900;margin:8px 0 2px}
+.caso .desc{color:var(--tinta-suave);font-size:.92rem;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.vacio{text-align:center;padding:40px;color:var(--tinta-suave);font-weight:600}
+
+/* detalle */
+.velo{position:fixed;inset:0;background:rgba(33,21,42,.45);z-index:20;display:flex;justify-content:flex-end}
+.detalle{background:var(--crema);width:min(560px,100%);height:100%;overflow-y:auto;border-left:3px solid var(--tinta);padding:20px 18px 40px}
+.detalle h2{font-size:1.4rem;font-weight:900;color:var(--morado);text-transform:uppercase;margin:8px 0}
+.texto{background:#fff;border:2px solid var(--tinta);border-radius:16px;padding:14px;white-space:pre-wrap;line-height:1.45;margin:12px 0}
+.datos{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:.9rem;margin:10px 0 16px}
+.datos dt{color:var(--tinta-suave);font-weight:700}
+.datos dd{font-weight:600;word-break:break-word}
+.acciones{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.gestion{background:#fff;border:2px solid var(--tinta);border-radius:16px;padding:14px}
+.gestion h4,.hist h4{font-size:.78rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:var(--morado);margin-bottom:10px}
+.estados{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.gestion textarea{min-height:80px;resize:vertical;margin-bottom:10px}
+.hist{margin-top:16px}
+.hist li{list-style:none;border-left:3px solid var(--lila);padding:4px 0 8px 12px;font-size:.88rem}
+.hist li b{text-transform:uppercase;font-size:.76rem;letter-spacing:.06em}
+.cerrar{float:right;background:#fff;border:2px solid var(--tinta);border-radius:999px;width:38px;height:38px;font-weight:900;font-size:1.1rem}
+.oaky{margin-top:26px;background:#fff;border:2px dashed var(--lila);border-radius:18px;padding:14px 16px;font-size:.9rem;color:var(--tinta-suave)}
+.oaky b{color:var(--morado)}
+</style>
+</head>
+<body>
+
+<section id="acceso">
+  <div class="caja">
+    <img class="loro" src="pd-assets/loro-vuela.png" alt="">
+    <h1>Casos de Oaky</h1>
+    <p>Escribe el código de acceso del equipo.</p>
+    <input id="codigo" type="password" autocomplete="current-password" placeholder="OAK-XXXX-XXXX-XXXX">
+    <div style="height:12px"></div>
+    <button class="btn morado" id="entrar" type="button" style="width:100%">Entrar</button>
+    <p class="err" id="err-acceso"></p>
+  </div>
+</section>
+
+<main id="tablero" class="oculto">
+  <div class="top">
+    <img src="pd-assets/loro-vuela.png" alt="">
+    <div><h1>Casos de Oaky</h1><small id="actualizado">—</small></div>
+    <div class="der">
+      <button class="btn blanco" id="recargar" type="button">↻ Actualizar</button>
+      <button class="btn blanco" id="salir" type="button">Salir</button>
+    </div>
+  </div>
+  <div class="kpis" id="kpis"></div>
+  <div class="filtros">
+    <div id="f-estado" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+    <select id="f-tipo"><option value="">Todos los tipos</option></select>
+    <select id="f-ciudad"><option value="">Todas las ciudades</option></select>
+    <input id="f-buscar" type="search" placeholder="Buscar nombre, radicado, texto…">
+  </div>
+  <div class="lista" id="lista"></div>
+  <div class="oaky" id="oaky"></div>
+</main>
+
+<div class="velo oculto" id="velo"><aside class="detalle" id="detalle"></aside></div>
+
+<script>
+const API = 'https://oakberry-ayuda-664413392517.us-central1.run.app/panel';
+const SLA_H = 24;  // un caso "nuevo" con más de 24 h se marca vencido
+const TIPO = {queja: 'Queja', reclamo: 'Reclamo', peticion: 'Petición', sugerencia: 'Sugerencia', felicitacion: 'Felicitación', alianza: 'Alianza / colaboración'};
+const ESTADO = {nuevo: 'Nuevo', en_revision: 'En revisión', resuelto: 'Resuelto', descartado: 'Descartado'};
+const CANAL = {tienda: 'En tienda', rappi: 'Rappi', domicilio_web: 'Domicilio web', otro: 'Otro'};
+const $ = id => document.getElementById(id);
+const esc = t => { const d = document.createElement('div'); d.textContent = t ?? ''; return d.innerHTML; };
+const qs = new URLSearchParams(location.search);
+let token = null, casos = [], filtro = {estado: 'abiertos', tipo: '', ciudad: '', q: ''};
+try { token = localStorage.getItem('casos_token'); if (token && +token.split('.')[0] * 1000 < Date.now()) token = null; } catch (e) {}
+
+function horas(iso) { return (Date.now() - new Date(iso)) / 36e5; }
+function edad(iso) { const h = horas(iso); if (h < 1) return `hace ${Math.max(1, Math.round(h * 60))} min`;
+  if (h < 48) return `hace ${Math.round(h)} h`; return `hace ${Math.round(h / 24)} días`; }
+const vencido = c => c.estado === 'nuevo' && horas(c.creado_at) > SLA_H;
+
+async function api(path, opts = {}) {
+  const r = await fetch(API + path, opts); const j = await r.json();
+  if (r.status === 401 && path !== '/sesion') { salir(); throw new Error('Sesión vencida'); }
+  if (!j.ok) throw new Error(j.error || 'Error'); return j;
+}
+async function entrar() {
+  $('err-acceso').textContent = '';
+  try {
+    const j = await api('/sesion', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({codigo: $('codigo').value.trim()})});
+    token = j.token; try { localStorage.setItem('casos_token', token); } catch (e) {}
+    iniciar();
+  } catch (e) { $('err-acceso').textContent = e.message; }
+}
+function salir() { token = null; try { localStorage.removeItem('casos_token'); } catch (e) {} $('tablero').classList.add('oculto'); $('acceso').classList.remove('oculto'); }
+$('entrar').onclick = entrar; $('codigo').onkeydown = e => { if (e.key === 'Enter') entrar(); };
+$('salir').onclick = salir; $('recargar').onclick = () => cargar();
+
+async function cargar() {
+  const t = qs.get('test') === '1' ? '&test=1' : '';
+  const [c, r] = await Promise.all([api(`/casos?token=${encodeURIComponent(token)}${t}`), api(`/resumen?token=${encodeURIComponent(token)}`)]);
+  casos = c.casos;
+  $('actualizado').textContent = `Actualizado ${new Date().toLocaleTimeString('es-CO', {hour: '2-digit', minute: '2-digit'})}${t ? ' · CASOS DE PRUEBA' : ''}`;
+  const o = r.oaky, sin = o.conversaciones ? Math.round(100 * (1 - o.con_caso / o.conversaciones)) : 0;
+  $('oaky').innerHTML = `<b>Oaky, últimos 30 días:</b> ${o.conversaciones} conversaciones · ${o.con_caso} terminaron en caso · <b>${sin}% resueltas sin caso</b> · costo US$${(o.costo_usd || 0).toFixed(2)}${o.errores ? ` · ⚠ ${o.errores} errores` : ''}`;
+  const tipos = [...new Set(casos.map(c => c.tipo))], ciudades = [...new Set(casos.map(c => c.ciudad).filter(Boolean))];
+  $('f-tipo').innerHTML = '<option value="">Todos los tipos</option>' + tipos.map(t => `<option value="${t}">${TIPO[t] || t}</option>`).join('');
+  $('f-ciudad').innerHTML = '<option value="">Todas las ciudades</option>' + ciudades.map(c => `<option>${esc(c)}</option>`).join('');
+  $('f-tipo').value = filtro.tipo; $('f-ciudad').value = filtro.ciudad;
+  pintar();
+  if (location.hash.length > 1) { const c = casos.find(x => x.radicado === location.hash.slice(1)); if (c) abrir(c.radicado); }
+}
+
+function pintar() {
+  const abiertos = casos.filter(c => ['nuevo', 'en_revision'].includes(c.estado));
+  const semana = casos.filter(c => horas(c.creado_at) < 168);
+  const gest = casos.filter(c => c.primera_gestion).map(c => (new Date(c.primera_gestion) - new Date(c.creado_at)) / 36e5);
+  const medio = gest.length ? gest.sort((a, b) => a - b)[Math.floor(gest.length / 2)] : null;
+  $('kpis').innerHTML = [
+    ['oro', abiertos.length, 'Abiertos'],
+    [casos.filter(vencido).length ? 'alerta' : '', casos.filter(vencido).length, `Sin atender +${SLA_H} h`],
+    ['', semana.length, 'Llegaron esta semana'],
+    ['', semana.filter(c => c.tipo === 'alianza').length, 'Alianzas esta semana'],
+    ['', medio == null ? '—' : (medio < 1 ? Math.round(medio * 60) + ' min' : medio.toFixed(1).replace('.', ',') + ' h'), 'Tiempo típico a 1ª gestión'],
+  ].map(([cl, v, t]) => `<div class="kpi ${cl}"><b>${v}</b><span>${t}</span></div>`).join('');
+  const est = [['abiertos', 'Abiertos'], ['nuevo', 'Nuevos'], ['en_revision', 'En revisión'], ['resuelto', 'Resueltos'], ['todos', 'Todos']];
+  $('f-estado').innerHTML = est.map(([k, t]) => `<button class="chip${filtro.estado === k ? ' sel' : ''}" data-e="${k}">${t}</button>`).join('');
+  const q = filtro.q.toLowerCase();
+  const lista = casos.filter(c =>
+    (filtro.estado === 'todos' || (filtro.estado === 'abiertos' ? ['nuevo', 'en_revision'].includes(c.estado) : c.estado === filtro.estado)) &&
+    (!filtro.tipo || c.tipo === filtro.tipo) && (!filtro.ciudad || c.ciudad === filtro.ciudad) &&
+    (!q || [c.radicado, c.nombre, c.descripcion, c.tienda, c.celular].join(' ').toLowerCase().includes(q)))
+    .sort((a, b) => (vencido(b) - vencido(a)) || (new Date(b.creado_at) - new Date(a.creado_at)));
+  $('lista').innerHTML = lista.map(c => `<article class="caso${vencido(c) ? ' vencido' : ''}" data-r="${esc(c.radicado)}">
+      <div class="fila"><span class="b rad">${esc(c.radicado)}</span><span class="b ${c.tipo}">${TIPO[c.tipo] || esc(c.tipo)}</span>
+        <span class="b ${c.estado}">${ESTADO[c.estado] || c.estado}</span>${vencido(c) ? '<span class="b" style="background:#FDE3E1">⏰ +24 h</span>' : ''}
+        <span class="edad">${edad(c.creado_at)}</span></div>
+      <h3>${esc(c.nombre)} · ${esc(c.tienda && c.tienda !== 'otra' ? c.tienda : (c.ciudad || 'sin tienda'))}</h3>
+      <p class="desc">${esc(c.descripcion)}</p></article>`).join('') || '<p class="vacio">No hay casos con estos filtros 💜</p>';
+}
+$('f-estado').onclick = e => { const b = e.target.closest('.chip'); if (b) { filtro.estado = b.dataset.e; pintar(); } };
+$('f-tipo').onchange = e => { filtro.tipo = e.target.value; pintar(); };
+$('f-ciudad').onchange = e => { filtro.ciudad = e.target.value; pintar(); };
+$('f-buscar').oninput = e => { filtro.q = e.target.value; pintar(); };
+$('lista').onclick = e => { const a = e.target.closest('.caso'); if (a) abrir(a.dataset.r); };
+
+function abrir(rad) {
+  const c = casos.find(x => x.radicado === rad); if (!c) return;
+  location.hash = rad;
+  const cel = (c.celular || '').replace(/\D/g, ''), wa = `https://wa.me/${cel.length > 10 ? cel : '57' + cel}?text=${encodeURIComponent(`Hola ${(c.nombre || '').split(' ')[0]}, te escribimos de OAKBERRY por tu caso ${c.radicado} 💜`)}`;
+  $('detalle').innerHTML = `<button class="cerrar" id="cerrar" type="button" aria-label="Cerrar">✕</button>
+    <div class="fila" style="display:flex;gap:6px;flex-wrap:wrap"><span class="b rad">${esc(c.radicado)}</span><span class="b ${c.tipo}">${TIPO[c.tipo] || esc(c.tipo)}</span><span class="b ${c.estado}">${ESTADO[c.estado]}</span></div>
+    <h2>${esc(c.nombre)}</h2>
+    <div class="texto">${esc(c.descripcion)}</div>
+    <dl class="datos">
+      <dt>Celular</dt><dd>${esc(c.celular)}</dd><dt>Correo</dt><dd>${esc(c.correo) || '—'}</dd>
+      <dt>Ciudad</dt><dd>${esc(c.ciudad) || '—'}</dd><dt>Tienda</dt><dd>${esc(c.tienda) || '—'}</dd>
+      <dt>Canal</dt><dd>${CANAL[c.canal] || esc(c.canal)}</dd><dt>Cuándo pasó</dt><dd>${esc(c.fecha_hecho) || '—'}</dd>
+      <dt>Llegó</dt><dd>${new Date(c.creado_at).toLocaleString('es-CO')} (${edad(c.creado_at)}) · ${esc(c.src || '')}</dd>
+    </dl>
+    <div class="acciones"><a class="btn verde" href="${wa}" target="_blank" rel="noopener">WhatsApp</a>
+      ${c.correo ? `<a class="btn blanco" href="mailto:${esc(c.correo)}?subject=${encodeURIComponent('Tu caso ' + c.radicado + ' en OAKBERRY')}">Correo</a>` : ''}</div>
+    <div class="gestion"><h4>Gestionar</h4>
+      <div class="estados">${Object.entries(ESTADO).filter(([k]) => k !== 'nuevo').map(([k, t]) => `<button class="chip${c.estado === k ? ' sel' : ''}" data-e="${k}" type="button">${t}</button>`).join('')}</div>
+      <textarea id="nota" placeholder="Nota (qué se hizo, qué se le respondió, bono entregado…)"></textarea>
+      <input id="por" placeholder="Quién gestiona" value="${esc(localStorage.getItem('casos_por') || 'Ana María')}" style="margin-bottom:10px">
+      <button class="btn morado" id="guardar" type="button" style="width:100%">Guardar gestión</button><p class="err" id="err-g"></p></div>
+    <div class="hist"><h4>Historial</h4><ul>${(c.hist || []).map(h => `<li><b>${ESTADO[h.estado] || h.estado}</b> · ${new Date(h.cambiado_at).toLocaleString('es-CO')} · ${esc(h.por)}${h.nota ? `<br>${esc(h.nota)}` : ''}</li>`).join('') || '<li>Sin gestiones todavía.</li>'}</ul></div>`;
+  let nuevo = null;
+  $('detalle').querySelectorAll('.estados .chip').forEach(b => b.onclick = () => { nuevo = b.dataset.e; $('detalle').querySelectorAll('.estados .chip').forEach(x => x.classList.toggle('sel', x === b)); });
+  $('cerrar').onclick = cerrar;
+  $('guardar').onclick = async () => {
+    const est = nuevo || (c.estado === 'nuevo' ? null : c.estado);
+    if (!est) { $('err-g').textContent = 'Escoge un estado.'; return; }
+    try { localStorage.setItem('casos_por', $('por').value); } catch (e) {}
+    $('guardar').disabled = true;
+    try {
+      await api('/estado', {method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({token, radicado: c.radicado, estado: est, nota: $('nota').value, por: $('por').value})});
+      cerrar(); await cargar();
+    } catch (e) { $('err-g').textContent = e.message; $('guardar').disabled = false; }
+  };
+  $('velo').classList.remove('oculto');
+}
+function cerrar() { $('velo').classList.add('oculto'); history.replaceState(null, '', location.pathname + location.search); }
+$('velo').onclick = e => { if (e.target.id === 'velo') cerrar(); };
+document.onkeydown = e => { if (e.key === 'Escape') cerrar(); };
+
+function iniciar() { $('acceso').classList.add('oculto'); $('tablero').classList.remove('oculto'); cargar().catch(e => alert(e.message)); setInterval(() => cargar().catch(() => {}), 120000); }
+if (token) iniciar();
+</script>
+</body>
+</html>
