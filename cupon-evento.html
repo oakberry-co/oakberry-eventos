@@ -21,7 +21,7 @@
 <link rel="preload" href="pd-assets/nexa-slab-black.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="pd-assets/nexa-slab-bold.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="pd-assets/nexa-slab-regular.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" as="image" href="cupon-assets/bowl-cuchara.webp">
+<link rel="preload" as="image" href="cupon-assets/bowl-cuchara-720.webp" media="(min-width:860px)">
 <!--
   CUPÓN EVENTO (/cupon-evento) — landing para asistentes a los eventos OAKBERRY.
   Objetivo: llevar tráfico a tienda y medir canje + recompra (cruce con Loopy por
@@ -61,7 +61,7 @@ a{color:inherit}
 :focus-visible{outline:3px solid var(--oro);outline-offset:3px}
 .wrap{max-width:1080px;margin:0 auto;padding:0 var(--gutter)}
 .eyebrow .corazon{display:inline-block;width:1.25em;height:1.25em;fill:var(--morado);vertical-align:-.28em;margin-left:.15em}
-.eyebrow{display:inline-block;font-size:.72rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--tinta-suave)}
+.eyebrow{display:inline-block;font-size:.8rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--tinta-suave)}
 .titulo{font-size:clamp(2rem,9vw,3.2rem);font-weight:900;line-height:.95;text-transform:uppercase;text-wrap:balance}
 .sub{font-weight:600;color:var(--tinta-suave);margin-top:10px;max-width:34ch;text-wrap:pretty}
 
@@ -84,7 +84,7 @@ a{color:inherit}
 /* ══ PORTADA ══════════════════════════════════════════════════════════ */
 .portada{position:relative;overflow:hidden;background:var(--cielo)}
 .portada::before{content:"";position:absolute;inset:auto 0 0 0;height:min(64vw,420px);z-index:0;
-  background:url('pd-assets/escena-rio.jpg') bottom center/cover no-repeat;
+  background:url('cupon-assets/escena-rio.webp') bottom center/cover no-repeat;
   -webkit-mask-image:linear-gradient(to bottom,transparent 0,#000 45%);mask-image:linear-gradient(to bottom,transparent 0,#000 45%)}
 .barra{position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0 0}
 .marca{width:min(40vw,168px)}
@@ -138,8 +138,6 @@ a{color:inherit}
 
 /* ══ REGISTRO ═════════════════════════════════════════════════════════ */
 .registro{position:relative;background:var(--cielo);overflow:hidden}
-.palmas{position:absolute;inset:0;background:url('pd-assets/escena-palmas.jpg') top center/cover no-repeat;opacity:.35;pointer-events:none;
-        -webkit-mask-image:linear-gradient(to bottom,#000 0,transparent 55%);mask-image:linear-gradient(to bottom,#000 0,transparent 55%)}
 .registro .wrap{position:relative;z-index:1}
 .registro .titulo{color:var(--morado)}
 .reg-grid{display:grid;gap:26px}
@@ -162,8 +160,8 @@ a{color:inherit}
 .err{display:none;color:var(--rojo);font-size:.8rem;font-weight:700;margin:6px 0 0 6px}
 .campo.mal .ctl{border-color:var(--rojo)}
 .campo.mal .err{display:block}
-.casilla{display:grid;grid-template-columns:24px minmax(0,1fr);gap:12px;align-items:start;cursor:pointer;font-size:.82rem;line-height:1.5;color:var(--tinta-suave);margin-top:4px}
-.casilla input{appearance:none;-webkit-appearance:none;width:24px;height:24px;border:3px solid var(--morado);border-radius:8px;background:#fff;display:grid;place-items:center;cursor:pointer;margin:0}
+.casilla{display:grid;grid-template-columns:26px minmax(0,1fr);gap:12px;align-items:start;cursor:pointer;font-size:.82rem;line-height:1.5;color:var(--tinta-suave);margin-top:4px}
+.casilla input{appearance:none;-webkit-appearance:none;width:26px;height:26px;border:3px solid var(--morado);border-radius:8px;background:#fff;display:grid;place-items:center;cursor:pointer;margin:0}
 .casilla input:checked{background:var(--morado)}
 .casilla input:checked::after{content:"";width:6px;height:11px;border:solid var(--crema);border-width:0 3px 3px 0;transform:rotate(45deg) translate(-1px,-1px)}
 .campo.mal .casilla input{border-color:var(--rojo)}
@@ -191,7 +189,7 @@ a{color:inherit}
 .reloj{display:flex;gap:8px;font-variant-numeric:tabular-nums}
 .reloj div{background:var(--morado-hondo);border-radius:12px;padding:7px 8px;min-width:54px;text-align:center}
 .reloj b{display:block;font-weight:900;font-size:1.35rem;line-height:1.1}
-.reloj span{font-size:.6rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--lila)}
+.reloj span{font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--lila)}
 .cupon-pie{background:var(--morado-hondo);padding:12px 20px;font-size:.82rem;font-weight:600;color:var(--lila)}
 .cupon-pie b{color:var(--crema)}
 .demo{display:inline-block;background:var(--coral);color:var(--crema);font-weight:900;font-size:.7rem;letter-spacing:.12em;padding:5px 10px;border-radius:999px;margin-bottom:10px}
@@ -263,7 +261,7 @@ a{color:inherit}
 .tarjetas::-webkit-scrollbar{display:none}
 .tienda{flex:0 0 min(80%,320px);scroll-snap-align:start;background:#fff;border:3px solid var(--morado-hondo);border-radius:22px;padding:16px 16px 18px;
   box-shadow:0 6px 0 var(--morado-hondo);display:flex;flex-direction:column;gap:6px}
-.tienda .pill{align-self:flex-start;background:var(--lila);color:var(--morado-hondo);border:2px solid var(--morado-hondo);font-weight:900;font-size:.68rem;
+.tienda .pill{align-self:flex-start;background:var(--lila);color:var(--morado-hondo);border:2px solid var(--morado-hondo);font-weight:900;font-size:.74rem;
   letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;border-radius:999px}
 .tienda .pill.oro{background:var(--oro)}
 .tienda h4{font-weight:900;font-size:1.2rem;line-height:1.05;text-transform:uppercase;color:var(--morado);margin-top:4px}
@@ -316,6 +314,16 @@ footer a{color:var(--crema)}
   .ciudades{columns:4}
   .seccion{padding:80px 0}
 }
+/* ══ CELULAR: el formulario sube; la foto grande de la portada pasa a la galería ══ */
+@media (max-width:859px){
+  .foto{display:none}
+  .portada-grid{padding-top:18px;gap:0}
+  .respiro{height:48vw}
+  /* La escena del río va solo como piso, debajo del texto (su parte alta trae una avioneta con letrero). */
+  .portada::before{height:52vw;-webkit-mask-image:linear-gradient(to bottom,transparent 0,transparent 30%,#000 62%);mask-image:linear-gradient(to bottom,transparent 0,transparent 30%,#000 62%)}
+  .registro.seccion{padding-top:36px}
+}
+@media (min-width:860px){.solo-cel{display:none!important}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
 </style>
 </head>
@@ -323,10 +331,10 @@ footer a{color:var(--crema)}
 
 <!-- ═══════════ PORTADA ═══════════ -->
 <header class="portada" id="arriba">
-  <img class="sol" src="pd-assets/sol-loro.png" alt="" aria-hidden="true">
+  <img class="sol" src="cupon-assets/sol-loro.webp" alt="" aria-hidden="true">
   <div class="wrap">
     <nav class="barra">
-      <video class="logo" src="cupon-assets/logo-animado.mp4" poster="cupon-assets/loro-morado.png" autoplay muted loop playsinline aria-label="OAKBERRY" width="330" height="480"></video>
+      <video class="logo" src="cupon-assets/logo-animado.mp4" poster="cupon-assets/loro-morado.webp" autoplay muted loop playsinline aria-label="OAKBERRY" width="330" height="480"></video>
     </nav>
     <div class="portada-grid">
       <div class="portada-copy">
@@ -335,9 +343,9 @@ footer a{color:var(--crema)}
         <p class="bajada">Regístrate y recibe tu descuento por WhatsApp.</p>
       </div>
       <div class="foto">
-        <div class="marco"><img src="cupon-assets/bowl-cuchara.webp" alt="Bowl OAKBERRY de açaí con granola, mantequilla de maní y banano" width="900" height="1600"></div>
+        <div class="marco"><img src="cupon-assets/bowl-cuchara-720.webp" alt="Bowl OAKBERRY de açaí con granola, mantequilla de maní y banano" width="720" height="1280"></div>
         <div class="sello" aria-hidden="true"><div><b>7</b><span>días para<br>usarlo</span></div></div>
-        <img class="loro" src="pd-assets/loro-vuela.png" alt="" aria-hidden="true">
+        <img class="loro" src="cupon-assets/loro-vuela.webp" alt="" aria-hidden="true">
       </div>
     </div>
   </div>
@@ -353,7 +361,6 @@ footer a{color:var(--crema)}
 
 <!-- ═══════════ REGISTRO ═══════════ -->
 <section class="registro seccion" id="registro">
-  <div class="palmas" aria-hidden="true"></div>
   <div class="wrap reg-grid">
     <h2 class="titulo redime">Redime tu cupón</h2>
 
@@ -396,7 +403,7 @@ footer a{color:var(--crema)}
         <p class="nota" id="okMsg">Te lo enviamos a tu WhatsApp. Por si acaso, aquí lo tienes:</p>
         <div class="cupon">
           <div class="cupon-top">
-            <img src="cupon-assets/loro-crema.png" alt="OAKBERRY" width="600" height="872">
+            <img src="cupon-assets/loro-crema.webp" alt="OAKBERRY" width="275" height="400" loading="lazy">
             <span class="meta">Toda tu orden<br>Todo el país</span>
           </div>
           <div class="grande">15<small>%</small> OFF</div>
@@ -419,6 +426,7 @@ footer a{color:var(--crema)}
 <!-- ═══════════ GALERÍA ═══════════ -->
 <section class="galeria">
   <div class="carrusel">
+    <figure class="solo-cel"><img src="cupon-assets/bowl-cuchara-720.webp" alt="Bowl OAKBERRY de açaí con granola, mantequilla de maní y banano" loading="lazy" width="720" height="1280" style="object-position:50% 72%"></figure>
     <figure><img src="cupon-assets/bowl-fresa.webp" alt="Bowl OAKBERRY con fresa, coco y granola" loading="lazy" width="900" height="1600"></figure>
     <figure><img src="cupon-assets/bowl-cerca.webp" alt="Capas de açaí y granola con el logo OAKBERRY" loading="lazy" width="900" height="1600" style="object-position:50% 100%"></figure>
     <figure><img src="cupon-assets/bowl-preparando.webp" alt="Preparando un bowl OAKBERRY en tienda" loading="lazy" width="640" height="800"></figure>
@@ -482,7 +490,7 @@ footer a{color:var(--crema)}
 <!-- ═══════════ PIE ═══════════ -->
 <footer id="tyc">
   <div class="wrap">
-    <img class="logo-pie" src="cupon-assets/loro-crema.png" alt="OAKBERRY" width="600" height="872">
+    <img class="logo-pie" src="cupon-assets/loro-crema.webp" alt="OAKBERRY" width="275" height="400" loading="lazy">
     <h4>Términos y condiciones</h4>
     <p>15% de descuento sobre el total de tu orden. Válido 7 días desde que te registras; si se vence, no se renueva. Uno por persona (por celular). Aplica en todas las tiendas físicas OAKBERRY de Colombia; no aplica en domicilios. No se acumula con otras promos. Manel Foods S.A.S.</p>
     <div class="redes">
