@@ -96,6 +96,36 @@
       "source": "/ENCUESTA",
       "destination": "/cuentanos?src=qr_tienda",
       "permanent": false
+    },
+    {
+      "source": "/Cupon-evento",
+      "destination": "/cupon-evento",
+      "permanent": false
+    },
+    {
+      "source": "/Cupon-Evento",
+      "destination": "/cupon-evento",
+      "permanent": false
+    },
+    {
+      "source": "/CUPON-EVENTO",
+      "destination": "/cupon-evento",
+      "permanent": false
+    },
+    {
+      "source": "/cuponevento",
+      "destination": "/cupon-evento",
+      "permanent": false
+    },
+    {
+      "source": "/cupon-eventos",
+      "destination": "/cupon-evento",
+      "permanent": false
+    },
+    {
+      "source": "/cupon_evento",
+      "destination": "/cupon-evento",
+      "permanent": false
     }
   ]
 }
