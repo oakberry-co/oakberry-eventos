@@ -4,15 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#F5EEE0">
-<title>Terezhina · Ayuda OAKBERRY Colombia</title>
-<meta name="description" content="Pregúntale a Terezhina, la asistente de OAKBERRY: tiendas, domicilios, tarjeta de fidelidad y más.">
+<title>Oaky · Ayuda OAKBERRY Colombia</title>
+<meta name="description" content="Pregúntale a Oaky, el asistente de OAKBERRY: tiendas, domicilios, tarjeta de fidelidad y más.">
 <meta name="robots" content="noindex">
 <link rel="preload" href="pd-assets/nexa-slab-black.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="pd-assets/nexa-slab-bold.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="pd-assets/nexa-slab-regular.woff2" as="font" type="font/woff2" crossorigin>
 <style>
 /* ─────────────────────────────────────────────────────────────────────────
-   AYUDA · Terezhina, la asistente virtual de OAKBERRY + "dejar un caso".
+   AYUDA · Oaky, el asistente virtual de OAKBERRY + "dejar un caso".
    Fuera de Meta y fuera del sitio de cupones a propósito (decisión de Daniel 15-oct-2026).
    Chat: POST /chat (Claude Haiku 5.5, crm/ayuda/main.py). Caso: POST /caso → crm.pqr_casos con radicado;
    el aviso a Ana María sale de la VM (crm/ayuda/alertas.py, cada 5 min).
@@ -172,7 +172,7 @@ textarea{min-height:130px;resize:vertical}
     <img class="marca" src="pd-wordmark-oakberry.svg" alt="OAKBERRY" width="3600" height="472">
     <div class="hola">
       <p class="eyebrow">Ayuda OAKBERRY</p>
-      <h1>¡Hola! Soy Terezhina</h1>
+      <h1>¡Hola! Soy Oaky</h1>
       <p>Pregúntame lo que quieras sobre OAKBERRY: tiendas, domicilios, la tarjeta de fidelidad o nuestro açaí.</p>
     </div>
   </header>
@@ -181,17 +181,17 @@ textarea{min-height:130px;resize:vertical}
     <div class="tarjeta">
       <div class="cab">
         <div class="avatar"><img src="pd-assets/loro-vuela.png" alt=""></div>
-        <div><b>Terezhina</b><small>Asistente virtual · responde al instante</small></div>
+        <div><b>Oaky</b><small>Asistente virtual · responde al instante</small></div>
       </div>
       <div id="chat" aria-live="polite"></div>
       <div class="entrada">
-        <input type="text" id="pregunta" maxlength="800" placeholder="Escríbele a Terezhina…" autocomplete="off" enterkeyhint="send" aria-label="Tu pregunta">
+        <input type="text" id="pregunta" maxlength="800" placeholder="Escríbele a Oaky…" autocomplete="off" enterkeyhint="send" aria-label="Tu pregunta">
         <button class="enviar" id="preguntar" type="button" aria-label="Enviar">
           <svg viewBox="0 0 24 24" fill="none" stroke="#FBF6E9" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
         </button>
       </div>
     </div>
-    <p class="pie">Terezhina es la asistente virtual de OAKBERRY.</p>
+    <p class="pie">Oaky es el asistente virtual de OAKBERRY.</p>
   </div>
 </section>
 
@@ -202,7 +202,7 @@ textarea{min-height:130px;resize:vertical}
     <p class="eyebrow">Dejar un caso</p>
     <h1>Cuéntanos qué pasó</h1>
     <p>Una persona del equipo lee tu caso y te escribe. Mientras más detalle, más rápido lo resolvemos.</p>
-    <button class="volver" id="volver" type="button">← Volver con Terezhina</button>
+    <button class="volver" id="volver" type="button">← Volver con Oaky</button>
   </header>
   <div class="wrap">
     <div class="bloque">
@@ -297,7 +297,7 @@ const hoy = new Date(Date.now() - 5 * 3600e3).toISOString().slice(0, 10);
 $('fecha').value = hoy; $('fecha').max = hoy;
 function error(t) { const e = $('error'); e.textContent = t; e.classList.toggle('oculto', !t); }
 
-// ── Terezhina ──
+// ── Oaky ──
 const chat = $('chat'), hist = [];
 const sesion = (crypto.randomUUID ? crypto.randomUUID() : String(Math.random())).slice(0, 36);
 const MINI = '<span class="mini"><img src="pd-assets/loro-vuela.png" alt=""></span>';
@@ -313,7 +313,7 @@ function escribiendo() {
   f.innerHTML = MINI + '<div class="msg"><span class="puntos"><i></i><i></i><i></i></span></div>';
   chat.appendChild(f); f.scrollIntoView({block: 'nearest', behavior: 'smooth'}); return f;
 }
-burbuja('¡Hola! Soy Terezhina 💜, la asistente virtual de OAKBERRY. Conozco nuestras 34 tiendas en 11 ciudades, el menú, los domicilios y la tarjeta de fidelidad, y respondo al instante. ¿En qué te ayudo?', 'bot');
+burbuja('¡Hola! Soy Oaky 💜, el asistente virtual de OAKBERRY. Conozco nuestras 34 tiendas en 11 ciudades, el menú, los domicilios y la tarjeta de fidelidad, y respondo al instante. ¿En qué te ayudo?', 'bot');
 
 function abrirCaso(resumen, tipo) {
   if (resumen) $('descripcion').value = resumen;

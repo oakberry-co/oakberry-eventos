@@ -105,7 +105,7 @@ main{max-width:560px;margin:0 auto;padding:0 16px 50px}
   <div class="mapa" id="mapa"></div>
   <div class="lista" id="lista"><p class="cargando">Cargando tiendas…</p></div>
 
-  <a class="btn oro maria" href="ayuda?src=tiendas">💬 ¿Dudas? Pregúntale a Terezhina</a>
+  <a class="btn oro maria" href="ayuda?src=tiendas">💬 ¿Dudas? Pregúntale a Oaky</a>
   <p class="pie">Los horarios de cada tienda están en su link de Google Maps.</p>
 </main>
 
@@ -115,7 +115,7 @@ const API = 'https://api.oakberry-cupones.com/?accion=obtenerTiendasCompleto';
 const RAPPI = 'https://rappi.sng.link/Ev50a/hene/03dq';
 const $ = id => document.getElementById(id);
 const esc = t => { const d = document.createElement('div'); d.textContent = t ?? ''; return d.innerHTML; };
-// Jamundí va con Cali (área metropolitana), igual que en Terezhina y en la pestaña Redes
+// Jamundí va con Cali (área metropolitana), igual que en Oaky y en la pestaña Redes
 const NOMBRE_CIUDAD = {bogota: 'Bogotá', medellin: 'Medellín', cucuta: 'Cúcuta', monteria: 'Montería', jamundi: 'Cali'};
 const ciudadBonita = c => { const k = (c || '').trim().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
   return NOMBRE_CIUDAD[k] || (c || '').trim().replace(/^\w/, x => x.toUpperCase()); };
