@@ -628,7 +628,8 @@ function pintarTarjetas(){
   }).join('');
   $('tarjetas').scrollLeft = 0;
 }
-function elegir(c){ ciudadSel = c; pintarChips(); pintarTarjetas(); const b = document.querySelector('#chipsCiudad [aria-selected="true"]'); if (b) b.scrollIntoView({ block: 'nearest', inline: 'center' }); }
+// Centra el botón de la ciudad moviendo SOLO la fila de botones (scrollIntoView movía toda la página al cargar).
+function elegir(c){ ciudadSel = c; pintarChips(); pintarTarjetas(); const fila = $('chipsCiudad'), b = fila.querySelector('[aria-selected="true"]'); if (b) fila.scrollLeft = b.offsetLeft - (fila.clientWidth - b.offsetWidth) / 2; }
 $('chipsCiudad').addEventListener('click', e => { const b = e.target.closest('button'); if (b) elegir(b.dataset.c); });
 function km(a, b, c, d){ const r = Math.PI / 180, x = Math.sin((c - a) * r / 2) ** 2 + Math.cos(a * r) * Math.cos(c * r) * Math.sin((d - b) * r / 2) ** 2; return 12742 * Math.asin(Math.sqrt(x)); }
 $('btnCerca').addEventListener('click', () => {
