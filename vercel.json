@@ -127,5 +127,15 @@
       "destination": "/cupon-evento",
       "permanent": false
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/concursos",
+      "destination": "https://oakberry-concursos.vercel.app/"
+    },
+    {
+      "source": "/concursos/:path*",
+      "destination": "https://oakberry-concursos.vercel.app/:path*"
+    }
   ]
 }
