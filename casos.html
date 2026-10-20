@@ -68,7 +68,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--morado)}
 .caso.vencido{border-left:10px solid var(--rojo)}
 .caso .fila{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .b{font-size:.7rem;font-weight:900;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px;border:2px solid var(--tinta);background:var(--crema)}
-.b.queja,.b.reclamo{background:#F7C8C3}.b.alianza{background:var(--lila)}.b.felicitacion{background:#CDEBD3}.b.peticion,.b.sugerencia{background:#fff}
+.b.queja,.b.reclamo{background:#F7C8C3}.b.alianza{background:var(--lila)}.b.oferta{background:var(--oro)}.b.felicitacion{background:#CDEBD3}.b.peticion,.b.sugerencia{background:#fff}
 .b.nuevo{background:var(--oro)}.b.en_revision{background:var(--lila)}.b.resuelto{background:#CDEBD3}.b.descartado{background:var(--hueso)}
 .b.rad{background:var(--tinta);color:var(--crema)}
 .edad{margin-left:auto;font-size:.8rem;font-weight:700;color:var(--tinta-suave)}
@@ -136,7 +136,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--morado)}
 <script>
 const API = 'https://oakberry-ayuda-664413392517.us-central1.run.app/panel';
 const SLA_H = 24;  // un caso "nuevo" con más de 24 h se marca vencido
-const TIPO = {queja: 'Queja', reclamo: 'Reclamo', peticion: 'Petición', sugerencia: 'Sugerencia', felicitacion: 'Felicitación', alianza: 'Alianza / colaboración'};
+const TIPO = {queja: 'Queja', reclamo: 'Reclamo', peticion: 'Petición', sugerencia: 'Sugerencia', felicitacion: 'Felicitación', alianza: 'Alianza / colaboración', oferta: 'Oferta comercial'};
 const ESTADO = {nuevo: 'Nuevo', en_revision: 'En revisión', resuelto: 'Resuelto', descartado: 'Descartado'};
 const CANAL = {tienda: 'En tienda', rappi: 'Rappi', domicilio_web: 'Domicilio web', otro: 'Otro'};
 const $ = id => document.getElementById(id);
