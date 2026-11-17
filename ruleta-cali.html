@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#280532">
+<title>Gira y gana · OAKBERRY Cali</title>
+<meta name="description" content="Compra desde $25.000, gira la ruleta OAKBERRY y llévate un premio para tu próxima visita. Aquí todos ganan.">
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://www.oakberry-eventos.com/ruleta-cali">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_CO">
+<meta property="og:site_name" content="OAKBERRY Colombia">
+<meta property="og:title" content="¡Gira y gana! · OAKBERRY Cali">
+<meta property="og:description" content="Compra desde $25.000 y gira. Aquí todos ganan.">
+<link rel="preload" href="pd-assets/nexa-slab-black.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="pd-assets/nexa-slab-bold.woff2" as="font" type="font/woff2" crossorigin>
+<!--
+  RULETA CALI (/ruleta-cali?t=<tienda>) — ruleta de premios en tienda, QR en el hablador.
+  Propuesta de Ana (mercadeo), 2026-11-11. Premios y probabilidades salen del análisis
+  de ventas de Cali (90 días) y de los costos de producto (analytics.ventas_items_global).
+
+  Cómo funciona (sin servidor):
+   1. El cliente compra desde $25.000, escanea el QR y el CAJERO escribe la clave de la
+      tienda para activar el giro (así nadie gira sin comprar).
+   2. La ruleta elige el premio (probabilidades en PREMIOS) y lo guarda en el celular.
+   3. En la próxima visita (lunes a jueves, 10 días) el cliente abre el mismo enlace,
+      el cajero ve el premio "en vivo" (reloj que corre: no sirve un pantallazo) y lo
+      canjea con la misma clave.
+  Las claves se guardan como hash SHA-256 (el repo es público). Vista previa: ?demo=1
+  (clave 1234, sin restricción de días).
+-->
+<style>
+@font-face{font-family:'Nexa Slab';src:url('pd-assets/nexa-slab-regular.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Nexa Slab';src:url('pd-assets/nexa-slab-bold.woff2') format('woff2');font-weight:600 700;font-display:swap}
+@font-face{font-family:'Nexa Slab';src:url('pd-assets/nexa-slab-black.woff2') format('woff2');font-weight:800 900;font-display:swap}
+:root{
+  --crema:#FBF6E9; --cielo:#F5EEE0; --hueso:#EAE1CC;
+  --tinta:#21152A; --tinta-suave:#5C4A66;
+  --morado:#4B1F60; --morado-hondo:#280532; --lila:#B79CC8;
+  --oro:#F4B223; --coral:#E04850; --verde:#2F6B3A;
+  --gutter:16px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%;overflow-x:hidden;background:var(--morado-hondo)}
+body{font-family:'Nexa Slab',Rockwell,'Roboto Slab',Georgia,serif;background:var(--morado-hondo);color:var(--crema);
+     min-height:100svh;overflow-x:hidden;line-height:1.4}
+[hidden]{display:none!important}
+.app{max-width:460px;margin:0 auto;padding:18px var(--gutter) 36px;display:flex;flex-direction:column;align-items:center;text-align:center;position:relative}
+
+/* fondo: rayos que giran lento detrás de la rueda */
+.rayos{position:fixed;left:50%;top:44%;width:180vmax;height:180vmax;transform:translate(-50%,-50%);z-index:0;pointer-events:none;opacity:.09;
+  background:repeating-conic-gradient(from 0deg,var(--lila) 0deg 8deg,transparent 8deg 22.5deg);animation:rayos 60s linear infinite}
+@keyframes rayos{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.app>*{position:relative;z-index:1}
+
+.marca{height:22px;width:auto;margin-bottom:12px}
+.eyebrow{display:inline-block;font-size:.72rem;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--lila)}
+.titulo{font-weight:900;text-transform:uppercase;line-height:.9;font-size:clamp(2.6rem,13vw,3.6rem);color:var(--oro);
+        text-shadow:4px 4px 0 var(--tinta);margin:6px 0 8px;letter-spacing:-.01em}
+.sub{font-weight:600;color:var(--crema);font-size:1rem;max-width:30ch}
+.sub b{color:var(--oro)}
+
+/* ══ RUEDA ══ */
+.rueda{position:relative;width:min(92vw,400px);aspect-ratio:1;margin:22px 0 10px}
+.rueda .disco{width:100%;height:100%;display:block;overflow:visible}
+#giro{transform-origin:200px 200px;transform-box:view-box}
+.bombillo{fill:var(--crema)}
+.girando .bombillo{animation:titila .35s steps(2) infinite}
+.girando .bombillo:nth-child(odd){animation-delay:.175s}
+@keyframes titila{50%{fill:var(--oro)}}
+.puntero{position:absolute;left:50%;top:-16px;transform:translateX(-50%);width:46px;height:56px;z-index:3;filter:drop-shadow(0 3px 0 var(--tinta))}
+.centro{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:23%;aspect-ratio:1;border-radius:50%;z-index:2;
+        background:var(--oro);border:4px solid var(--tinta);box-shadow:0 4px 0 var(--tinta);display:grid;place-items:center;
+        font:inherit;font-weight:900;color:var(--tinta);font-size:clamp(.85rem,4vw,1.05rem);letter-spacing:.04em;cursor:pointer}
+.centro:active{transform:translate(-50%,-46%);box-shadow:0 1px 0 var(--tinta)}
+.centro[disabled]{cursor:default}
+.centro img{width:72%;height:auto}
+
+/* ══ BOTONES ══ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;border:0;cursor:pointer;text-decoration:none;width:100%;
+     font:inherit;font-weight:900;text-transform:uppercase;letter-spacing:.06em;font-size:1.1rem;
+     background:var(--oro);color:var(--tinta);padding:18px 24px;border-radius:999px;box-shadow:0 5px 0 var(--tinta);
+     transition:transform .12s,box-shadow .12s}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--tinta)}
+.btn[disabled]{opacity:.6;cursor:default}
+.btn.crema{background:var(--crema);color:var(--morado)}
+.btn.pulso{animation:pulso 1.6s ease-in-out infinite}
+@keyframes pulso{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+.nota{font-size:.78rem;font-weight:700;color:var(--lila);margin-top:12px}
+
+/* ══ PASOS ══ */
+.pasos{list-style:none;display:grid;gap:10px;width:100%;margin-top:26px;text-align:left}
+.paso{display:flex;gap:14px;align-items:center;background:rgba(251,246,233,.08);border-radius:18px;padding:14px}
+.paso .n{flex:0 0 auto;width:40px;height:40px;border-radius:50%;background:var(--oro);color:var(--tinta);display:grid;place-items:center;font-weight:900;font-size:1.2rem}
+.paso b{display:block;font-weight:900;text-transform:uppercase;font-size:.95rem;letter-spacing:.02em}
+.paso span{font-size:.85rem;color:var(--lila);font-weight:600}
+
+/* ══ PREMIOS (lista) ══ */
+.lista{width:100%;margin-top:26px;background:var(--crema);color:var(--tinta);border-radius:22px;padding:18px 16px;text-align:left;box-shadow:0 6px 0 var(--tinta)}
+.lista h2{font-weight:900;text-transform:uppercase;color:var(--morado);font-size:1.1rem;margin-bottom:8px}
+.lista li{list-style:none;display:flex;gap:10px;align-items:center;padding:8px 0;border-top:2px dashed var(--hueso);font-weight:700;font-size:.92rem}
+.lista li:first-of-type{border-top:0}
+.lista .p{width:14px;height:14px;border-radius:50%;flex:0 0 auto;border:2px solid var(--tinta)}
+.letra{font-size:.74rem;color:var(--tinta-suave);font-weight:600;margin-top:12px;line-height:1.45}
+
+/* ══ HOJA DEL CAJERO ══ */
+.velo{position:fixed;inset:0;background:rgba(33,21,42,.72);z-index:20;display:flex;align-items:flex-end;justify-content:center}
+.hoja{width:100%;max-width:460px;background:var(--crema);color:var(--tinta);border-radius:26px 26px 0 0;padding:24px var(--gutter) calc(24px + env(safe-area-inset-bottom));text-align:center;
+      animation:sube .25s ease-out}
+@keyframes sube{from{transform:translateY(100%)}}
+.hoja h3{font-weight:900;text-transform:uppercase;color:var(--morado);font-size:1.3rem;line-height:1.05}
+.hoja p{font-weight:600;color:var(--tinta-suave);font-size:.92rem;margin:8px 0 16px}
+.pin{width:100%;font:inherit;font-weight:900;font-size:2rem;letter-spacing:.5em;text-align:center;padding:12px 0 12px .5em;border-radius:16px;
+     border:3px solid var(--tinta);background:#fff;color:var(--tinta);margin-bottom:14px}
+.pin:focus{outline:3px solid var(--oro);outline-offset:2px}
+.err{color:var(--coral);font-weight:800;font-size:.88rem;min-height:1.2em;margin:-4px 0 10px}
+.cerrar{background:none;border:0;font:inherit;font-weight:800;color:var(--tinta-suave);margin-top:14px;text-decoration:underline;cursor:pointer}
+
+/* ══ RESULTADO ══ */
+.cupon{width:100%;background:var(--crema);color:var(--tinta);border-radius:26px;padding:24px 18px 20px;box-shadow:0 7px 0 var(--tinta);position:relative;overflow:hidden;margin-top:6px}
+.cupon::before,.cupon::after{content:"";position:absolute;top:58%;width:28px;height:28px;border-radius:50%;background:var(--morado-hondo)}
+.cupon::before{left:-14px}.cupon::after{right:-14px}
+.cupon .felicidades{font-weight:900;text-transform:uppercase;letter-spacing:.14em;font-size:.78rem;color:var(--tinta-suave)}
+.cupon .premio{font-weight:900;text-transform:uppercase;color:var(--morado);font-size:clamp(1.9rem,9vw,2.4rem);line-height:.95;margin:8px 0 10px;text-wrap:balance}
+.cupon .detalle{font-weight:700;font-size:.98rem;color:var(--tinta);max-width:30ch;margin:0 auto}
+.corte{border-top:3px dashed var(--hueso);margin:20px -18px 16px}
+.vivo{display:inline-flex;align-items:center;gap:8px;background:var(--tinta);color:var(--crema);border-radius:999px;padding:7px 14px;font-weight:800;font-size:.82rem;letter-spacing:.06em}
+.vivo i{width:10px;height:10px;border-radius:50%;background:var(--coral);animation:late 1s infinite}
+@keyframes late{50%{opacity:.25}}
+.codigo{font-weight:900;font-size:1.7rem;letter-spacing:.14em;color:var(--tinta);margin:12px 0 2px}
+.vigencia{font-weight:700;font-size:.9rem;color:var(--tinta-suave);margin-top:6px}
+.vigencia b{color:var(--morado)}
+.tienda-chip{display:inline-block;margin-top:10px;background:var(--oro);color:var(--tinta);font-weight:900;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;border-radius:999px;padding:6px 12px}
+.sello{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-14deg);border:5px solid var(--verde);color:var(--verde);
+       font-weight:900;font-size:2.4rem;letter-spacing:.08em;padding:4px 18px;border-radius:12px;background:rgba(251,246,233,.85);text-transform:uppercase}
+.acciones{width:100%;display:grid;gap:12px;margin-top:22px}
+
+/* confeti */
+.confeti{position:fixed;inset:0;pointer-events:none;z-index:30;overflow:hidden}
+.confeti i{position:absolute;top:-20px;width:10px;height:16px;border-radius:2px;animation:cae linear forwards}
+@keyframes cae{to{transform:translateY(110vh) rotate(720deg)}}
+
+@media (prefers-reduced-motion:reduce){.rayos,.btn.pulso,.girando .bombillo{animation:none}}
+</style>
+</head>
+<body>
+<div class="rayos" aria-hidden="true"></div>
+<main class="app">
+  <img class="marca" src="oakberry-logo-cream.png" alt="OAKBERRY" width="1272" height="160">
+
+  <!-- ══ PORTADA + RUEDA ══ -->
+  <section id="v-juego">
+    <span class="eyebrow" id="eyebrow">OAKBERRY Cali</span>
+    <h1 class="titulo">¡Gira<br>y gana!</h1>
+    <p class="sub">Compra desde <b>$25.000</b>, gira la ruleta y llévate un premio para tu próxima visita. <b>Aquí todos ganan.</b></p>
+  </section>
+
+  <div class="rueda" id="rueda">
+    <svg class="puntero" viewBox="0 0 44 54" aria-hidden="true"><path d="M22 52 L3 12 A20 20 0 0 1 41 12 Z" fill="#F4B223" stroke="#21152A" stroke-width="4" stroke-linejoin="round"/><circle cx="22" cy="17" r="6" fill="#21152A"/></svg>
+    <svg class="disco" viewBox="-12 -12 424 424" role="img" aria-label="Ruleta de premios OAKBERRY">
+      <circle cx="200" cy="200" r="210" fill="#21152A"/>
+      <circle cx="200" cy="200" r="198" fill="#4B1F60"/>
+      <g id="bombillos"></g>
+      <g id="giro"></g>
+    </svg>
+    <button class="centro" id="centro" type="button" aria-label="Girar la ruleta">GIRA</button>
+  </div>
+
+  <section id="v-cta" style="width:100%">
+    <button class="btn pulso" id="btn-girar" type="button">🎡 ¡Quiero girar!</button>
+    <p class="nota">El cajero activa tu giro con tu compra desde $25.000</p>
+
+    <ol class="pasos">
+      <li class="paso"><span class="n">1</span><div><b>Compra desde $25.000</b><span>Tu bowl como más te guste.</span></div></li>
+      <li class="paso"><span class="n">2</span><div><b>El cajero activa tu giro</b><span>Escanea este QR y muéstrale tu celular.</span></div></li>
+      <li class="paso"><span class="n">3</span><div><b>Gira y vuelve por tu premio</b><span>Úsalo de lunes a jueves en los próximos 10 días.</span></div></li>
+    </ol>
+
+    <div class="lista">
+      <h2>Lo que puedes ganar</h2>
+      <ul id="lista-premios"></ul>
+      <p class="letra">Válido en la tienda donde giraste, de lunes a jueves, desde el día siguiente al giro y por 10 días. Un giro por compra desde $25.000 y un premio activo por persona. El premio se canjea comprando un bowl y no se suma a otras promociones. Hasta agotar existencias.</p>
+    </div>
+  </section>
+
+  <!-- ══ RESULTADO ══ -->
+  <section id="v-premio" hidden style="width:100%">
+    <div class="cupon" id="cupon">
+      <div class="felicidades" id="r-titulo">🎉 ¡Felicidades! Ganaste</div>
+      <div class="premio" id="r-premio"></div>
+      <p class="detalle" id="r-detalle"></p>
+      <div class="corte"></div>
+      <span class="vivo"><i></i><span id="r-reloj">EN VIVO</span></span>
+      <div class="codigo" id="r-codigo"></div>
+      <p class="vigencia" id="r-vigencia"></p>
+      <span class="tienda-chip" id="r-tienda"></span>
+      <div class="sello" id="r-sello" hidden>Canjeado</div>
+    </div>
+    <div class="acciones">
+      <p class="nota" id="r-nota" style="margin:0">Guarda este enlace: tu premio queda en este celular. En tu próxima visita ábrelo y muéstraselo al cajero.</p>
+      <button class="btn" id="btn-canjear" type="button">Canje en caja</button>
+      <button class="btn crema" id="btn-otra" type="button" hidden>🎡 Volver a girar</button>
+    </div>
+  </section>
+</main>
+
+<!-- ══ HOJA DEL CAJERO (clave) ══ -->
+<div class="velo" id="velo" hidden>
+  <div class="hoja" role="dialog" aria-modal="true" aria-labelledby="h-titulo">
+    <h3 id="h-titulo">Pásale el celular al cajero</h3>
+    <p id="h-texto">Clave de la tienda para activar el giro.</p>
+    <input class="pin" id="pin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" aria-label="Clave de la tienda">
+    <div class="err" id="h-err"></div>
+    <button class="btn" id="h-ok" type="button">Activar giro</button>
+    <button class="cerrar" id="h-cerrar" type="button">Cancelar</button>
+  </div>
+</div>
+<div class="confeti" id="confeti" aria-hidden="true"></div>
+
+<script>
+/* ── Premios: orden en la rueda, probabilidad (peso) y textos ───────────── */
+const PREMIOS=[
+  // Premios del franquiciado de Cali (2026-11-13). Probabilidades = propuesta, pendientes de aprobar.
+  {k:"d10",     rueda:["10%","DESCUENTO"],              nombre:"10% de descuento",             detalle:"10% de descuento en el total de tu próxima compra.", peso:12, fondo:"#4B1F60", texto:"#FBF6E9"},
+  {k:"upgrade", rueda:["UPGRADE","DE TAMAÑO"],             nombre:"Upgrade de tamaño",            detalle:"Pide tu bowl y te lo servimos en el tamaño siguiente sin costo.", peso:8, fondo:"#FBF6E9", texto:"#4B1F60"},
+  {k:"sellos",  rueda:["2x","SELLOS"],     nombre:"Doble sello",                  detalle:"En tu próxima compra te ponemos 2 sellos en tu tarjeta en vez de 1.", peso:20, fondo:"#B79CC8", texto:"#21152A"},
+  {k:"sorpresa",rueda:["🎁 PREMIO","SORPRESA"],          nombre:"Un premio sorpresa",           detalle:"Vuelve y el cajero te revela tu sorpresa.", peso:5, fondo:"#21152A", texto:"#F4B223", jackpot:true},
+  {k:"topsorp", rueda:["UN TOPPING","SORPRESA"],           nombre:"Un topping sorpresa",          detalle:"Te regalamos un topping elegido por nosotros en tu próximo bowl.", peso:25, fondo:"#F4B223", texto:"#21152A"},
+  {k:"topgratis",rueda:["TOPPINGS","GRATIS"],              nombre:"Toppings gratis",              detalle:"Toppings de regalo en tu próximo bowl.", peso:15, fondo:"#4B1F60", texto:"#FBF6E9"},
+  {k:"cumple",  rueda:["REGALO","DE CUMPLE"], nombre:"Beneficio especial de cumpleaños", detalle:"Un regalo especial para celebrar tu cumpleaños con nosotros.", peso:7, fondo:"#FBF6E9", texto:"#4B1F60"},
+  {k:"duo",     rueda:["PROMO","DE DÚO"],                  nombre:"Promo de dúo",                 detalle:"Un beneficio especial cuando compras 2 bowls.", peso:8, fondo:"#B79CC8", texto:"#21152A"}
+];
+
+/* ── Tiendas: ?t=<clave>. pin = SHA-256 de la clave de 4 dígitos (null = aún sin activar) ── */
+const TIENDAS={
+  granada:{nombre:"OAKBERRY Granada",pin:null},
+  ciudadjardin:{nombre:"OAKBERRY Ciudad Jardín",pin:null},
+  jardinplaza:{nombre:"OAKBERRY Jardín Plaza",pin:null},
+  chipichape:{nombre:"OAKBERRY Chipichape",pin:null},
+  campestre:{nombre:"OAKBERRY Club Campestre",pin:null}
+};
+const VIGENCIA_DIAS=10, DIAS_OK=[1,2,3,4]; // lunes a jueves
+
+const QS=new URLSearchParams(location.search);
+const DEMO=QS.get("demo")==="1";
+const T_KEY=(QS.get("t")||"").toLowerCase();
+const TIENDA=TIENDAS[T_KEY]||{nombre:"OAKBERRY Cali",pin:null};
+const PIN_DEMO="03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4"; // 1234
+const LS="oak_ruleta_cali_"+(T_KEY||"x")+(DEMO?"_demo":"");
+const $=id=>document.getElementById(id);
+
+/* ── Dibujo de la rueda (SVG) ── */
+const N=PREMIOS.length, A=360/N, R=196, C=200;
+const pt=(r,deg)=>{const a=(deg-90)*Math.PI/180;return[C+r*Math.cos(a),C+r*Math.sin(a)]};
+(function dibujar(){
+  const g=$("giro");let html="";
+  PREMIOS.forEach((p,i)=>{
+    const a0=i*A, a1=a0+A, [x0,y0]=pt(R,a0), [x1,y1]=pt(R,a1);
+    html+=`<path d="M${C} ${C} L${x0} ${y0} A${R} ${R} 0 0 1 ${x1} ${y1} Z" fill="${p.fondo}" stroke="#21152A" stroke-width="3"/>`;
+    const mid=a0+A/2, lines=p.rueda, fs=lines.some(l=>l.length>11)?12:(p.k==="d10"?13:14), lh=fs+3;
+    // texto derecho dentro del gajo: se lee bien cuando el gajo queda arriba (bajo el puntero)
+    html+=`<g transform="rotate(${mid} ${C} ${C})">`;
+    lines.forEach((l,j)=>{
+      const big=p.k==="d10"&&j===0;
+      html+=`<text x="${C}" y="${C-R+40+j*lh+(big?0:(p.k==="d10"?10:0))}" text-anchor="middle" fill="${p.texto}" font-family="Nexa Slab, Rockwell, serif" font-weight="900" font-size="${big?26:fs}" letter-spacing=".3">${l}</text>`;
+    });
+    html+=`</g>`;
+  });
+  g.innerHTML=html;
+  // bombillos del borde
+  let b="";for(let i=0;i<24;i++){const[x,y]=pt(204,i*15+7.5);b+=`<circle class="bombillo" cx="${x}" cy="${y}" r="4.2"/>`;}
+  $("bombillos").innerHTML=b;
+  // lista de premios
+  $("lista-premios").innerHTML=PREMIOS.map(p=>`<li><span class="p" style="background:${p.fondo}"></span>${p.nombre}</li>`).join("");
+  $("eyebrow").textContent=TIENDA.nombre+(DEMO?" · DEMO":"");
+})();
+
+/* ── Utilidades ── */
+const leer=()=>{try{return JSON.parse(localStorage.getItem(LS)||"null")}catch(e){return null}};
+const guardar=o=>{try{localStorage.setItem(LS,JSON.stringify(o))}catch(e){}};
+async function sha(t){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
+const hoy0=()=>{const d=new Date();d.setHours(0,0,0,0);return d};
+const fmt=d=>d.toLocaleDateString("es-CO",{weekday:"short",day:"numeric",month:"short"});
+function elegir(){let r=Math.random()*PREMIOS.reduce((s,p)=>s+p.peso,0);for(let i=0;i<N;i++){r-=PREMIOS[i].peso;if(r<0)return i}return 0}
+function codigo(){const c="ABCDEFGHJKMNPQRSTUVWXYZ23456789";let s="";for(let i=0;i<4;i++)s+=c[Math.floor(Math.random()*c.length)];return"CALI-"+s}
+
+/* ── Hoja del cajero ── */
+let accion=null;
+function pedirClave(tipo){
+  accion=tipo;
+  $("h-titulo").textContent=tipo==="girar"?"Pásale el celular al cajero":"Canje en caja";
+  $("h-texto").textContent=tipo==="girar"?"Clave de la tienda para activar el giro (compra desde $25.000).":"Clave de la tienda para marcar el premio como entregado.";
+  $("h-ok").textContent=tipo==="girar"?"Activar giro":"Confirmar canje";
+  $("pin").value="";$("h-err").textContent="";$("velo").hidden=false;setTimeout(()=>$("pin").focus(),250);
+}
+$("h-cerrar").onclick=()=>{$("velo").hidden=true};
+$("h-ok").onclick=async()=>{
+  const v=$("pin").value.trim();
+  const ok=DEMO?(await sha(v))===PIN_DEMO:(TIENDA.pin&&(await sha(v))===TIENDA.pin);
+  if(!ok){$("h-err").textContent=TIENDA.pin||DEMO?"Clave incorrecta.":"Esta tienda aún no tiene la ruleta activa.";return}
+  $("velo").hidden=true;
+  accion==="girar"?girar():canjear();
+};
+$("pin").addEventListener("keydown",e=>{if(e.key==="Enter")$("h-ok").click()});
+
+/* ── Girar ── */
+let rot=0, ocupado=false;
+function quiereGirar(){
+  if(ocupado)return;
+  const g=leer();
+  if(g&&!g.canjeado&&new Date()<new Date(g.vence)){mostrar(g);return}
+  pedirClave("girar");
+}
+$("btn-girar").onclick=quiereGirar; $("centro").onclick=quiereGirar;
+$("btn-otra").onclick=()=>{$("v-premio").hidden=true;$("rueda").hidden=false;$("v-juego").hidden=false;$("v-cta").hidden=false;pedirClave("girar")};
+
+function girar(){
+  ocupado=true;$("btn-girar").disabled=true;$("centro").disabled=true;
+  $("rueda").scrollIntoView({behavior:"smooth",block:"center"});
+  const i=elegir(), centro=i*A+A/2, jitter=(Math.random()-.5)*A*.6;
+  rot=rot-(rot%360)+360*8+(360-centro)+jitter;
+  const giro=$("giro");$("rueda").classList.add("girando");
+  giro.style.transition="transform 6.5s cubic-bezier(.12,.72,.08,1)";
+  giro.style.transform=`rotate(${rot}deg)`;
+  setTimeout(()=>{
+    $("rueda").classList.remove("girando");
+    const d0=hoy0(), desde=new Date(d0.getTime()+864e5), vence=new Date(d0.getTime()+(VIGENCIA_DIAS+1)*864e5);
+    const g={k:PREMIOS[i].k,codigo:codigo(),fecha:new Date().toISOString(),desde:desde.toISOString(),vence:vence.toISOString(),tienda:TIENDA.nombre,canjeado:false};
+    guardar(g);confeti(PREMIOS[i].jackpot?160:90);
+    setTimeout(()=>{mostrar(g);ocupado=false;$("btn-girar").disabled=false;$("centro").disabled=false},900);
+  },6700);
+}
+
+/* ── Resultado ── */
+let relojT=null;
+function mostrar(g){
+  const p=PREMIOS.find(x=>x.k===g.k)||PREMIOS[0];
+  $("v-juego").hidden=true;$("v-cta").hidden=true;$("v-premio").hidden=false;
+  $("rueda").hidden=true;
+  $("r-titulo").textContent=p.jackpot?"🎁 ¡Wow! Ganaste":"🎉 ¡Felicidades! Ganaste";
+  $("r-premio").textContent=p.nombre;$("r-detalle").textContent=p.detalle;
+  $("r-codigo").textContent=g.codigo;$("r-tienda").textContent=g.tienda;
+  let ultimo=new Date(new Date(g.vence).getTime()-864e5);
+  while(!DIAS_OK.includes(ultimo.getDay()))ultimo=new Date(ultimo.getTime()-864e5);
+  $("r-vigencia").innerHTML=`Úsalo <b>de lunes a jueves</b><br>del <b>${fmt(new Date(g.desde))}</b> al <b>${fmt(ultimo)}</b>`;
+  $("r-sello").hidden=!g.canjeado;
+  $("btn-canjear").hidden=g.canjeado;$("btn-otra").hidden=!g.canjeado;
+  $("r-nota").textContent=g.canjeado?"¡Disfrútalo! Con tu próxima compra desde $25.000 puedes volver a girar.":"Guarda este enlace: tu premio queda en este celular. En tu próxima visita ábrelo y muéstraselo al cajero.";
+  clearInterval(relojT);
+  const tic=()=>{$("r-reloj").textContent="EN VIVO · "+new Date().toLocaleTimeString("es-CO",{hour:"2-digit",minute:"2-digit",second:"2-digit"})};
+  tic();relojT=setInterval(tic,1000);
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* ── Canje ── */
+$("btn-canjear").onclick=()=>{
+  const g=leer();if(!g)return;
+  const hoy=new Date();
+  if(!DEMO){
+    if(hoy<new Date(g.desde)){alert("Tu premio se puede usar desde mañana. ¡Te esperamos!");return}
+    if(hoy>=new Date(g.vence)){alert("Este premio ya venció.");return}
+    if(!DIAS_OK.includes(hoy.getDay())){alert("Este premio se usa de lunes a jueves.");return}
+  }
+  pedirClave("canjear");
+};
+function canjear(){const g=leer();if(!g)return;g.canjeado=true;g.canjeadoEn=new Date().toISOString();guardar(g);mostrar(g)}
+
+/* ── Confeti ── */
+function confeti(n){
+  if(matchMedia("(prefers-reduced-motion:reduce)").matches)return;
+  const c=$("confeti"),col=["#F4B223","#B79CC8","#FBF6E9","#E04850","#4B1F60"];let h="";
+  for(let i=0;i<n;i++)h+=`<i style="left:${Math.random()*100}%;background:${col[i%5]};animation-duration:${2+Math.random()*2}s;animation-delay:${Math.random()*.6}s;transform:rotate(${Math.random()*360}deg)"></i>`;
+  c.innerHTML=h;setTimeout(()=>c.innerHTML="",4800);
+}
+
+/* ── Al abrir: si ya tiene un premio guardado, mostrarlo ── */
+(function(){const g=leer();if(g&&(g.canjeado||new Date()<new Date(g.vence)))mostrar(g)})();
+</script>
+</body>
+</html>
